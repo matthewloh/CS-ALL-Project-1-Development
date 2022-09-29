@@ -66,7 +66,7 @@ def signinbuttonpressed():
 # ----------------------Widgets----------------------
 # Inti Picture Processing Using PIL
 INTI_BannerOriginal = Image.open(
-    r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')  # Will need to change the path to the image
+    r'C:/Users/User/Desktop/BCSCU - Year 1 - Semester 1/CS Project/yeah/Home-Banner-INTI.png')  # Will need to change the path to the image C:/Users/User/Desktop/BCSCU - Year 1 - Semester 1/CS Project/yeah/Home-Banner-INTI.png
 INTI_BannerImage = ImageOps.exif_transpose(INTI_BannerOriginal)
 INTI_BannerImage = ImageTk.PhotoImage(INTI_BannerImage.resize(
     (math.ceil(480 * dpi / 96), math.ceil(180 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -75,7 +75,7 @@ INTI_Banner = Label(image=INTI_BannerImage, width=1, height=1, bg='#FFE3E1')
 INTI_Banner.grid(row=2, column=20, columnspan=8, rowspan=3, sticky=N+S+E+W)
 
 LandingPageArtOriginal = Image.open(
-    r'D:/Syncthingstuff/Abstruct/Colored ocean in another world.jpg') #Will need to change the path to the image
+    r'C:/Users/User/Desktop/BCSCU - Year 1 - Semester 1/CS Project/Abstruct/Colored ocean in another world.jpg') #Will need to change the path to the image #On Laptop: C:/Users/User/Desktop/BCSCU - Year 1 - Semester 1/CS Project/Abstruct/Colored ocean in another world.jpg
 LandingPageArtImage = ImageOps.exif_transpose(LandingPageArtOriginal)
 LandingPageArtImage = ImageTk.PhotoImage(LandingPageArtImage.resize(
     (math.ceil(840 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
