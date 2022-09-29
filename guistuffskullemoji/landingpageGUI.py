@@ -36,22 +36,24 @@ landingpageGUI.resizable(False, False)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~WIDGETS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-landingpageGUI.Image1Original = Image.open(r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
-landingpageGUI.Image1Image = ImageOps.exif_transpose(landingpageGUI.Image1Original)
-landingpageGUI.Image1Image = ImageTk.PhotoImage(landingpageGUI.Image1Image.resize((math.ceil(480 * dpi / 96), math.ceil(180 * dpi / 96)), Image.Resampling.LANCZOS))
-landingpageGUI.Image1 = Label(landingpageGUI, image = landingpageGUI.Image1Image, width = 1, height = 1, bg = '#FFE3E1')
-landingpageGUI.Image1.grid(row = 2, column = 20, columnspan = 8, rowspan = 3, sticky = N+S+E+W)
-landingpageGUI.Image2Original = Image.open(r'D:/Syncthingstuff/Abstruct/Colored ocean in another world.jpg')
-landingpageGUI.Image2Image = ImageOps.exif_transpose(landingpageGUI.Image2Original)
-landingpageGUI.Image2Image = ImageTk.PhotoImage(landingpageGUI.Image2Image.resize((math.ceil(840 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
-landingpageGUI.Image2 = Label(landingpageGUI, image = landingpageGUI.Image2Image, width = 1, height = 1, bg = '#FFE3E1')
-landingpageGUI.Image2.grid(row = 2, column = 2, columnspan = 14, rowspan = 14, sticky = N+S+E+W)
+landingpageGUI.INTI_BannerOriginal = Image.open(r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
+landingpageGUI.INTI_BannerImage = ImageOps.exif_transpose(landingpageGUI.INTI_BannerOriginal)
+landingpageGUI.INTI_BannerImage = ImageTk.PhotoImage(landingpageGUI.INTI_BannerImage.resize((math.ceil(480 * dpi / 96), math.ceil(180 * dpi / 96)), Image.Resampling.LANCZOS))
+landingpageGUI.INTI_Banner = Label(landingpageGUI, image = landingpageGUI.INTI_BannerImage, width = 1, height = 1, bg = '#FFE3E1')
+landingpageGUI.INTI_Banner.grid(row = 2, column = 20, columnspan = 8, rowspan = 3, sticky = N+S+E+W)
+landingpageGUI.LandingPageArtOriginal = Image.open(r'D:/Syncthingstuff/Abstruct/Colored ocean in another world.jpg')
+landingpageGUI.LandingPageArtImage = ImageOps.exif_transpose(landingpageGUI.LandingPageArtOriginal)
+landingpageGUI.LandingPageArtImage = ImageTk.PhotoImage(landingpageGUI.LandingPageArtImage.resize((math.ceil(840 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+landingpageGUI.LandingPageArt = Label(landingpageGUI, image = landingpageGUI.LandingPageArtImage, width = 1, height = 1, bg = '#FFE3E1')
+landingpageGUI.LandingPageArt.grid(row = 2, column = 2, columnspan = 14, rowspan = 14, sticky = N+S+E+W)
 landingpageGUI.LoginLabel = Label(landingpageGUI, text = "Sign in to your account", font = ('Arial', 18), width = 1, height = 1, fg = '#000000', bg = '#FFF5E4')
 landingpageGUI.LoginLabel.grid(row = 6, column = 21, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
 landingpageGUI.NewIntiLabel = Label(landingpageGUI, text = "New to INTI Interactive System?", font = ('Arial', 14), width = 1, height = 1, fg = '#000000', bg = '#00FFFF')
 landingpageGUI.NewIntiLabel.grid(row = 14, column = 21, columnspan = 4, rowspan = 1, sticky = N+S+E+W)
 landingpageGUI.PlaceholderRadioButton = Label(landingpageGUI, text = "Placeholder | Remember me.?", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#00FFFF')
-landingpageGUI.PlaceholderRadioButton.grid(row = 12, column = 22, columnspan = 3, rowspan = 1, sticky = N+S+E+W)
+landingpageGUI.PlaceholderRadioButton.grid(row = 12, column = 21, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
+landingpageGUI.ForgotPassword = Label(landingpageGUI, text = "Forgot password?", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#00FFFF')
+landingpageGUI.ForgotPassword.grid(row = 13, column = 21, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
 landingpageGUI.EmailEntry = Entry(landingpageGUI, width = 1, bg = '#FFFFFF', font = ('Arial', 14), justify = 'center', highlightthickness = 0, bd=0)
 landingpageGUI.EmailEntry.grid(row = 8, column = 21, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
 landingpageGUI.EmailEntry.insert(0, "Please insert your student email.")
@@ -59,12 +61,26 @@ landingpageGUI.PasswordEntry = Entry(landingpageGUI, width = 1, bg = '#FFFFFF', 
 landingpageGUI.PasswordEntry.grid(row = 10, column = 21, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
 landingpageGUI.PasswordEntry.insert(0, "Please insert your password.")
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~BUTTONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+def runEvent1(argument):
+  if not(__name__ == '__main__'):
+    from landingpage import Event1
+    try:
+      Event1(argument)
+    except TypeError:
+      Event1()
+landingpageGUI.Button2 = Button(landingpageGUI, text = "Button2", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', command = lambda: runEvent1("Button2"), bg = '#00FFFF')
+landingpageGUI.Button2.grid(row = 14, column = 25, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
+landingpageGUI.SignInButton = Button(landingpageGUI, text = "SIGN IN", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', command = lambda: runEvent1("SignInButton"), bg = '#FFF5E4')
+landingpageGUI.SignInButton.grid(row = 12, column = 25, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~HELPER FUNCTIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def initModules():
   raise Exception('This main file is outdated. Script landingpage.py must be updated to reflect the changes in GUI Pie v3.')
 def init():
-  pass
+  from landingpage import Event1
 landingpageGUI.initModules = initModules
 def hide():
   landingpageGUI.withdraw()
@@ -74,19 +90,25 @@ def hideAllWidgets():
     landingpageGUI.LoginLabel.grid_remove()
     landingpageGUI.NewIntiLabel.grid_remove()
     landingpageGUI.PlaceholderRadioButton.grid_remove()
+    landingpageGUI.ForgotPassword.grid_remove()
     landingpageGUI.EmailEntry.grid_remove()
     landingpageGUI.PasswordEntry.grid_remove()
-    landingpageGUI.Image1.grid_remove()
-    landingpageGUI.Image2.grid_remove()
+    landingpageGUI.Button2.grid_remove()
+    landingpageGUI.SignInButton.grid_remove()
+    landingpageGUI.INTI_Banner.grid_remove()
+    landingpageGUI.LandingPageArt.grid_remove()
 landingpageGUI.hideAllWidgets = hideAllWidgets
 def showAllWidgets():
     landingpageGUI.LoginLabel.grid()
     landingpageGUI.NewIntiLabel.grid()
     landingpageGUI.PlaceholderRadioButton.grid()
+    landingpageGUI.ForgotPassword.grid()
     landingpageGUI.EmailEntry.grid()
     landingpageGUI.PasswordEntry.grid()
-    landingpageGUI.Image1.grid()
-    landingpageGUI.Image2.grid()
+    landingpageGUI.Button2.grid()
+    landingpageGUI.SignInButton.grid()
+    landingpageGUI.INTI_Banner.grid()
+    landingpageGUI.LandingPageArt.grid()
 landingpageGUI.showAllWidgets = showAllWidgets
 def run():
   global dimensions
@@ -104,7 +126,10 @@ def resize():
   if landingpageGUI.winfo_width() != dimensions[0] or landingpageGUI.winfo_height() != dimensions[1]:
     landingpageGUI.LoginLabel.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 6 / 32) + 2)
     landingpageGUI.NewIntiLabel.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 4 / 32) + 2)
-    landingpageGUI.PlaceholderRadioButton.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 3 / 32) + 2)
+    landingpageGUI.PlaceholderRadioButton.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 2 / 32) + 2)
+    landingpageGUI.ForgotPassword.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 2 / 32) + 2)
+    landingpageGUI.Button2.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 2 / 32) + 2)
+    landingpageGUI.SignInButton.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 2 / 32) + 2)
 
 eventID = None
 landingpageGUI.resizeDelay = 100
