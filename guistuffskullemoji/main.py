@@ -16,23 +16,14 @@ except:
   subprocess.check_call(['pip', 'install', 'pillow'])
   print('Done.')
   from PIL import ImageTk, Image, ImageOps
-dpiError = False
-try:
-  from ctypes import windll
-  windll.shcore.SetProcessDpiAwareness(1)
-except:
-  print('ERROR. Could not set DPI awareness.')
-  dpiError = True
+
 if __name__ == "__main__":
   main = Tk()
 else:
   main = Tk()
 main.title('main')
-if dpiError:
-  dpi = 96
-else:
-  dpi = main.winfo_fpixels('1i')
-main.geometry(f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
+dpi = 96
+main.geometry('1920x1080')
 main.grid_propagate(False)
 for x in range(32):
   Grid.columnconfigure(main, x, weight=1, uniform='row')
@@ -41,23 +32,35 @@ for y in range(18):
   Grid.rowconfigure(main, y, weight=1, uniform='row')
   Label(main, width = 1, bg = '#FFE3E1').grid(row = y, column = 0, sticky = N+S+E+W)
 main.configure(background='#FFE3E1')
+main.resizable(False, False)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~WIDGETS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-main.Image1Original = Image.open(r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
-main.Image1Image = ImageOps.exif_transpose(main.Image1Original)
-main.Image1Image = ImageTk.PhotoImage(main.Image1Image.resize((math.ceil(360 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
-main.Image1 = Label(main, image = main.Image1Image, width = 1, height = 1, bg = '#FFE3E1')
-main.Image1.grid(row = 1, column = 13, columnspan = 6, rowspan = 2, sticky = N+S+E+W)
-main.SignUpLabel = Label(main, text = "        Sign Up", font = ('Arial', 14), width = 1, height = 1, fg = '#000000', bg = '#FFF5E4')
-main.SignUpLabel.grid(row = 4, column = 16, columnspan = 3, rowspan = 1, sticky = N+S+E+W)
-main.LoginLabel = Label(main, text = "Log In        ", font = ('Arial', 14), width = 1, height = 1, fg = '#000000', bg = '#FFF5E4')
-main.LoginLabel.grid(row = 4, column = 13, columnspan = 3, rowspan = 1, sticky = N+S+E+W)
-main.EmailEntry = Entry(main, width = 1, bg = '#FFFFFF', font = ('Arial', 12), justify = 'center', highlightthickness = 0, bd=0)
-main.EmailEntry.grid(row = 6, column = 13, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
+main.INTI_BannerOriginal = Image.open(r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
+main.INTI_BannerImage = ImageOps.exif_transpose(main.INTI_BannerOriginal)
+main.INTI_BannerImage = ImageTk.PhotoImage(main.INTI_BannerImage.resize((math.ceil(480 * dpi / 96), math.ceil(180 * dpi / 96)), Image.Resampling.LANCZOS))
+main.INTI_Banner = Label(main, image = main.INTI_BannerImage, width = 1, height = 1, bg = '#FFE3E1')
+main.INTI_Banner.grid(row = 2, column = 20, columnspan = 8, rowspan = 3, sticky = N+S+E+W)
+main.LandingPageArtOriginal = Image.open(r'D:/Syncthingstuff/Abstruct/Colored ocean in another world.jpg')
+main.LandingPageArtImage = ImageOps.exif_transpose(main.LandingPageArtOriginal)
+main.LandingPageArtImage = ImageTk.PhotoImage(main.LandingPageArtImage.resize((math.ceil(840 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+main.LandingPageArt = Label(main, image = main.LandingPageArtImage, width = 1, height = 1, bg = '#FFE3E1')
+main.LandingPageArt.grid(row = 2, column = 2, columnspan = 14, rowspan = 14, sticky = N+S+E+W)
+main.LoginLabel = Label(main, text = "Sign in to your account", font = ('Arial', 18), width = 1, height = 1, fg = '#000000', bg = '#FFF5E4')
+main.LoginLabel.grid(row = 6, column = 21, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
+main.NewIntiLabel = Label(main, text = "New to INTI Interactive System?", font = ('Arial', 14), width = 1, height = 1, fg = '#000000', bg = '#00FFFF')
+main.NewIntiLabel.grid(row = 14, column = 21, columnspan = 4, rowspan = 1, sticky = N+S+E+W)
+main.PlaceholderRadioButton = Label(main, text = "Placeholder | Remember me.?", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#00FFFF')
+main.PlaceholderRadioButton.grid(row = 12, column = 21, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
+main.ForgotPassword = Label(main, text = "Forgot password?", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#00FFFF')
+main.ForgotPassword.grid(row = 13, column = 21, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
+main.Label1 = Label(main, text = "Label1", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#00FFFF')
+main.Label1.grid(row = 0, column = 18, columnspan = 11, rowspan = 1, sticky = N+S+E+W)
+main.EmailEntry = Entry(main, width = 1, bg = '#FFFFFF', font = ('Arial', 14), justify = 'center', highlightthickness = 0, bd=0)
+main.EmailEntry.grid(row = 8, column = 21, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
 main.EmailEntry.insert(0, "Please insert your student email.")
-main.PasswordEntry = Entry(main, width = 1, bg = '#FFFFFF', font = ('Arial', 12), justify = 'center', highlightthickness = 0, bd=0)
-main.PasswordEntry.grid(row = 8, column = 13, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
+main.PasswordEntry = Entry(main, width = 1, bg = '#FFFFFF', font = ('Arial', 14), justify = 'center', highlightthickness = 0, bd=0)
+main.PasswordEntry.grid(row = 10, column = 21, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
 main.PasswordEntry.insert(0, "Please insert your password.")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~BUTTONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,8 +72,12 @@ def runEvent1(argument):
       Event1(argument)
     except TypeError:
       Event1()
-main.LoginButton = Button(main, text = "LOG IN", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', command = lambda: runEvent1("LoginButton"), bg = '#FFF5E4')
-main.LoginButton.grid(row = 11, column = 13, columnspan = 6, rowspan = 1, sticky = N+S+E+W)
+main.Button2 = Button(main, text = "Button2", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', command = lambda: runEvent1("Button2"), bg = '#00FFFF')
+main.Button2.grid(row = 14, column = 25, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
+main.SignInButton = Button(main, text = "SIGN IN", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', command = lambda: runEvent1("SignInButton"), bg = '#FFF5E4')
+main.SignInButton.grid(row = 12, column = 25, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
+main.Button1 = Button(main, text = "Button1", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', command = lambda: runEvent1("Button1"), bg = '#00FFFF')
+main.Button1.grid(row = 1, column = 18, columnspan = 3, rowspan = 1, sticky = N+S+E+W)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~HELPER FUNCTIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -84,27 +91,38 @@ def hide():
 def show():
   main.deiconify()
 def hideAllWidgets():
-    main.SignUpLabel.grid_remove()
     main.LoginLabel.grid_remove()
+    main.NewIntiLabel.grid_remove()
+    main.PlaceholderRadioButton.grid_remove()
+    main.ForgotPassword.grid_remove()
+    main.Label1.grid_remove()
     main.EmailEntry.grid_remove()
     main.PasswordEntry.grid_remove()
-    main.LoginButton.grid_remove()
-    main.Image1.grid_remove()
+    main.Button2.grid_remove()
+    main.SignInButton.grid_remove()
+    main.Button1.grid_remove()
+    main.INTI_Banner.grid_remove()
+    main.LandingPageArt.grid_remove()
 main.hideAllWidgets = hideAllWidgets
 def showAllWidgets():
-    main.SignUpLabel.grid()
     main.LoginLabel.grid()
+    main.NewIntiLabel.grid()
+    main.PlaceholderRadioButton.grid()
+    main.ForgotPassword.grid()
+    main.Label1.grid()
     main.EmailEntry.grid()
     main.PasswordEntry.grid()
-    main.LoginButton.grid()
-    main.Image1.grid()
+    main.Button2.grid()
+    main.SignInButton.grid()
+    main.Button1.grid()
+    main.INTI_Banner.grid()
+    main.LandingPageArt.grid()
 main.showAllWidgets = showAllWidgets
 def run():
   global dimensions
   dimensions = [0,0]
   if __name__ != "__main__":
     init()
-  resizeEvent(None)
   main.mainloop()
 main.run = run
 main.hide = hide
@@ -114,14 +132,14 @@ dimensions = [main.winfo_width(), main.winfo_height()]
 def resize():
   global main, dimensions
   if main.winfo_width() != dimensions[0] or main.winfo_height() != dimensions[1]:
-    main.SignUpLabel.config(wraplength = math.ceil(main.winfo_width() * 3 / 32) + 2)
-    main.LoginLabel.config(wraplength = math.ceil(main.winfo_width() * 3 / 32) + 2)
-    main.LoginButton.config(wraplength = math.ceil(main.winfo_width() * 6 / 32) + 2)
-    main.Image1Original = Image.open(r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
-    main.Image1Image = ImageOps.exif_transpose(main.Image1Original)
-    main.Image1Image = ImageTk.PhotoImage(main.Image1Image.resize((math.ceil(main.winfo_width() * 6 / 32), math.ceil(main.winfo_height() * 2 / 18)), Image.Resampling.LANCZOS))
-    main.Image1.config(image = main.Image1Image)
-    dimensions = [main.winfo_width(), main.winfo_height()]
+    main.LoginLabel.config(wraplength = math.ceil(main.winfo_width() * 6 / 32) + 2)
+    main.NewIntiLabel.config(wraplength = math.ceil(main.winfo_width() * 4 / 32) + 2)
+    main.PlaceholderRadioButton.config(wraplength = math.ceil(main.winfo_width() * 2 / 32) + 2)
+    main.ForgotPassword.config(wraplength = math.ceil(main.winfo_width() * 2 / 32) + 2)
+    main.Label1.config(wraplength = math.ceil(main.winfo_width() * 11 / 32) + 2)
+    main.Button2.config(wraplength = math.ceil(main.winfo_width() * 2 / 32) + 2)
+    main.SignInButton.config(wraplength = math.ceil(main.winfo_width() * 2 / 32) + 2)
+    main.Button1.config(wraplength = math.ceil(main.winfo_width() * 3 / 32) + 2)
 
 eventID = None
 main.resizeDelay = 100
