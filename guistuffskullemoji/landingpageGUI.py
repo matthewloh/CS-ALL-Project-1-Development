@@ -16,23 +16,14 @@ except:
   subprocess.check_call(['pip', 'install', 'pillow'])
   print('Done.')
   from PIL import ImageTk, Image, ImageOps
-dpiError = False
-try:
-  from ctypes import windll
-  windll.shcore.SetProcessDpiAwareness(1)
-except:
-  print('ERROR. Could not set DPI awareness.')
-  dpiError = True
+
 if __name__ == "__main__":
   landingpageGUI = Tk()
 else:
   landingpageGUI = Tk()
 landingpageGUI.title('landingpageGUI')
-if dpiError:
-  dpi = 96
-else:
-  dpi = landingpageGUI.winfo_fpixels('1i')
-landingpageGUI.geometry(f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
+dpi = 96
+landingpageGUI.geometry('1920x1080')
 landingpageGUI.grid_propagate(False)
 for x in range(32):
   Grid.columnconfigure(landingpageGUI, x, weight=1, uniform='row')
@@ -41,6 +32,7 @@ for y in range(18):
   Grid.rowconfigure(landingpageGUI, y, weight=1, uniform='row')
   Label(landingpageGUI, width = 1, bg = '#FFE3E1').grid(row = y, column = 0, sticky = N+S+E+W)
 landingpageGUI.configure(background='#FFE3E1')
+landingpageGUI.resizable(False, False)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~WIDGETS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -101,7 +93,6 @@ def run():
   dimensions = [0,0]
   if __name__ != "__main__":
     init()
-  resizeEvent(None)
   landingpageGUI.mainloop()
 landingpageGUI.run = run
 landingpageGUI.hide = hide
@@ -114,18 +105,6 @@ def resize():
     landingpageGUI.LoginLabel.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 6 / 32) + 2)
     landingpageGUI.NewIntiLabel.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 4 / 32) + 2)
     landingpageGUI.PlaceholderRadioButton.config(wraplength = math.ceil(landingpageGUI.winfo_width() * 3 / 32) + 2)
-    landingpageGUI.Image1Original = Image.open(r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
-    landingpageGUI.Image1Image = ImageOps.exif_transpose(landingpageGUI.Image1Original)
-    landingpageGUI.Image1Image = ImageTk.PhotoImage(landingpageGUI.Image1Image.resize((math.ceil(landingpageGUI.winfo_width() * 8 / 32), math.ceil(landingpageGUI.winfo_height() * 3 / 18)), Image.Resampling.LANCZOS))
-    landingpageGUI.Image1.config(image = landingpageGUI.Image1Image)
-    landingpageGUI.Image2Original = Image.open(r'D:/Syncthingstuff/Abstruct/Colored ocean in another world.jpg')
-    landingpageGUI.Image2Image = ImageOps.exif_transpose(landingpageGUI.Image2Original)
-    if (landingpageGUI.winfo_height() / 18 * 14) * 2340 / 2340 < landingpageGUI.winfo_width() * 14 / 32:
-      landingpageGUI.Image2Image = ImageTk.PhotoImage(landingpageGUI.Image2Image.resize((math.ceil(landingpageGUI.winfo_height() * 14 / 18 * 2340 / 2340), math.ceil(landingpageGUI.winfo_height() * 14 / 18)), Image.Resampling.LANCZOS))
-    else:
-      landingpageGUI.Image2Image = ImageTk.PhotoImage(landingpageGUI.Image2Image.resize((math.ceil(landingpageGUI.winfo_width() * 14 / 32), math.ceil(landingpageGUI.winfo_width() * 14 / 32 * 2340 / 2340)), Image.Resampling.LANCZOS))
-    landingpageGUI.Image2.config(image = landingpageGUI.Image2Image)
-    dimensions = [landingpageGUI.winfo_width(), landingpageGUI.winfo_height()]
 
 eventID = None
 landingpageGUI.resizeDelay = 100
