@@ -13,9 +13,9 @@
       </gridSize>
       <title>registrationpageGUI</title>
       <exportLocation>D:\CS-ALL-Project-1-Development\CS-ALL-Project-1-Development\guistuffskullemoji\registrationpageGUI.py</exportLocation>
-      <backgroundColourHex>FFFFFF</backgroundColourHex>
+      <backgroundColourHex>00FFFF</backgroundColourHex>
       <backgroundColour>
-        <float>1</float>
+        <float>0</float>
         <float>1</float>
         <float>1</float>
       </backgroundColour>
@@ -45,9 +45,168 @@
         <isButton>false</isButton>
         <eventName>Event1</eventName>
       </backgroundImage>
-      <saveDataLabel />
+      <saveDataLabel>
+        <label>
+          <xPos>1</xPos>
+          <yPos>16</yPos>
+          <xSpace>7</xSpace>
+          <ySpace>2</ySpace>
+          <title>Label1</title>
+          <colour>
+            <float>1</float>
+            <float>0</float>
+            <float>0</float>
+          </colour>
+          <text>Welcome, Student!</text>
+          <hexColour>FF0000</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <font>Arial</font>
+        </label>
+        <label>
+          <xPos>18</xPos>
+          <yPos>14</yPos>
+          <xSpace>11</xSpace>
+          <ySpace>12</ySpace>
+          <title>Label2</title>
+          <colour>
+            <float>1</float>
+            <float>1</float>
+            <float>0</float>
+          </colour>
+          <text>Important Announcement</text>
+          <hexColour>FFFF00</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <font>Arial</font>
+        </label>
+        <label>
+          <xPos>1</xPos>
+          <yPos>8</yPos>
+          <xSpace>3</xSpace>
+          <ySpace>1</ySpace>
+          <title>Label3</title>
+          <colour>
+            <float>1</float>
+            <float>0</float>
+            <float>0</float>
+          </colour>
+          <text>View Announcements</text>
+          <hexColour>FF0000</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <font>Arial</font>
+        </label>
+        <label>
+          <xPos>5</xPos>
+          <yPos>8</yPos>
+          <xSpace>3</xSpace>
+          <ySpace>1</ySpace>
+          <title>Label4</title>
+          <colour>
+            <float>1</float>
+            <float>0</float>
+            <float>0</float>
+          </colour>
+          <text>Register For Events</text>
+          <hexColour>FF0000</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <font>Arial</font>
+        </label>
+      </saveDataLabel>
       <saveDataEntry />
-      <saveDataButton />
+      <saveDataButton>
+        <button>
+          <xPos>1</xPos>
+          <yPos>12</yPos>
+          <xSpace>3</xSpace>
+          <ySpace>3</ySpace>
+          <title>Button1</title>
+          <colour>
+            <float>1</float>
+            <float>0.6666667</float>
+            <float>0.13333334</float>
+          </colour>
+          <text>Button1</text>
+          <hexColour>FFAA22</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <eventName>Event1</eventName>
+          <font>Arial</font>
+        </button>
+        <button>
+          <xPos>5</xPos>
+          <yPos>12</yPos>
+          <xSpace>3</xSpace>
+          <ySpace>3</ySpace>
+          <title>Button2</title>
+          <colour>
+            <float>1</float>
+            <float>0.6666667</float>
+            <float>0.13333334</float>
+          </colour>
+          <text>Button2</text>
+          <hexColour>FFAA22</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <eventName>Event1</eventName>
+          <font>Arial</font>
+        </button>
+        <button>
+          <xPos>1</xPos>
+          <yPos>1</yPos>
+          <xSpace>3</xSpace>
+          <ySpace>1</ySpace>
+          <title>Button3</title>
+          <colour>
+            <float>1</float>
+            <float>0.6666667</float>
+            <float>0.13333334</float>
+          </colour>
+          <text>Logout</text>
+          <hexColour>FFAA22</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <eventName>Event1</eventName>
+          <font>Arial</font>
+        </button>
+      </saveDataButton>
       <saveDataDropdown />
       <saveDataImage />
       <saveDataCustom />
