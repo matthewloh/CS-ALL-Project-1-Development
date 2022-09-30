@@ -17,11 +17,11 @@ window.grid_propagate(False)
 window.geometry('1920x1080')
 for x in range(32):
     Grid.columnconfigure(window, x, weight=1, uniform='row')
-    Label(width=1, bg='#FFE3E1').grid(row=0, column=x, sticky=N+S+E+W)
+    Label(width=1, bg=PINK).grid(row=0, column=x, sticky=N+S+E+W)
 for y in range(18):
     Grid.rowconfigure(window, y, weight=1, uniform='row')
-    Label(width=1, bg='#FFE3E1').grid(row=y, column=0, sticky=N+S+E+W)
-window.configure(background='#FFE3E1')
+    Label(width=1, bg=PINK).grid(row=y, column=0, sticky=N+S+E+W)
+window.configure(background=PINK)
 window.resizable(False, False)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~Database Functions~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,13 +49,13 @@ def signupbuttonpressed():
     print("auugh")
 
 def signinbuttonpressed():
-    text = EmailEntry.get()
-    text2 = PasswordEntry.get()
-    print(text)
-    print(text2)
+    email_entry = EmailEntry.get()
+    password_entry = PasswordEntry.get()
+    print(email_entry)
+    print(password_entry)
     try:
-        if text == "admin" and text2 == "admin":
-            messagebox.showinfo("Login Successful", "Welcome back!")
+        c.execute("SELECT * FROM users WHERE username = :username AND password = :password", {'username': email_entry, 'password': password_entry}) #TODO: Create a database on initilaization of the program,
+        messagebox.showinfo("Login Successful", "Welcome back!")
     except:
         messagebox.showerror("Login Failed", "Please try again")
 
