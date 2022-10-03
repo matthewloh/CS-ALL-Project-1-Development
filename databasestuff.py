@@ -1,9 +1,8 @@
 import sqlite3
-from sysconfig import get_scheme_names
-from user import User
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Database Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 conn = sqlite3.connect('registration.db')
-class User:
+class UsersRegistration:
     def __init__(self) -> None:
         self.conn = sqlite3.connect('registration.db')
         self.c = self.conn.cursor()
@@ -11,25 +10,24 @@ class User:
     def create_table(self):
         # self.c.execute("""DROP TABLE users""")
         self.c.execute("""CREATE TABLE IF NOT EXISTS users(
-                    user_id INTEGER NOT NULL,
-                    email TEXT NOT NULL,
-                    first_name TEXT,
+                    email TEXT PRIMARY KEY NOT NULL,
+                    first_name TEXT NOT NULL,
                     last_name TEXT NOT NULL,
-                    password TEXT NOT NULL,
-                    PRIMARY KEY(user_id, email)
+                    password TEXT NOT NULL
                     )""")
       
     def insert_user(self, item):
         with conn:
-            self.c.execute("""INSERT OR IGNORE INTO users VALUES (?,?,?,?,?,?)""", item)
-            self.c.commit()
+            self.c.execute("""INSERT OR IGNORE INTO users VALUES (?,?,?,?)""", item)
+            self.conn.commit()
 
-    def get_user(username):
-        c.execute("SELECT * FROM users WHERE username = :username", {'username':username})
-        return c.fetchall()
+    def get_details(self):
+        self.c.execute("SELECT * FROM users")
+        return self.c.fetchall()
 
-user_1 = User('Matthew', 'Loh', 'matthewloh256@gmail.com', 'password1')
-user_ = User(f'{first_name_entry.get()}, {last_name_entry.get()}, {email_entry.get()}{password_entry.get()}')
-insert_user(user_1)
-
-conn.close()
+db = UsersRegistration()
+db.create_table()
+item = ("email", "first_name", "last_name", "password")
+item2 = ("email2", "first_name2", "last_name2", "password2")
+db.insert_user(item)
+db.insert_user(item2)

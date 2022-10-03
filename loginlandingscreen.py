@@ -3,6 +3,7 @@ from tkinter import messagebox
 from PIL import ImageTk, Image, ImageOps
 import math
 import sqlite3
+from databasestuff import UsersRegistration
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ # 
 PINK = "#FFE3E1"
@@ -25,16 +26,11 @@ window.configure(background='#FFE3E1')
 window.resizable(True, True)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Database Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-conn = sqlite3.connect('registration.db')
+db = UsersRegistration()
 
-c = conn.cursor()
-#Creating a Table 
-
-
-
-def select(firstname, lastname, username, password, email):
-    with conn:
-        c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+stuff = (
+    
+)
 
 
 
