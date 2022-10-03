@@ -1,1 +1,1 @@
-Label
+insert_user(user_1)
