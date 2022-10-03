@@ -1,5 +1,5 @@
 import sqlite3
-from employee import Employee
+from InteractiveSystem import Employee
 
 conn = sqlite3.connect(':memory:')
 
