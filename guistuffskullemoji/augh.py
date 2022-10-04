@@ -35,12 +35,12 @@ augh.configure(background='#FFE3E1')
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~WIDGETS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-augh.LandingPageArtOriginal = Image.open(r'D:/Syncthingstuff/Abstruct/Colored ocean in another world.jpg')
+augh.LandingPageArtOriginal = Image.open('/Assets/Abstruct/')
 augh.LandingPageArtImage = ImageOps.exif_transpose(augh.LandingPageArtOriginal)
 augh.LandingPageArtImage = ImageTk.PhotoImage(augh.LandingPageArtImage.resize((math.ceil(840 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
 augh.LandingPageArt = Label(augh, image = augh.LandingPageArtImage, width = 1, height = 1, bg = '#FFE3E1')
 augh.LandingPageArt.grid(row = 2, column = 2, columnspan = 14, rowspan = 14, sticky = N+S+E+W)
-augh.INTI_BannerOriginal = Image.open(r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
+augh.INTI_BannerOriginal = Image.open('/Assets/INTI_Banner.png')
 augh.INTI_BannerImage = ImageOps.exif_transpose(augh.INTI_BannerOriginal)
 augh.INTI_BannerImage = ImageTk.PhotoImage(augh.INTI_BannerImage.resize((math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
 
