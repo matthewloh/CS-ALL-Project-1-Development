@@ -6,6 +6,7 @@ from PIL import ImageTk, Image, ImageOps
 import sqlite3
 
 
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 PINK = "#FFE3E1"
 OTHERPINK = "#FA9494"
@@ -24,7 +25,7 @@ class Window(Tk):
         Tk.__init__(self, *args, **kwargs)
         self.geometry('1920x1080')
         self.title("INTI Interactive System")
-        self.resizable(0, 0)
+        self.resizable(1, 1)
         for x in range(32):
             self.columnconfigure(x, weight=1, uniform='row')
             Label(width=1, bg=LIGHTYELLOW, borderwidth=1, relief="solid").grid(
@@ -63,12 +64,12 @@ class Window(Tk):
         mainpagebutton = Button(container3, text="Main\nPage", bg=OTHERPINK, fg="white", font=(
             "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(MainPage), self.show_frameleft(MainPage2)])
         mainpagebutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
-        eventregistrationbutton = Button(container3, text="Event\nRegistration", bg=OTHERPINK, fg="white", font=(
-            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventRegistration), self.show_frameleft(EventRegistration2)])
-        eventregistrationbutton.grid(row=0, column=3, rowspan=1, sticky=N+S+E+W)
         eventlistbutton = Button(container3, text="Event\nList", bg=OTHERPINK, fg="white", font=(
             "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventView), self.show_frameleft(EventView2)])
-        eventlistbutton.grid(row=0, column=4, rowspan=1, sticky=N+S+E+W)
+        eventlistbutton.grid(row=0, column=3, rowspan=1, sticky=N+S+E+W)
+        eventregistrationbutton = Button(container3, text="Event\nRegistration", bg=OTHERPINK, fg="white", font=(
+            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventRegistration), self.show_frameleft(EventRegistration2)])
+        eventregistrationbutton.grid(row=0, column=4, rowspan=1, sticky=N+S+E+W)
         # container3.grid_rowconfigure(0, weight=1)
         # container3.grid_columnconfigure(0, weight=1)
         # container3.grid_rowconfigure(1, weight=1)
@@ -79,16 +80,6 @@ class Window(Tk):
         # container3.grid_columnconfigure(3, weight=1)
         # container3.grid_rowconfigure(4, weight=1)
         # container3.grid_columnconfigure(4, weight=1)
-
-
-        self.frames = {}
-        for F in (MainPage, LoginPage, RegistrationPage, MainPage2, LoginPage2, RegistrationPage2):
-            frame = F(container, self)
-            frame.grid(row=0, column=0, sticky="nsew")
-            self.frames[F] = frame
-        self.show_frame(MainPage)
-        self.show_frameleft(MainPage2)
-
         # Top Container
         # container4 = Containers(self, bg="magenta", borderwidth=1, relief="solid", row=0, column=0, rowspan=2, columnspan=32, sticky=N+S+E+W)
 
@@ -423,7 +414,7 @@ class LoginPage2(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(25):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg="purple", borderwidth=1, relief="solid").grid(
+            Label(self, height=2, bg="orange", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
         for y in range(25):
             self.rowconfigure(y, weight=0, uniform='x')
@@ -498,7 +489,7 @@ class MainPage2(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(25):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg="red", borderwidth=1, relief="solid").grid(
+            Label(self, height=2, bg="light yellow", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
         for y in range(25):
             self.rowconfigure(y, weight=0, uniform='x')
@@ -572,7 +563,7 @@ class EventView2(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(25):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg="red", borderwidth=1, relief="solid").grid(
+            Label(self, height=2, bg="light green", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
         for y in range(25):
             self.rowconfigure(y, weight=0, uniform='x')
@@ -646,7 +637,7 @@ class EventRegistration2(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(25):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg="red", borderwidth=1, relief="solid").grid(
+            Label(self, height=2, bg="light blue", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
         for y in range(25):
             self.rowconfigure(y, weight=0, uniform='x')
@@ -671,7 +662,7 @@ class EventRegistration2(Frame):
 
         # Widgets
         label = Label(self, text="This is the secondary event registration page\n Still under construction :)", font=(
-            'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+            'Segoe Ui Semibold', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=2, columnspan=16,
                 rowspan=2, sticky=N+S+E+W)
 
