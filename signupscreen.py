@@ -4,7 +4,7 @@ from PIL import ImageTk, Image, ImageOps
 import math
 import sqlite3
 
-from mysqlx import IntegrityError
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 PINK = "#FFE3E1"
