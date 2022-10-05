@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from typing import Protocol
 from PIL import ImageTk, Image, ImageOps
+import math
 import sqlite3
 
 
@@ -23,9 +24,21 @@ class ContainerFactory(Protocol):
 class Window(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
-        self.geometry('1920x1080')
+        dpiError = False
+        try:
+            from ctypes import windll
+            windll.shcore.SetProcessDpiAwareness(1)
+        except:
+            print('ERROR. Could not set DPI awareness.')
+        dpiError = True
+        if dpiError:
+            dpi = 96
+        else:
+            dpi = self.winfo_fpixels('1i')
+        self.geometry(f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
+        self.grid_propagate(False)
         self.title("INTI Interactive System")
-        self.resizable(1, 1)
+        self.resizable(0, 0)
         for x in range(32):
             self.columnconfigure(x, weight=1, uniform='row')
             Label(width=1, bg=LIGHTYELLOW, borderwidth=1, relief="solid").grid(

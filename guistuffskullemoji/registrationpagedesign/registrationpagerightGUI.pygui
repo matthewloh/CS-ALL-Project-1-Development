@@ -16706,7 +16706,7 @@
       </backgroundColour>
       <mainWindow>true</mainWindow>
       <format>4</format>
-      <DPIaware>false</DPIaware>
+      <DPIaware>true</DPIaware>
       <resizable>false</resizable>
       <backgroundImage>
         <xPos>0</xPos>
@@ -16744,6 +16744,28 @@
           </colour>
           <text>Welcome to the login page of\nINTI Interactive System!</text>
           <hexColour>FFF5E4</hexColour>
+          <hexTextColour>000000</hexTextColour>
+          <textColour>
+            <float>0</float>
+            <float>0</float>
+            <float>0</float>
+          </textColour>
+          <textSize>16</textSize>
+          <font>Arial</font>
+        </label>
+        <label>
+          <xPos>9</xPos>
+          <yPos>7</yPos>
+          <xSpace>2</xSpace>
+          <ySpace>1</ySpace>
+          <title>Label1</title>
+          <colour>
+            <float>1</float>
+            <float>0</float>
+            <float>0</float>
+          </colour>
+          <text>Label1</text>
+          <hexColour>FF0000</hexColour>
           <hexTextColour>000000</hexTextColour>
           <textColour>
             <float>0</float>

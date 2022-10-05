@@ -10,14 +10,23 @@ from tkinter import *
 from tkinter import ttk
 import tkinter.font
 
-
+dpiError = False
+try:
+  from ctypes import windll
+  windll.shcore.SetProcessDpiAwareness(1)
+except:
+  print('ERROR. Could not set DPI awareness.')
+  dpiError = True
 if __name__ == "__main__":
   registrationpagerightGUI = Tk()
 else:
   registrationpagerightGUI = Tk()
 registrationpagerightGUI.title('registrationpagerightGUI')
-dpi = 96
-registrationpagerightGUI.geometry('780x897')
+if dpiError:
+  dpi = 96
+else:
+  dpi = registrationpagerightGUI.winfo_fpixels('1i')
+registrationpagerightGUI.geometry(f'{math.ceil(780 * dpi / 96)}x{math.ceil(897 * dpi / 96)}')
 registrationpagerightGUI.grid_propagate(False)
 for x in range(20):
   Grid.columnconfigure(registrationpagerightGUI, x, weight=1, uniform='row')
@@ -95,6 +104,7 @@ def run():
   dimensions = [0,0]
   if __name__ != "__main__":
     init()
+  resizeEvent(None)
   registrationpagerightGUI.mainloop()
 registrationpagerightGUI.run = run
 registrationpagerightGUI.hide = hide
@@ -108,6 +118,7 @@ def resize():
     registrationpagerightGUI.Label1.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 2 / 20) + 2)
     registrationpagerightGUI.havepassword.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 11 / 20) + 2)
     registrationpagerightGUI.signupbutton.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 8 / 20) + 2)
+    dimensions = [registrationpagerightGUI.winfo_width(), registrationpagerightGUI.winfo_height()]
 
 eventID = None
 registrationpagerightGUI.resizeDelay = 100
