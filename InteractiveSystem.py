@@ -1,5 +1,6 @@
 
 from tkinter import *
+from tkinter import ttk
 from tkinter import messagebox
 from typing import Protocol
 from PIL import ImageTk, Image, ImageOps
@@ -49,8 +50,9 @@ class Window(Tk):
                 row=y, column=0, sticky=N+S+E+W,)
         self.configure(background=LIGHTYELLOW)
         # Right Container
-        container = Frame(self, bg="brown", borderwidth=1,
-                          relief="solid", width=1, height=1)
+        container = Frame(self, 
+                         bg="brown", borderwidth=1,relief="solid", 
+                         width=1, height=1)
         container.grid_propagate(0)
         container.grid(row=3, column=17, columnspan=13,
                        rowspan=12, sticky=N+S+E+W)
@@ -64,24 +66,43 @@ class Window(Tk):
         container2.grid_rowconfigure(0, weight=0)
         container2.grid_columnconfigure(0, weight=0)
 
-        # Bottom Container
-        container3 = Containers(self, bg="orange", borderwidth=1, relief="solid",
-                                row=0, column=0, rowspan=2, columnspan=10, sticky=N+S+E+W)
+
+        # Top Container
+        #functions to enlarge the left and right frames and revert
+        def changecontainersizes(rightcontainer, leftcontainer): 
+            rightcontainer.grid(row=2, column=16, rowspan=14,
+                            columnspan=14, sticky=N+S+E+W)
+            leftcontainer.grid(row=2, column=2, rowspan=14,
+                               columnspan=14, sticky=N+S+E+W)
+        def makeleftcontainerhuge(leftcontainer):
+             leftcontainer.grid(row=2, column=2, rowspan=14,
+                               columnspan=28, sticky=N+S+E+W)
+
+        def revertcontainersizes(rightcontainer, leftcontainer):
+            rightcontainer.grid(row=3, column=17, columnspan=13,
+                               rowspan=12, sticky=N+S+E+W)
+            leftcontainer.grid(row=3, column=2, columnspan=13,
+                               rowspan=12, sticky=N+S+E+W)
+        def keepcontainerlarge(rightcontainer):
+            rightcontainer.grid(row=2, column=16, rowspan=14,
+                            columnspan=14, sticky=N+S+E+W)
+        container3 = Frame(self, bg="orange", borderwidth=1, relief="solid")
+        container3.grid(row=0, column=0, rowspan=2, columnspan=10, sticky=N+S+E+W)
         container3.grid_propagate(0)
         signupbutton = Button(container3, text="Sign Up\n Page", bg=OTHERPINK, fg="white", font=(
-            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(RegistrationPage), self.show_frameleft(RegistrationPage2)])
+            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(RegistrationPage), self.show_frameleft(RegistrationPage2), revertcontainersizes(container, container2)])
         signupbutton.grid(row=0, column=0, rowspan=1, sticky=N+S+E+W)
         loginbutton = Button(container3, text="Login\nPage", bg=OTHERPINK, fg="white", font=(
-            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(LoginPage), self.show_frameleft(LoginPage2)])
+            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(LoginPage), self.show_frameleft(LoginPage2), revertcontainersizes(container, container2), keepcontainerlarge(container)])
         loginbutton.grid(row=0, column=1, rowspan=1, sticky=N+S+E+W)
         mainpagebutton = Button(container3, text="Main\nPage", bg=OTHERPINK, fg="white", font=(
-            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(MainPage), self.show_frameleft(MainPage2)])
+            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EmptyRFrame),self.show_frameleft(MainPage2), makeleftcontainerhuge(container2)])
         mainpagebutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
         eventlistbutton = Button(container3, text="Event\nList", bg=OTHERPINK, fg="white", font=(
-            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventView), self.show_frameleft(EventView2)])
+            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventView), self.show_frameleft(EventView2), revertcontainersizes(container, container2),changecontainersizes(container2,container2)])
         eventlistbutton.grid(row=0, column=3, rowspan=1, sticky=N+S+E+W)
         eventregistrationbutton = Button(container3, text="Event\nRegistration", bg=OTHERPINK, fg="white", font=(
-            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventRegistration), self.show_frameleft(EventRegistration2)])
+            "Arial", 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventRegistration), self.show_frameleft(EventRegistration2), revertcontainersizes(container, container2),changecontainersizes(container,container2)])
         eventregistrationbutton.grid(row=0, column=4, rowspan=1, sticky=N+S+E+W)
         # container3.grid_rowconfigure(0, weight=1)
         # container3.grid_columnconfigure(0, weight=1)
@@ -98,7 +119,7 @@ class Window(Tk):
 
         self.frames = {}
 
-        for F in (RegistrationPage, LoginPage, MainPage, EventView, EventRegistration):
+        for F in (RegistrationPage, LoginPage, MainPage,EmptyRFrame, EventView, EventRegistration):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -118,7 +139,7 @@ class Window(Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
-# this is totally unnecessary and I was just tinker to learn how classes worked
+# this is totally unnecessary and I was just messing around to learn how classes worked
 class Containers(Frame):
     def __init__(self, parent, row, column, rowspan, columnspan, sticky, *args, **kwargs):
         self.row = row
@@ -332,7 +353,7 @@ class RegistrationPage2(Frame):
                        relief="solid", cursor="hand2")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(25):
+        for x in range(50):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg="red", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
@@ -425,7 +446,7 @@ class LoginPage2(Frame):
                        relief="solid", cursor="hand2")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(25):
+        for x in range(50):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg="orange", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
@@ -493,14 +514,51 @@ class MainPage(Frame):
                    rowspan=2, sticky=N+S+E+W)
 
         # Buttons
+class EmptyRFrame(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent, bg=LIGHTYELLOW)
+        #  bg=LIGHTYELLOW, borderwidth=1, relief="solid")
+        # self.grid_columnconfigure(0, weight=1)
+        # self.grid_rowconfigure(0, weight=1)
+        # for x in range(25):
+        #     self.columnconfigure(x, weight=1, uniform='x')
+        #     Label(self, height=2, bg="red", borderwidth=1, relief="solid").grid(
+        #         row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+        # for y in range(25):
+        #     self.rowconfigure(y, weight=0, uniform='x')
+        #     Label(self, width=5, bg=ORANGE, bd=1, borderwidth=1, relief="solid").grid(
+        #         row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
 
+        # class _(Window):
+        #     def changecontainersize(self, container):
+        #         container.grid(row=2, column=16, rowspan=14,
+        #                        columnspan=14, sticky=N+S+E+W)
+
+        #     def revertcontainersize(self, container):
+        #         container.grid(row=3, column=17, columnspan=13,
+        #                        rowspan=12, sticky=N+S+E+W)
+
+        # sizebutton = Button(
+        #     self, text="Big", command=lambda: _.changecontainersize(self, parent))
+        # sizebutton.grid(row=1, column=1, sticky=N+S+E+W)
+        # unsizebutton = Button(
+        #     self, text="Small", command=lambda: _.revertcontainersize(self, parent))
+        # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
+
+        # # Widgets
+        # label = Label(self, text="This is an empty page", font=(
+        #     'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # label.grid(row=1, column=2, columnspan=17,
+        #            rowspan=2, sticky=N+S+E+W)
+
+# Should only be one main page, but this is just for testing :)
 class MainPage2(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg="gold", borderwidth=1,
                        relief="solid", cursor="hand2")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(25):
+        for x in range(50):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg="light yellow", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
@@ -508,15 +566,30 @@ class MainPage2(Frame):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=ORANGE, bd=1, borderwidth=1, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
-
+        #mainly for development purposes
         class _(Window):
-            def changecontainersize(self, container):
-                container.grid(row=2, column=2, rowspan=14,
-                               columnspan=14, sticky=N+S+E+W)
-
             def revertcontainersize(self, container):
                 container.grid(row=3, column=2, columnspan=13,
                                rowspan=12, sticky=N+S+E+W)
+            def changecontainersize(self, container): 
+                container.grid(row=2, column=2, rowspan=14,
+                               columnspan=28, sticky=N+S+E+W)
+            def makeleftcontainerhuge(leftcontainer):
+             leftcontainer.grid(row=2, column=2, rowspan=14,
+                               columnspan=28, sticky=N+S+E+W)
+
+            def revertcontainersizes(rightcontainer, leftcontainer):
+                 rightcontainer.grid(row=3, column=17, columnspan=13,
+                               rowspan=12, sticky=N+S+E+W)
+                 leftcontainer.grid(row=3, column=2, columnspan=13,
+                               rowspan=12, sticky=N+S+E+W)
+            def keepcontainerlarge(rightcontainer):
+                    rightcontainer.grid(row=3, column=2, columnspan=13,
+                               rowspan=12, sticky=N+S+E+W)
+            def trollbutton(container):
+                container.grid(row=3, column=2, columnspan=13,
+                                 rowspan=12, sticky=N+S+E+W)
+            
 
         sizebutton = Button(
             self, text="Big", command=lambda: _.changecontainersize(self, parent))
@@ -524,12 +597,28 @@ class MainPage2(Frame):
         unsizebutton = Button(
             self, text="Small", command=lambda: _.revertcontainersize(self, parent))
         unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
+        testbutton = Button(
+            self, text="Heh", command=lambda: _.trollbutton(parent))
+        testbutton.grid(row=3, column=1, sticky=N+S+E+W)
+
 
         # Widgets
-        self.label = Label(self, text="This is the secondary main page\n Still under construction :)", font=(
+        placeholderlabel = Label(self, text="This is the main page\n Still under construction :)", font=(
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        self.label.grid(row=1, column=2, columnspan=16,
+        placeholderlabel.grid(row=1, column=12, columnspan=18,
                         rowspan=2, sticky=N+S+E+W)
+
+        # Buttons
+        eventlistbutton = Button(self, text="Event List", font=(
+            'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4', command=lambda:[controller.show_frame(EventView), controller.show_frameleft(EventView2),
+            _.keepcontainerlarge(parent)])
+        eventlistbutton.grid(row=10, column=2, columnspan=4,
+                        rowspan=4, sticky=N+S+E+W)
+        eventregistrationbutton = Button(self, text="Event\nRegistration", font=(
+            'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        eventregistrationbutton.grid(row=10, column=8, columnspan=4,
+                        rowspan=4, sticky=N+S+E+W)
+
 
 class EventView(Frame):
     def __init__(self, parent, controller):
@@ -574,7 +663,7 @@ class EventView2(Frame):
                     relief="solid", cursor="hand2")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(25):
+        for x in range(50):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg="light green", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
@@ -609,6 +698,7 @@ class EventRegistration(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg="gold", borderwidth=1,
                     relief="solid", cursor="hand2")
+        FONTNAME = "Avenir Next"
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         for x in range(25):
@@ -641,6 +731,47 @@ class EventRegistration(Frame):
             'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=2, columnspan=17,
                 rowspan=2, sticky=N+S+E+W)
+        def defocus(event):
+            event.widget.master.focus_set()
+
+        event_list = ["Lorem", "Ipsum", "Dolor"]
+        eventdropdown = ttk.Combobox(self, values = event_list, width = 1, state = 'readonly')
+        eventdropdown.set("Please select the event you want to register for:",)
+        eventdropdown.grid(row = 3, column = 2, columnspan = 17, rowspan = 2, sticky = N+S+E+W)
+        eventdropdown.bind('<FocusIn>', defocus)
+        separator = ttk.Separator(self, orient=HORIZONTAL)
+        separator.grid(row=5, column=3,columnspan=15, pady=5, sticky=EW)
+        var = StringVar()
+        genderlabel = Label(self, text="Gender", font=(FONTNAME, 14), bg='#FFF5E4')
+        genderlabel.grid(row=9, column=2, columnspan=2, rowspan=2, sticky=N+S+E+W)
+        phonenumberlabel = Label(self, text="Phone\nNumber", font=(FONTNAME, 14), bg='#FFF5E4')
+        phonenumberlabel.grid(row=9, column=10, columnspan=2, rowspan=2, sticky=N+S+E+W) 
+
+        radio_1 = ttk.Radiobutton(self, text="Male  ", variable=var, value=0)
+        radio_1.grid(row=9, column=5,rowspan=2, columnspan=2, pady=(0, 10), sticky=NS)
+
+        radio_1 = ttk.Radiobutton(self, text="Female", variable=var, value=1, command=lambda:print(var.get()))
+        radio_1.grid(row=9, column=7,rowspan=2, columnspan=2, pady=(0, 10), sticky=NS)
+
+        firstnamefield = Entry(self, width=1, bg='#FFFFFF',
+                               font=(FONTNAME, 18), justify='center')
+        firstnamefield.grid(row=6, column=2, columnspan=7,
+                            rowspan=2, sticky=N+S+E+W)
+        firstnamefield.insert(0, "First Name")
+
+        lastnamefield = Entry(self, width=1, bg='#FFFFFF',
+                              font=(FONTNAME, 18), justify='center')
+        lastnamefield.grid(row=6, column=12, columnspan=7,
+                           rowspan=2, sticky=N+S+E+W)
+        lastnamefield.insert(0, "Last Name")
+
+        emailfield = Entry(self, width=1, bg='#FFFFFF',
+                           font=(FONTNAME, 18), justify='center')
+        emailfield.grid(row=16, column=2, columnspan=17,
+                        rowspan=2, sticky=N+S+E+W)
+        emailfield.insert(0, "Email")
+
+  
 
 class EventRegistration2(Frame):
     def __init__(self, parent, controller):
@@ -648,7 +779,7 @@ class EventRegistration2(Frame):
                     relief="solid", cursor="hand2")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(25):
+        for x in range(50):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg="light blue", borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
@@ -678,6 +809,15 @@ class EventRegistration2(Frame):
             'Segoe Ui Semibold', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=2, columnspan=16,
                 rowspan=2, sticky=N+S+E+W)
+        
+        def defocus(event):
+            event.widget.master.focus_set()
+        
+        event_list = ["Please select the event you want to register for:","Lorem", "Ipsum", "Dolor"]
+        eventdropdown = ttk.Combobox(self, values = event_list, width = 1, state = 'readonly')
+        eventdropdown.current(0)
+        eventdropdown.grid(row = 6, column = 2, columnspan = 16, rowspan = 2, sticky = NSEW)
+        eventdropdown.bind('<FocusIn>', defocus)
 
 
 if __name__ == "__main__":

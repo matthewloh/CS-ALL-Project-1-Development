@@ -41,14 +41,11 @@ registrationpagerightGUI.resizable(False, False)
 
 registrationpagerightGUI.enterdetailslabel = Label(registrationpagerightGUI, text = "Welcome to the login page of\nINTI Interactive System!", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#FFF5E4')
 registrationpagerightGUI.enterdetailslabel.grid(row = 1, column = 2, columnspan = 16, rowspan = 2, sticky = N+S+E+W)
-registrationpagerightGUI.Label1 = Label(registrationpagerightGUI, text = "Label1", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#FF0000')
-registrationpagerightGUI.Label1.grid(row = 15, column = 9, columnspan = 2, rowspan = 1, sticky = N+S+E+W)
-registrationpagerightGUI.emailfield = Entry(registrationpagerightGUI, width = 1, bg = '#FFFFFF', font = ('Arial', 18), justify = 'center')
-registrationpagerightGUI.emailfield.grid(row = 5, column = 2, columnspan = 16, rowspan = 2, sticky = N+S+E+W)
-registrationpagerightGUI.emailfield.insert(0, "Please enter your student email.")
-registrationpagerightGUI.passwordfield = Entry(registrationpagerightGUI, width = 1, bg = '#FFFFFF', font = ('Arial', 18), justify = 'center')
-registrationpagerightGUI.passwordfield.grid(row = 8, column = 2, columnspan = 16, rowspan = 2, sticky = N+S+E+W)
-registrationpagerightGUI.passwordfield.insert(0, "Please enter your password.")
+def defocus(event):
+  event.widget.master.focus_set()
+registrationpagerightGUI.eventdropdown = ttk.Combobox(registrationpagerightGUI, values = ['Value 1','Event1','Event2','Event3','',], width = 1, state = 'readonly')
+registrationpagerightGUI.eventdropdown.grid(row = 6, column = 2, columnspan = 16, rowspan = 2, sticky = N+S+E+W)
+registrationpagerightGUI.eventdropdown.bind('<FocusIn>', defocus)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~BUTTONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -59,17 +56,8 @@ def rungotosignin(argument):
       gotosignin(argument)
     except TypeError:
       gotosignin()
-def runsignupbuttonclicked(argument):
-  if not(__name__ == '__main__'):
-    from main import signupbuttonclicked
-    try:
-      signupbuttonclicked(argument)
-    except TypeError:
-      signupbuttonclicked()
 registrationpagerightGUI.havepassword = Button(registrationpagerightGUI, text = "Don't have an account? Click here to sign up.", font = ('Arial', 12), width = 1, height = 1, fg = '#000000', command = lambda: rungotosignin("havepassword"), bg = '#FF0000')
 registrationpagerightGUI.havepassword.grid(row = 21, column = 4, columnspan = 11, rowspan = 1, sticky = N+S+E+W)
-registrationpagerightGUI.signupbutton = Button(registrationpagerightGUI, text = "SIGN IN", font = ('Arial', 18), width = 1, height = 1, fg = '#000000', command = lambda: runsignupbuttonclicked("signupbutton"), bg = '#FF0000')
-registrationpagerightGUI.signupbutton.grid(row = 12, column = 6, columnspan = 8, rowspan = 2, sticky = N+S+E+W)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~HELPER FUNCTIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -77,7 +65,6 @@ def initModules():
   raise Exception('This main file is outdated. Script main.py must be updated to reflect the changes in GUI Pie v3.')
 def init():
   from main import gotosignin
-  from main import signupbuttonclicked
 registrationpagerightGUI.initModules = initModules
 def hide():
   registrationpagerightGUI.withdraw()
@@ -85,19 +72,13 @@ def show():
   registrationpagerightGUI.deiconify()
 def hideAllWidgets():
     registrationpagerightGUI.enterdetailslabel.grid_remove()
-    registrationpagerightGUI.Label1.grid_remove()
-    registrationpagerightGUI.emailfield.grid_remove()
-    registrationpagerightGUI.passwordfield.grid_remove()
     registrationpagerightGUI.havepassword.grid_remove()
-    registrationpagerightGUI.signupbutton.grid_remove()
+    registrationpagerightGUI.eventdropdown.grid_remove()
 registrationpagerightGUI.hideAllWidgets = hideAllWidgets
 def showAllWidgets():
     registrationpagerightGUI.enterdetailslabel.grid()
-    registrationpagerightGUI.Label1.grid()
-    registrationpagerightGUI.emailfield.grid()
-    registrationpagerightGUI.passwordfield.grid()
     registrationpagerightGUI.havepassword.grid()
-    registrationpagerightGUI.signupbutton.grid()
+    registrationpagerightGUI.eventdropdown.grid()
 registrationpagerightGUI.showAllWidgets = showAllWidgets
 def run():
   global dimensions
@@ -115,9 +96,7 @@ def resize():
   global registrationpagerightGUI, dimensions
   if registrationpagerightGUI.winfo_width() != dimensions[0] or registrationpagerightGUI.winfo_height() != dimensions[1]:
     registrationpagerightGUI.enterdetailslabel.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 16 / 20) + 2)
-    registrationpagerightGUI.Label1.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 2 / 20) + 2)
     registrationpagerightGUI.havepassword.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 11 / 20) + 2)
-    registrationpagerightGUI.signupbutton.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 8 / 20) + 2)
     dimensions = [registrationpagerightGUI.winfo_width(), registrationpagerightGUI.winfo_height()]
 
 eventID = None
