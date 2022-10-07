@@ -192,10 +192,30 @@ class RegistrationPage(Frame):
             first_name text NOT NULL,
             last_name text NOT NULL,
             email text NOT NULL PRIMARY KEY,
+            role text NOT NULL,
             password text NOT NULL
         )""")
+        c.execute("DROP Table registration")
 
         # possibly, we could make two functions, one to validate input and another to actually send the data to the database, instead of checking validity itself in checkfields()
+        # a function to designate a role depending on ending of email registration
+
+        def role():
+            try:
+                emailending = emailfield.get().split("@")[1]
+                if emailending==("student.newinti.edu.my"):
+                    messagebox.showinfo("Role", "You are a student.")
+                    return "student"
+
+                elif emailending==("newinti.edu.my"):
+                    messagebox.showinfo("Role", "You are an.")
+                    return "admin"
+                else:
+                    messagebox.showerror("Error", "Please enter a valid email.")
+            except IndexError:
+                messagebox.showerror("Error", "Please enter an email")
+            
+ 
         def checkfields():
             # c.execute("DROP TABLE registration")
             firstnametext = firstnamefield.get()
@@ -203,6 +223,7 @@ class RegistrationPage(Frame):
             emailtext = emailfield.get()
             passwordtext = passwordfield.get()
             confirmpasstext = confirmpasswordfield.get()
+            
             information = (firstnametext, lastnametext,
                            emailtext, passwordtext)
 
@@ -352,6 +373,11 @@ class RegistrationPage(Frame):
         loginbutton.grid(row=19, column=6, columnspan=8,
                          rowspan=2, sticky=N+S+E+W)
 
+        checkrolebutton = Button(self, text="Check your role", font=(
+            'Arial', 18), width=1, height=1, fg='#000000', command=lambda: role(), bg=LIGHTYELLOW)
+        checkrolebutton.grid(row=15, column=2, columnspan=4,
+                                rowspan=2, sticky=N+S+E+W)
+
 
 class RegistrationPage2(Frame):
     def __init__(self, parent, controller):
@@ -389,6 +415,18 @@ class RegistrationPage2(Frame):
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=2, columnspan=16,
                    rowspan=2, sticky=N+S+E+W)
+        # imageframe = Frame(self, borderwidth=1,
+        #                     relief="solid", cursor="hand2")
+        # imageframe.grid(row=3, column=2, columnspan=13,
+        #                 rowspan=12, sticky=N+S+E+W) 
+        # INTI_BannerImage = Image.open('Assets\Home-Banner-INTI.png')
+        # # INTI_BannerImage = ImageOps.exif_transpose(INTI_BannerImage)
+        # INTI_BannerImage = ImageTk.PhotoImage(INTI_BannerImage.resize(
+        #     (math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        # INTI_Banner = Label(self, image=INTI_BannerImage)
+        INTI_Banner = PhotoImage(file="Assets\Home-Banner-INTI.png")
+        INTI_Banner = Label(parent, image=INTI_Banner)
+        INTI_Banner.grid(row=15, column=2, columnspan=8, rowspan=2, sticky=N+S+E+W)
 
         # Buttons
 

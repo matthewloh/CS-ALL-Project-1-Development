@@ -3,7 +3,7 @@ from tkinter import messagebox
 from PIL import ImageTk, Image, ImageOps
 import math
 import sqlite3
-from databasestuff import UsersRegistration
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ # 
 PINK = "#FFE3E1"
@@ -26,7 +26,7 @@ window.configure(background='#FFE3E1')
 window.resizable(True, True)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Database Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-db = UsersRegistration()
+
 
 stuff = (
     
@@ -226,9 +226,8 @@ PlaceholderRadioButton.grid(
 # # Inti Logo
 # INTI_Banner = Label(window, image=INTI_BannerImage, width=1, height=1, bg='#FFE3E1')
 # INTI_Banner.grid(row=2, column=20, columnspan=8, rowspan=3, sticky=N+S+E+W)
-INTI_BannerOriginal = Image.open(
-    r'C:/Users/matth/Desktop/yeah/Home-Banner-INTI.png')
-INTI_BannerImage = ImageOps.exif_transpose(INTI_BannerOriginal)
+INTI_BannerImage = Image.open('Home-Banner-INTI.png')
+# INTI_BannerImage = ImageOps.exif_transpose(INTI_BannerImage)
 INTI_BannerImage = ImageTk.PhotoImage(INTI_BannerImage.resize(
     (math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
 INTI_Banner = Label(image=INTI_BannerImage, width=1, height=1, bg='#FFE3E1')
