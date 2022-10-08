@@ -211,7 +211,12 @@ class RegistrationPage(Frame):
                     messagebox.showinfo("Role", "You are an.")
                     return "admin"
                 else:
-                    messagebox.showerror("Error", "Please enter a valid email.")
+                    emailwarning = Label(self, text="Please enter a valid email address.", font=(
+                    'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
+                    emailwarning.grid(row=6, column=11, columnspan=7,
+                                rowspan=1, sticky=N+S+E+W)
+                    emailwarning.configure(text ="Please enter a valid email.", fg="red")
+                    return "invalid"
             except IndexError:
                 messagebox.showerror("Error", "Please enter an email")
             
@@ -419,15 +424,33 @@ class RegistrationPage2(Frame):
         #                     relief="solid", cursor="hand2")
         # imageframe.grid(row=3, column=2, columnspan=13,
         #                 rowspan=12, sticky=N+S+E+W) 
-        # INTI_BannerImage = Image.open('Assets\Home-Banner-INTI.png')
-        # # INTI_BannerImage = ImageOps.exif_transpose(INTI_BannerImage)
-        # INTI_BannerImage = ImageTk.PhotoImage(INTI_BannerImage.resize(
+        # self.INTI_BannerImage = Image.open('Assets\Home-Banner-INTI.png')
+        # self.INTI_BannerImage = ImageOps.exif_transpose(self.INTI_BannerImage)
+        # self.INTI_BannerImage = ImageTk.PhotoImage(self.INTI_BannerImage.resize(
         #     (math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
-        # INTI_Banner = Label(self, image=INTI_BannerImage)
-        INTI_Banner = PhotoImage(file="Assets\Home-Banner-INTI.png")
-        INTI_Banner = Label(parent, image=INTI_Banner)
-        INTI_Banner.grid(row=15, column=2, columnspan=8, rowspan=2, sticky=N+S+E+W)
+        # INTI_Banner = Label(self, image=self.INTI_BannerImage, anchor=S)
+        # INTI_Banner.grid(row=3, column=2, columnspan=4,
+        #                     rowspan=3, sticky=N+S+E+W) 
+        # INTI_Banner.grid_propagate(False)
+        # self.bannerphoto = Image.open("Assets\Home-Banner-INTI.png")
+        # self.bannerphoto = ImageTk.PhotoImage(self.bannerphoto.resize(
+        #     (math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
 
+        # bannerlabel = Label(self, image=self.bannerphoto, anchor=NW, width=1, height=1)
+        # bannerlabel.grid(row=6, column=5, columnspan=9, rowspan=4, sticky=N+S+E+W)
+        # bannerlabel.grid_propagate(False)
+        self.intibanner = Image.open("Home-Banner-INTI.png")
+        self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
+            (math.ceil(380 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        ballslabel = Button(self, image=self.intibanner, anchor=NW, width=1, height=1)
+        ballslabel.grid(row=7, column=5, columnspan=10,
+                        rowspan=12, sticky=N+S+E+W)
+
+
+        
+        
+
+     
         # Buttons
 
 

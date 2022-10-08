@@ -266,11 +266,18 @@ class RegistrationPage(Frame):
             emailfield.configure(fg="black")
             if emailfield.get() == EMAILTEXT:
                 emailfield.delete(0, END)
-
+        def showwarninglabelaboveentry():
+            #configure emailwarning to show red when invalid email
+            emailwarning = Label(self, text="Please enter a valid email address.", font=(
+            'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
+            emailwarning.grid(row=6, column=11, columnspan=7,
+                          rowspan=1, sticky=N+S+E+W)
+            emailwarning.configure(text ="Please enter a valid email.", fg="red")
         def repopulateemailfield():
             if emailfield.get() == "":
                 emailfield.insert(0, EMAILTEXT)
                 emailfield.configure(fg="red")
+                showwarninglabelaboveentry()
 
         def clearpasswordfield():
             passwordfield.configure(fg="black")
@@ -323,6 +330,7 @@ class RegistrationPage(Frame):
         emailfield.grid(row=7, column=1, columnspan=17,
                         rowspan=2, sticky=N+S+E+W)
         emailfield.insert(0, EMAILTEXT)
+
 
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
@@ -397,8 +405,22 @@ class RegistrationPage2(Frame):
         # Widgets
         label = Label(self, text="This is the registration page on left frame\nCome back later, still under construction!", font=(
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        label.grid(row=1, column=2, columnspan=16,
+        label.grid(row=1, column=2, columnspan=17,
                    rowspan=2, sticky=N+S+E+W)
+
+        self.intibanner = Image.open("Home-Banner-INTI.png")
+        self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
+            (math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        logolabel = Button(self, image=self.intibanner, anchor=CENTER, width=1, height=1)
+        logolabel.grid(row=4, column=5, columnspan=11,
+                        rowspan=5, sticky=N+S+E+W)
+        self.titleart = Image.open("DR7j7r0.png")
+        self.titleart = ImageTk.PhotoImage(self.titleart.resize(
+            (math.ceil(720 * dpi / 96), math.ceil(240 * dpi / 96)), Image.Resampling.LANCZOS))
+        titleartlabel = Button(self, image=self.titleart, anchor=CENTER, width=1, height=1)
+        titleartlabel.grid(row=9, column=0, columnspan=21,
+                        rowspan=8, sticky=N+S+E+W)
+        
 
         # Buttons
 
