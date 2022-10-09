@@ -9,7 +9,13 @@ import math
 from tkinter import *
 from tkinter import ttk
 import tkinter.font
-
+try:
+  from PIL import ImageTk, Image, ImageOps
+except:
+  print('Installing PIL.')
+  subprocess.check_call(['pip', 'install', 'pillow'])
+  print('Done.')
+  from PIL import ImageTk, Image, ImageOps
 dpiError = False
 try:
   from ctypes import windll
@@ -39,6 +45,9 @@ registrationpagerightGUI.resizable(False, False)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~WIDGETS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+registrationpagerightGUI.Image1Original = Image.open(r'C:/Users/matth/Desktop/CS-ALL-Project-1-Development/CS-ALL-Project-1-Development/Assets/Abstruct/Night in Dreamcanyon.jpg')
+registrationpagerightGUI.Image1Image = ImageOps.exif_transpose(registrationpagerightGUI.Image1Original)
+registrationpagerightGUI.Image1Image = ImageTk.PhotoImage(registrationpagerightGUI.Image1Image.resize((math.ceil(429 * dpi / 96), math.ceil(429 * dpi / 96)), Image.Resampling.LANCZOS))
 registrationpagerightGUI.enterdetailslabel = Label(registrationpagerightGUI, text = "Welcome to the login page of\nINTI Interactive System!", font = ('Arial', 16), width = 1, height = 1, fg = '#000000', bg = '#FFF5E4')
 registrationpagerightGUI.enterdetailslabel.grid(row = 1, column = 2, columnspan = 16, rowspan = 2, sticky = N+S+E+W)
 def defocus(event):
@@ -56,8 +65,17 @@ def rungotosignin(argument):
       gotosignin(argument)
     except TypeError:
       gotosignin()
+def runimage(argument):
+  if not(__name__ == '__main__'):
+    from main import image
+    try:
+      image(argument)
+    except TypeError:
+      image()
 registrationpagerightGUI.havepassword = Button(registrationpagerightGUI, text = "Don't have an account? Click here to sign up.", font = ('Arial', 12), width = 1, height = 1, fg = '#000000', command = lambda: rungotosignin("havepassword"), bg = '#FF0000')
 registrationpagerightGUI.havepassword.grid(row = 21, column = 4, columnspan = 11, rowspan = 1, sticky = N+S+E+W)
+registrationpagerightGUI.Image1 = Button(registrationpagerightGUI, image = registrationpagerightGUI.Image1Image, width = 1, height = 1, bg = '#00FFFF', activebackground = '#00FFFF', command = lambda: runimage("Image1"), highlightthickness=0, relief='flat')
+registrationpagerightGUI.Image1.grid(row = 9, column = 2, columnspan = 15, rowspan = 11, sticky = N+S+E+W)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~HELPER FUNCTIONS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -65,6 +83,7 @@ def initModules():
   raise Exception('This main file is outdated. Script main.py must be updated to reflect the changes in GUI Pie v3.')
 def init():
   from main import gotosignin
+  from main import image
 registrationpagerightGUI.initModules = initModules
 def hide():
   registrationpagerightGUI.withdraw()
@@ -74,11 +93,13 @@ def hideAllWidgets():
     registrationpagerightGUI.enterdetailslabel.grid_remove()
     registrationpagerightGUI.havepassword.grid_remove()
     registrationpagerightGUI.eventdropdown.grid_remove()
+    registrationpagerightGUI.Image1.grid_remove()
 registrationpagerightGUI.hideAllWidgets = hideAllWidgets
 def showAllWidgets():
     registrationpagerightGUI.enterdetailslabel.grid()
     registrationpagerightGUI.havepassword.grid()
     registrationpagerightGUI.eventdropdown.grid()
+    registrationpagerightGUI.Image1.grid()
 registrationpagerightGUI.showAllWidgets = showAllWidgets
 def run():
   global dimensions
@@ -97,6 +118,13 @@ def resize():
   if registrationpagerightGUI.winfo_width() != dimensions[0] or registrationpagerightGUI.winfo_height() != dimensions[1]:
     registrationpagerightGUI.enterdetailslabel.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 16 / 20) + 2)
     registrationpagerightGUI.havepassword.config(wraplength = math.ceil(registrationpagerightGUI.winfo_width() * 11 / 20) + 2)
+    registrationpagerightGUI.Image1Original = Image.open(r'C:/Users/matth/Desktop/CS-ALL-Project-1-Development/CS-ALL-Project-1-Development/Assets/Abstruct/Night in Dreamcanyon.jpg')
+    registrationpagerightGUI.Image1Image = ImageOps.exif_transpose(registrationpagerightGUI.Image1Original)
+    if (registrationpagerightGUI.winfo_height() / 23 * 11) * 2340 / 2340 < registrationpagerightGUI.winfo_width() * 15 / 20:
+      registrationpagerightGUI.Image1Image = ImageTk.PhotoImage(registrationpagerightGUI.Image1Image.resize((math.ceil(registrationpagerightGUI.winfo_height() * 11 / 23 * 2340 / 2340), math.ceil(registrationpagerightGUI.winfo_height() * 11 / 23)), Image.Resampling.LANCZOS))
+    else:
+      registrationpagerightGUI.Image1Image = ImageTk.PhotoImage(registrationpagerightGUI.Image1Image.resize((math.ceil(registrationpagerightGUI.winfo_width() * 15 / 20), math.ceil(registrationpagerightGUI.winfo_width() * 15 / 20 * 2340 / 2340)), Image.Resampling.LANCZOS))
+    registrationpagerightGUI.Image1.config(image = registrationpagerightGUI.Image1Image)
     dimensions = [registrationpagerightGUI.winfo_width(), registrationpagerightGUI.winfo_height()]
 
 eventID = None

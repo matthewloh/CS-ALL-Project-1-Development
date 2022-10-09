@@ -18,7 +18,7 @@ NICEBLUE = "#AAC4FF"
 LAVENDER = "#D2DAFF"
 LIGHTPURPLE = "#EEF1FF"
 dpi = 96
-
+LOGGEDIN = "Nah"
 
 class ContainerFactory(Protocol):
     def __call__(self, master: Tk, *args, **kwargs) -> Frame:
@@ -53,6 +53,13 @@ class Window(Tk):
             Label(width=1, bg=NICEPURPLE, bd=1).grid(
                 row=y, column=0, sticky=N+S+E+W,)
         self.configure(background=NICEPURPLE)
+        
+        def setstateofaccount(self, state):
+            self.stateofaccount = state
+            return self.stateofaccount
+
+        setstateofaccount(self, LOGGEDIN)
+        print(setstateofaccount(self, LOGGEDIN))
         # Right Container
         container = Frame(self,
                           bg=LAVENDER,
@@ -130,7 +137,6 @@ class Window(Tk):
         # container3.grid_columnconfigure(4, weight=1)
         # Top Container
         # container4 = Containers(self, bg="magenta", borderwidth=1, relief="solid", row=0, column=0, rowspan=2, columnspan=32, sticky=N+S+E+W)
-
         self.frames = {}
 
         for F in (RegistrationPage, LoginPage, MainPage, EmptyRFrame, EventView, EventRegistration):
@@ -202,15 +208,26 @@ class RegistrationPage(Frame):
             first_name text NOT NULL,
             last_name text NOT NULL,
             email text NOT NULL PRIMARY KEY,
-            password text NOT NULL
+            password text NOT NULL,
+            role text NOT NULL
         )""")
-
+        # c.execute ("DROP TABLE registration")
         # possibly, we could make two functions, one to validate input and another to actually send the data to the database, instead of checking validity itself in checkfields()
         def checkfields():
             # c.execute("DROP TABLE registration")
             firstnametext = firstnamefield.get()
             lastnametext = lastnamefield.get()
             emailtext = emailfield.get()
+            try:
+                emailending = emailfield.get().split("@")[1]
+                if emailending == "student.newinti.edu.my":
+                    role = "student"
+                    return role
+                elif emailending == "newinti.edu.my":
+                    role = "admin"
+                    return role   
+            except IndexError:
+                emailwarning.configure(text="You have not entered an email")
             passwordtext = passwordfield.get()
             confirmpasstext = confirmpasswordfield.get()
             information = (firstnametext, lastnametext,
@@ -229,6 +246,7 @@ class RegistrationPage(Frame):
                             "Success", "You have successfully registered.")
                         controller.show_frame(LoginPage)
                         controller.show_frameleft(LoginPage2)
+                        _.changecontainersize(self, parent)
 
             except sqlite3.IntegrityError:
                 messagebox.showerror("Error", "Email already in use.")
@@ -236,7 +254,7 @@ class RegistrationPage(Frame):
         class _(Window):
             def changecontainersize(self, container):
                 container.grid(row=2, column=16, rowspan=14,
-                               columnspan=14, sticky=N+S+E+W)
+                                columnspan=14, sticky=N+S+E+W)
 
             def revertcontainersize(self, container):
                 container.grid(row=3, column=17, columnspan=13,
@@ -261,16 +279,43 @@ class RegistrationPage(Frame):
                 firstnamefield.insert(0, FIRSTNAME)
             if lastnamefield.get() == "":
                 lastnamefield.insert(0, LASTNAME)
-
+        emailwarning = Label(self, text="Please enter a valid email address.", font=(
+            'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
         def clearemailfield():
             emailfield.configure(fg="black")
             if emailfield.get() == EMAILTEXT:
                 emailfield.delete(0, END)
-
+            try:
+                emailending = emailfield.get().split("@")[1]
+                if emailending in ["student.newinti.edu.my", "newinti.edu.my"]:
+                    emailwarning.configure(fg="black")
+                else:
+                    emailwarning.configure(text="Email entered is not with INTI or incomplete")
+            except IndexError:
+                emailwarning.configure(text="You have not entered an email")
+        def showwarninglabelaboveentry():
+            #configure emailwarning to show red when invalid email
+            emailwarning.grid(row=6, column=10, columnspan=8,
+                          rowspan=1, sticky=N+S+E+W)
+            emailwarning.configure(text ="Please enter a valid email.", fg="red")
         def repopulateemailfield():
-            if emailfield.get() == "":
-                emailfield.insert(0, EMAILTEXT)
+            try:
+                emailending = emailfield.get().split("@")[1]
+                print(emailending)
+                if emailending not in ["student.newinti.edu.my", "newinti.edu.my"]:
+                    if emailfield=="":
+                        emailfield.insert(0, EMAILTEXT)
+                    emailfield.configure(fg="red")
+                    showwarninglabelaboveentry()
+                else:
+                    emailfield.configure(fg="black")
+                    emailwarning.grid_forget()
+            except IndexError:
+                if emailfield.get() == EMAILTEXT or emailfield.get() == "":
+                    emailfield.delete(0, END)
+                    emailfield.insert(0, EMAILTEXT)
                 emailfield.configure(fg="red")
+                showwarninglabelaboveentry()
 
         def clearpasswordfield():
             passwordfield.configure(fg="black")
@@ -323,6 +368,7 @@ class RegistrationPage(Frame):
         emailfield.grid(row=7, column=1, columnspan=17,
                         rowspan=2, sticky=N+S+E+W)
         emailfield.insert(0, EMAILTEXT)
+
 
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
@@ -397,8 +443,22 @@ class RegistrationPage2(Frame):
         # Widgets
         label = Label(self, text="This is the registration page on left frame\nCome back later, still under construction!", font=(
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        label.grid(row=1, column=2, columnspan=16,
+        label.grid(row=1, column=2, columnspan=17,
                    rowspan=2, sticky=N+S+E+W)
+
+        self.intibanner = Image.open("Home-Banner-INTI.png")
+        self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
+            (math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        logolabel = Button(self, image=self.intibanner, anchor=CENTER, width=1, height=1)
+        logolabel.grid(row=4, column=5, columnspan=11,
+                        rowspan=5, sticky=N+S+E+W)
+        self.titleart = Image.open("DR7j7r0.png")
+        self.titleart = ImageTk.PhotoImage(self.titleart.resize(
+            (math.ceil(720 * dpi / 96), math.ceil(240 * dpi / 96)), Image.Resampling.LANCZOS))
+        titleartlabel = Button(self, image=self.titleart, anchor=CENTER, width=1, height=1)
+        titleartlabel.grid(row=9, column=0, columnspan=21,
+                        rowspan=8, sticky=N+S+E+W)
+        
 
         # Buttons
 
@@ -417,6 +477,40 @@ class LoginPage(Frame):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+        #Database Functions for Logging in and setting loginstate to student or teacher
+        # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
+        # If email is not found in database, it will return an error message.
+        # If email is found in database, it will return a success message.
+
+        conn = sqlite3.connect('registration.db')
+        c = conn.cursor()
+        def checkpassword():
+            c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
+            if c.fetchone() is not None:
+                print("Login Successful")
+                if emailfield.get().endswith("@student.inti.edu.my"):
+                    print("Student Login")
+                    loginstate = "Student"
+                elif emailfield.get().endswith("@inti.edu.my"):
+                    print("Teacher Login")
+                    loginstate = "Teacher"
+            else:
+                print("Login Failed")
+                loginstate = "Failed"
+            return loginstate
+        def checkemail():
+            c.execute('SELECT * FROM registration WHERE email = ?', (emailfield.get(),))
+            data = c.fetchall()
+            if data:
+                print("Email found in database")
+                checkpassword()
+            else:
+                print("Email not found in database")
+                messagebox.showerror("Error", "Email not found in database")
+                emailfield.delete(0, END)
+                passwordfield.delete(0, END)
+                emailfield.focus()
+
 
         class _(Window):
             def changecontainersize(self, container):
@@ -439,21 +533,54 @@ class LoginPage(Frame):
             'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=2, columnspan=18,
                    rowspan=2, sticky=N+S+E+W)
-
+        EMAILTEXT = "Please enter your registered email address"
+        PASSWORDTEXT = "Please enter your password"
+        FONTNAME = "Avenir Next"
         # Buttons
+        emailfield = Entry(self, width=1, bg='#FFFFFF',
+                           font=(FONTNAME, 18), justify='center')
+        emailfield.grid(row=7, column=2, columnspan=18,
+                        rowspan=2, sticky=N+S+E+W)
+        emailfield.insert(0, EMAILTEXT)
+        emailfield.bind("<FocusIn>", lambda args: emailfield.delete('0', 'end'))
+        emailfield.bind("<FocusOut>", lambda args: emailfield.insert( 0, EMAILTEXT) if emailfield.get() == '' else None)
+        passwordfield = Entry(self, width=1, bg='#FFFFFF',
+                                font=(FONTNAME, 18), justify='center')
+        passwordfield.grid(row=10, column=2, columnspan=18,
+                            rowspan=2, sticky=N+S+E+W)
+        passwordfield.insert(0, PASSWORDTEXT)
+
+        
         signinbutton = Button(self, text="SIGN IN", font=(
-            'Arial', 18), width=1, height=1, fg='#000000', command=lambda: [messagebox.showinfo("Successful Login", "You can now click on the main page function!")], bg=LIGHTYELLOW)
+            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW,fg='#000000', command=lambda: changestatetologgedin())
         signinbutton.grid(row=16, column=7, columnspan=9,
                           rowspan=2, sticky=N+S+E+W)
         ortext = Label(self, text="------OR------", font=('Arial', 18), width=1,
                        height=1, fg='#000000', bg='#FFF5E4')
         ortext.grid(row=18, column=7, columnspan=9,
                     rowspan=2, sticky=N+S+E+W)
+        
         signupbutton = Button(self, text="Not a member yet?\n Click here to sign up", font=(
             'Arial', 18), width=1, height=1, fg='#000000', command=lambda: [
             controller.show_frame(RegistrationPage), controller.show_frameleft(RegistrationPage2), _.revertcontainersize(self, parent)], bg=OTHERPINK)
         signupbutton.grid(row=20, column=7, columnspan=9,
                           rowspan=2, sticky=N+S+E+W)
+        def changestatetologgedin():
+            global LOGGEDIN
+            LOGGEDIN = "Now I'm logged in"
+        def changedtologout():
+            global LOGGEDIN
+            LOGGEDIN = "Now I'm logged out"
+        def checkstate():
+            global LOGGEDIN
+            print(LOGGEDIN)
+        signoutbutton = Button(self, text="SIGN OUT", font=(
+            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW,fg='#000000', command=lambda: changedtologout())
+        signoutbutton.grid(row=24, column=7, columnspan=9,
+                            rowspan=2, sticky=N+S+E+W)
+        checkstatebutton = Button(self, text="Check state", command= lambda:checkstate())
+        checkstatebutton.grid(row=22, column=7, columnspan=9,  
+                            rowspan=2, sticky=N+S+E+W)
 
 
 class LoginPage2(Frame):
