@@ -484,7 +484,7 @@ class LoginPage(Frame):
 
         conn = sqlite3.connect('registration.db')
         c = conn.cursor()
-        def checkpassword():
+        def checkcredentials():
             c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
             if c.fetchone() is not None:
                 print("Login Successful")
@@ -503,7 +503,6 @@ class LoginPage(Frame):
             data = c.fetchall()
             if data:
                 print("Email found in database")
-                checkpassword()
             else:
                 print("Email not found in database")
                 messagebox.showerror("Error", "Email not found in database")
