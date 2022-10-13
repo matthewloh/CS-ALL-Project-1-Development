@@ -7,7 +7,6 @@ from PIL import ImageTk, Image, ImageOps
 import math
 import sqlite3
 
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 PINK = "#FFE3E1"
 OTHERPINK = "#FA9494"
@@ -462,6 +461,9 @@ class RegistrationPage2(Frame):
         titleartlabel = Button(self, image=self.titleart, anchor=CENTER, width=1, height=1)
         titleartlabel.grid(row=9, column=0, columnspan=21,
                         rowspan=8, sticky=N+S+E+W)
+
+
+        
         
 
         # Buttons
@@ -772,6 +774,12 @@ class MainPage2(Frame):
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         todolabel.grid(row=5, column=14, columnspan=16,
                        rowspan=10, sticky=N+S+E+W)
+        
+        self.originalimage = Image.open("laptopassets\Home-Banner-INTI.png")
+        self.resultingimage = ImageTk.PhotoImage(self.originalimage.resize(
+            (math.ceil(600 * dpi / 96), math.ceil(200 * dpi / 96)), Image.Resampling.LANCZOS))
+        imagelabel = Label(self, image=self.resultingimage, anchor=CENTER, width=1, height=1)
+        imagelabel.grid(row=17, column=14, columnspan=16, rowspan=5, sticky=N+S+E+W)
 
 
 class EventView(Frame):
