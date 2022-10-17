@@ -326,8 +326,6 @@ class RegistrationPage(Frame):
                 passwordcontents = passwordfield.get()
             except: 
                 pass
-        def showpasswordwarning():
-            passwordwarning.configure(text="Passwords do not match.", fg="red")
 
         def repopulatepasswordfield():
             if passwordfield.get() == "":
@@ -483,39 +481,6 @@ class LoginPage(Frame):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
-        #Database Functions for Logging in and setting loginstate to student or teacher
-        # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
-        # If email is not found in database, it will return an error message.
-        # If email is found in database, it will return a success message.
-
-        conn = sqlite3.connect('registration.db')
-        c = conn.cursor()
-        def checkcredentials():
-            c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
-            if c.fetchone() is not None:
-                print("Login Successful")
-                if emailfield.get().endswith("@student.inti.edu.my"):
-                    print("Student Login")
-                    loginstate = "Student"
-                elif emailfield.get().endswith("@inti.edu.my"):
-                    print("Teacher Login")
-                    loginstate = "Teacher"
-            else:
-                print("Login Failed")
-                loginstate = "Failed"
-            return loginstate
-        def checkemail():
-            c.execute('SELECT * FROM registration WHERE email = ?', (emailfield.get(),))
-            data = c.fetchall()
-            if data:
-                print("Email found in database")
-            else:
-                print("Email not found in database")
-                messagebox.showerror("Error", "Email not found in database")
-                emailfield.delete(0, END)
-                passwordfield.delete(0, END)
-                emailfield.focus()
-
 
         class _(Window):
             def changecontainersize(self, container):
@@ -525,50 +490,141 @@ class LoginPage(Frame):
             def revertcontainersize(self, container):
                 container.grid(row=3, column=18, columnspan=12,
                              rowspan=12, sticky=N+S+E+W)
+        #Database Functions for Logging in and setting loginstate to student or teacher
+        # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
+        # If email is not found in database, it will return an error message.
+        # If email is found in database, it will return a success message.
 
-        # sizebutton = Button(
-        #     self, text="Big", command=lambda: _.changecontainersize(self, parent))
-        # sizebutton.grid(row=1, column=1, sticky=N+S+E+W)
-        # unsizebutton = Button(
-        #     self, text="Small", command=lambda: _.revertcontainersize(self, parent))
-        # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
+        conn = sqlite3.connect('registration.db')
+        c = conn.cursor()
+        def checkcredentials():
+            c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
+            for row in c.fetchall():
+                name = row[0]
+                email = row[2]
+                password = row[3]
+                role = row[4]
+                print("Your name is: ", name)
+                print("Email is: ",email)
+                print("Password is :", password)
+                print("Your role is : ", role)
+            try:
+                if role == "student":
+                    messagebox.showinfo("Login Successful", "Welcome Student!")
+                    loginstate = "student"
+                elif role == "admin":
+                    messagebox.showinfo("Login Successful", "Welcome Admin!")
+                    loginstate = "admin"
+                else:
+                    messagebox.showerror("Login Failed", "Invalid Email or Password")
+            except UnboundLocalError:
+                messagebox.showerror("Login Failed", "Invalid Email or Password")
+                    
+
+
+        emailwarning = Label(self, text="Please enter a valid email address.", font=(
+            'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        
+        def signinbuttonpressed():
+            checkcredentials()
+        def clearemailfield():
+            emailfield.configure(fg="black")
+            if emailfield.get() == EMAILTEXT:
+                emailfield.delete(0, END)
+            try:
+                emailending = emailfield.get().split("@")[1]
+                if emailending in ["student.newinti.edu.my", "newinti.edu.my"]:
+                    emailwarning.configure(fg="black")
+                else:
+                    emailwarning.configure(text="Email entered is not with INTI or incomplete")
+            except IndexError:
+                emailwarning.configure(text="You have not entered an email")
+        def showwarninglabelaboveentry():
+            #configure emailwarning to show and become red when invalid email
+            emailwarning.grid(row=6, column=12, columnspan=8,
+                          rowspan=2, sticky=N+S+E+W)
+            emailwarning.configure(text ="Please enter a valid email.", fg="red")
+
+        def repopulateemailfield():
+            try:
+                emailending = emailfield.get().split("@")[1]
+                if emailending not in ["student.newinti.edu.my", "newinti.edu.my"]:
+                    if emailfield=="":
+                        emailfield.insert(0, EMAILTEXT)
+                    emailfield.configure(fg="red")
+                    showwarninglabelaboveentry()
+                else:
+                    emailfield.configure(fg="black")
+                    emailwarning.grid_forget()
+            except IndexError:
+                if emailfield.get() == EMAILTEXT or emailfield.get() == "":
+                    emailfield.delete(0, END)
+                    emailfield.insert(0, EMAILTEXT)
+                emailfield.configure(fg="red")
+                showwarninglabelaboveentry()
+
+        def clearpasswordfield():
+            passwordfield.configure(fg="black")
+            passwordfield.configure(show="*")
+            if passwordfield.get() == PASSWORDTEXT:
+                passwordfield.delete(0, END)
+            try:
+                passwordcontents = passwordfield.get()
+            except: 
+                pass
+
+        def repopulatepasswordfield():
+            if passwordfield.get() == "":
+                passwordfield.insert(0, PASSWORDTEXT)
+                passwordfield.configure(show="")
+                passwordfield.configure(fg="red")
+            else:
+                passwordfield.configure(show="*")
 
         # Widgets
-        label = Label(self, text="This is the primary login page", font=(
-            'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        label.grid(row=1, column=2, columnspan=18,
-                   rowspan=2, sticky=N+S+E+W)
+        # label = Label(self, text="This is the primary login page", font=(
+        #     'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # label.grid(row=1, column=2, columnspan=18,
+        #            rowspan=2, sticky=N+S+E+W)
         EMAILTEXT = "Please enter your registered email address"
         PASSWORDTEXT = "Please enter your password"
         FONTNAME = "Avenir Next"
         # Buttons
         emailfield = Entry(self, width=1, bg='#FFFFFF',
                            font=(FONTNAME, 18), justify='center')
-        emailfield.grid(row=7, column=2, columnspan=18,
+        emailfield.grid(row=8, column=2, columnspan=18,
                         rowspan=2, sticky=N+S+E+W)
         emailfield.insert(0, EMAILTEXT)
-        emailfield.bind("<FocusIn>", lambda args: emailfield.delete('0', 'end'))
-        emailfield.bind("<FocusOut>", lambda args: emailfield.insert( 0, EMAILTEXT) if emailfield.get() == '' else None)
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
                                 font=(FONTNAME, 18), justify='center')
-        passwordfield.grid(row=10, column=2, columnspan=18,
+        passwordfield.grid(row=11, column=2, columnspan=18,
                             rowspan=2, sticky=N+S+E+W)
         passwordfield.insert(0, PASSWORDTEXT)
+        emailfield.bind("<FocusIn>", lambda a: clearemailfield())
+        emailfield.bind("<FocusOut>", lambda a: repopulateemailfield())
+        passwordfield.bind("<FocusIn>", lambda a: clearpasswordfield())
+        passwordfield.bind("<FocusOut>", lambda a: repopulatepasswordfield())
 
+        self.intibanner = Image.open("Home-Banner-INTI.png")
+        self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
+            (math.ceil(720 * dpi / 96), math.ceil(240 * dpi / 96)), Image.Resampling.LANCZOS))
+        logolabel = Button(self, image=self.intibanner, anchor=CENTER, width=1, height=1)
+        logolabel.grid(row=1, column=2, columnspan=18,
+                        rowspan=5, sticky=N+S+E+W)
         
         signinbutton = Button(self, text="SIGN IN", font=(
-            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW,fg='#000000', command=lambda: changestatetologgedin())
-        signinbutton.grid(row=16, column=7, columnspan=9,
+            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW,fg='#000000', command=lambda: signinbuttonpressed())
+        signinbutton.grid(row=16, column=6, columnspan=9,
                           rowspan=2, sticky=N+S+E+W)
         ortext = Label(self, text="------OR------", font=('Arial', 18), width=1,
                        height=1, fg='#000000', bg='#FFF5E4')
-        ortext.grid(row=18, column=7, columnspan=9,
+        ortext.grid(row=18, column=6, columnspan=9,
                     rowspan=2, sticky=N+S+E+W)
         
         signupbutton = Button(self, text="Not a member yet?\n Click here to sign up", font=(
             'Arial', 18), width=1, height=1, fg='#000000', command=lambda: [
             controller.show_frame(RegistrationPage), controller.show_frameleft(RegistrationPage2), _.changecontainersize(self, parent)], bg=OTHERPINK)
-        signupbutton.grid(row=20, column=7, columnspan=9,
+        signupbutton.grid(row=20, column=6, columnspan=9,
                           rowspan=2, sticky=N+S+E+W)
         def changestatetologgedin():
             global LOGGEDIN
@@ -581,10 +637,10 @@ class LoginPage(Frame):
             print(LOGGEDIN)
         signoutbutton = Button(self, text="SIGN OUT", font=(
             'Arial', 18), width=1, height=1, bg=LIGHTYELLOW,fg='#000000', command=lambda: changedtologout())
-        signoutbutton.grid(row=24, column=7, columnspan=9,
+        signoutbutton.grid(row=24, column=6, columnspan=9,
                             rowspan=2, sticky=N+S+E+W)
         checkstatebutton = Button(self, text="Check state", command= lambda:checkstate())
-        checkstatebutton.grid(row=22, column=7, columnspan=9,  
+        checkstatebutton.grid(row=22, column=6, columnspan=9,  
                             rowspan=2, sticky=N+S+E+W)
 
 

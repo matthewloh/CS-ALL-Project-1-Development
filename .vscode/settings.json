@@ -26,5 +26,6 @@
             "password": "password",
             "database": "vaccinerolloutsystem"
         }
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "off"
 }
