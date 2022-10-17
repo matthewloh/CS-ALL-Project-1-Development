@@ -498,27 +498,32 @@ class LoginPage(Frame):
         conn = sqlite3.connect('registration.db')
         c = conn.cursor()
         def checkcredentials():
-            c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
-            for row in c.fetchall():
-                name = row[0]
-                email = row[2]
-                password = row[3]
-                role = row[4]
-                print("Your name is: ", name)
-                print("Email is: ",email)
-                print("Password is :", password)
-                print("Your role is : ", role)
-            try:
-                if role == "student":
-                    messagebox.showinfo("Login Successful", "Welcome Student!")
-                    loginstate = "student"
-                elif role == "admin":
-                    messagebox.showinfo("Login Successful", "Welcome Admin!")
-                    loginstate = "admin"
-                else:
-                    messagebox.showerror("Login Failed", "Invalid Email or Password")
-            except UnboundLocalError:
-                messagebox.showerror("Login Failed", "Invalid Email or Password")
+            global LOGGEDIN
+            if LOGGEDIN != "admin":
+                with conn:
+                    c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
+                    for row in c.fetchall():
+                        name = row[0]
+                        email = row[2]
+                        password = row[3]
+                        role = row[4]
+                        print("Your name is: ", name)
+                        print("Email is: ",email)
+                        print("Password is :", password)
+                        print("Your role is : ", role)
+                    try:
+                        if role == "student":
+                            messagebox.showinfo("Login Successful", "Welcome Student!")
+                            loginstate = "student"
+                        elif role == "admin":
+                            messagebox.showinfo("Login Successful", "Welcome Admin!")
+                            LOGGEDIN = "admin"
+                        else:
+                            messagebox.showerror("Login Failed", "Invalid Email or Password")
+                    except UnboundLocalError:
+                        messagebox.showerror("Login Failed", "Invalid Email or Password")
+            else:
+                messagebox.showerror(f"Login Failed", "You are already logged in as an admin!")
                     
 
 
