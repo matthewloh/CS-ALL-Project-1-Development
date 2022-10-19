@@ -17,7 +17,8 @@ NICEBLUE = "#AAC4FF"
 LAVENDER = "#D2DAFF"
 LIGHTPURPLE = "#EEF1FF"
 dpi = 96
-LOGGEDIN = "Nah"
+LOGGEDIN = "Neither student or admin"
+LOGINSTATE = "Not logged in"
 
 class ContainerFactory(Protocol):
     def __call__(self, master: Tk, *args, **kwargs) -> Frame:
@@ -108,7 +109,7 @@ class Window(Tk):
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(LoginPage), self.show_frameleft(LoginPage2), revertcontainersizes(container, container2), keepcontainerlarge(container)])
         loginbutton.grid(row=0, column=1, rowspan=1, sticky=N+S+E+W)
         mainpagebutton = Button(container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(
-            FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EmptyRFrame), self.show_frameleft(MainPage2), makeleftcontainerhuge(container2)])
+            FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(MainPage),self.show_frameleft(MainPage2), makeleftcontainerhuge(container2)])
         mainpagebutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
         eventlistbutton = Button(container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventView), self.show_frameleft(EventView2), revertcontainersizes(container, container2), changecontainersizes(container, container2)])
@@ -217,15 +218,17 @@ class RegistrationPage(Frame):
             firstnametext = firstnamefield.get()
             lastnametext = lastnamefield.get()
             emailtext = emailfield.get()
-            role = ""
             try:
                 emailending = emailfield.get().split("@")[1]
                 if emailending == "student.newinti.edu.my":
                     role = "student"
                 elif emailending == "newinti.edu.my":
                     role = "admin"
+                validemail = "True"
             except IndexError:
                 emailwarning.configure(text="You have not entered an email")
+                messagebox.showerror("Error", "Please enter a valid email.")
+                validemail = "False"
             passwordtext = passwordfield.get()
             confirmpasstext = confirmpasswordfield.get()
             information = (firstnametext, lastnametext,
@@ -234,8 +237,11 @@ class RegistrationPage(Frame):
             try:
                 if (FIRSTNAME in firstnametext) or (LASTNAME in lastnametext) or (EMAILTEXT in emailtext) or (PASSWORDTEXT in passwordtext) or (CONFPASSTEXT in confirmpasstext):
                     messagebox.showerror("Error", "Please fill in all fields.")
+
                 elif passwordtext != confirmpasstext:
                     messagebox.showerror("Error", "Passwords do not match.")
+                elif validemail != "True":
+                    messagebox.showerror("Error", "Please enter a valid email.")
                 else:
                     with conn:
                         c.execute(
@@ -244,8 +250,8 @@ class RegistrationPage(Frame):
                             "Success", "You have successfully registered.")
                         controller.show_frame(LoginPage)
                         controller.show_frameleft(LoginPage2)
+                        cleareveryentry()
                         _.changecontainersize(self, parent)
-
             except sqlite3.IntegrityError:
                 messagebox.showerror("Error", "Email already in use.")
 
@@ -347,6 +353,22 @@ class RegistrationPage(Frame):
                 confirmpasswordfield.insert(0, CONFPASSTEXT)
                 confirmpasswordfield.configure(show="")
                 confirmpasswordfield.configure(fg="red")
+        def cleareveryentry():
+            firstnamefield.delete(0, END)
+            lastnamefield.delete(0, END)
+            emailfield.delete(0, END)
+            passwordfield.delete(0, END)
+            confirmpasswordfield.delete(0, END)
+            firstnamefield.insert(0, FIRSTNAME)
+            lastnamefield.insert(0, LASTNAME)
+            emailfield.insert(0, EMAILTEXT)
+            passwordfield.insert(0, PASSWORDTEXT)
+            confirmpasswordfield.insert(0, CONFPASSTEXT)
+            passwordfield.configure(show="")
+            confirmpasswordfield.configure(show="")
+            passwordfield.configure(fg="black")
+            confirmpasswordfield.configure(fg="black")
+
 
         # Labels
         enterdetailslabel = Label(self, text="Please enter your details as shown in the entries.", font=(
@@ -405,7 +427,10 @@ class RegistrationPage(Frame):
                           rowspan=2, sticky=N+S+E+W)
 
         loginbutton = Button(self, text="Already have an account?\nClick here to sign in.", font=('Atkinson Hyperlegible', 18), width=1,
-                             height=1, fg='#000000', command=lambda: [controller.show_frame(LoginPage), controller.show_frameleft(LoginPage2), _.changecontainersize(self, parent)], bg=OTHERPINK)
+                             height=1, fg='#000000', command=lambda: [controller.show_frame(LoginPage),
+                              controller.show_frameleft(LoginPage2),
+                              _.changecontainersize(self, parent),
+                              cleareveryentry()], bg=OTHERPINK)
         loginbutton.grid(row=22, column=6, columnspan=10,
                          rowspan=2, sticky=N+S+E+W)
 
@@ -499,7 +524,8 @@ class LoginPage(Frame):
         c = conn.cursor()
         def checkcredentials():
             global LOGGEDIN
-            if LOGGEDIN != "admin":
+            global LOGINSTATE
+            if LOGGEDIN != "admin" and LOGGEDIN != "student" and LOGINSTATE != "logged in":
                 with conn:
                     c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
                     for row in c.fetchall():
@@ -514,17 +540,19 @@ class LoginPage(Frame):
                     try:
                         if role == "student":
                             messagebox.showinfo("Login Successful", "Welcome Student!")
-                            loginstate = "student"
+                            LOGGEDIN = "student"
+                            LOGINSTATE = "logged in"
                         elif role == "admin":
                             messagebox.showinfo("Login Successful", "Welcome Admin!")
                             LOGGEDIN = "admin"
+                            LOGINSTATE = "logged in"
                         else:
                             messagebox.showerror("Login Failed", "Invalid Email or Password")
                     except UnboundLocalError:
                         messagebox.showerror("Login Failed", "Invalid Email or Password")
             else:
-                messagebox.showerror(f"Login Failed", "You are already logged in as an admin!")
-                    
+                roles = LOGGEDIN
+                messagebox.showerror("Login Failed", f"You are already logged in as {roles}!")
 
 
         emailwarning = Label(self, text="Please enter a valid email address.", font=(
@@ -636,7 +664,9 @@ class LoginPage(Frame):
             LOGGEDIN = "Now I'm logged in"
         def changedtologout():
             global LOGGEDIN
+            global LOGINSTATE
             LOGGEDIN = "Now I'm logged out"
+            LOGINSTATE = "Logged Out"
         def checkstate():
             global LOGGEDIN
             print(LOGGEDIN)
