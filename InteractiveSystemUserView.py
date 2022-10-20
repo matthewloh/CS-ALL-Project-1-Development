@@ -20,6 +20,7 @@ dpi = 96
 LOGGEDIN = "Neither student or admin"
 LOGINSTATE = "Not logged in"
 
+
 class ContainerFactory(Protocol):
     def __call__(self, master: Tk, *args, **kwargs) -> Frame:
         Frame.__init__(self, master, *args, **kwargs)
@@ -53,7 +54,7 @@ class Window(Tk):
             Label(width=1, bg=NICEPURPLE, bd=1).grid(
                 row=y, column=0, sticky=N+S+E+W,)
         self.configure(background=NICEPURPLE)
-        
+
         def setstateofaccount(self, state):
             self.stateofaccount = state
             return self.stateofaccount
@@ -65,8 +66,8 @@ class Window(Tk):
                           bg=LAVENDER,
                           width=1, height=1)
         container.grid_propagate(0)
-        container.grid(row=2, column=16, 
-                        rowspan=14, columnspan=14, sticky=N+S+E+W)
+        container.grid(row=2, column=16,
+                       rowspan=14, columnspan=14, sticky=N+S+E+W)
         container.grid_rowconfigure(0, weight=0)
         container.grid_columnconfigure(0, weight=0)
         # Left Container
@@ -91,10 +92,11 @@ class Window(Tk):
 
         def revertcontainersizes(rightcontainer, leftcontainer):
             rightcontainer.grid(row=3, column=18, columnspan=12,
-                             rowspan=12, sticky=N+S+E+W)
+                                rowspan=12, sticky=N+S+E+W)
             leftcontainer.grid(row=3, column=2, columnspan=13,
                                rowspan=12, sticky=N+S+E+W)
         FONTFORBUTTONS = "Bahnschrift Semibold"
+
         def keepcontainerlarge(rightcontainer):
             rightcontainer.grid(row=2, column=16, rowspan=14,
                                 columnspan=14, sticky=N+S+E+W)
@@ -109,7 +111,7 @@ class Window(Tk):
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(LoginPage), self.show_frameleft(LoginPage2), revertcontainersizes(container, container2), keepcontainerlarge(container)])
         loginbutton.grid(row=0, column=1, rowspan=1, sticky=N+S+E+W)
         mainpagebutton = Button(container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(
-            FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(MainPage),self.show_frameleft(MainPage2), makeleftcontainerhuge(container2)])
+            FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(MainPage), self.show_frameleft(MainPage2), makeleftcontainerhuge(container2)])
         mainpagebutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
         eventlistbutton = Button(container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventView), self.show_frameleft(EventView2), revertcontainersizes(container, container2), changecontainersizes(container, container2)])
@@ -213,35 +215,38 @@ class RegistrationPage(Frame):
         )""")
         # c.execute ("DROP TABLE registration")
         # possibly, we could make two functions, one to validate input and another to actually send the data to the database, instead of checking validity itself in checkfields()
+
         def checkfields():
             # c.execute("DROP TABLE registration")
             firstnametext = firstnamefield.get()
             lastnametext = lastnamefield.get()
             emailtext = emailfield.get()
+            passwordtext = passwordfield.get()
+            confirmpasstext = confirmpasswordfield.get()
+            emailending = emailfield.get().split("@")[1]
             try:
-                emailending = emailfield.get().split("@")[1]
                 if emailending == "student.newinti.edu.my":
                     role = "student"
+                    validemail = True
                 elif emailending == "newinti.edu.my":
                     role = "admin"
-                validemail = "True"
+                    validemail = True
+                else:
+                    validemail = False
+                    role = "invalid"
             except IndexError:
                 emailwarning.configure(text="You have not entered an email")
                 messagebox.showerror("Error", "Please enter a valid email.")
-                validemail = "False"
-            passwordtext = passwordfield.get()
-            confirmpasstext = confirmpasswordfield.get()
             information = (firstnametext, lastnametext,
                            emailtext, passwordtext, role)
-
             try:
                 if (FIRSTNAME in firstnametext) or (LASTNAME in lastnametext) or (EMAILTEXT in emailtext) or (PASSWORDTEXT in passwordtext) or (CONFPASSTEXT in confirmpasstext):
                     messagebox.showerror("Error", "Please fill in all fields.")
-
                 elif passwordtext != confirmpasstext:
                     messagebox.showerror("Error", "Passwords do not match.")
-                elif validemail != "True":
-                    messagebox.showerror("Error", "Please enter a valid email.")
+                elif validemail == False:
+                    messagebox.showerror(
+                        "Error", "Please enter a valid email.")
                 else:
                     with conn:
                         c.execute(
@@ -258,7 +263,7 @@ class RegistrationPage(Frame):
         class _(Window):
             def changecontainersize(self, container):
                 container.grid(row=2, column=16, rowspan=14,
-                                columnspan=14, sticky=N+S+E+W)
+                               columnspan=14, sticky=N+S+E+W)
 
             def revertcontainersize(self, container):
                 container.grid(row=3, column=17, columnspan=13,
@@ -285,6 +290,7 @@ class RegistrationPage(Frame):
                 lastnamefield.insert(0, LASTNAME)
         emailwarning = Label(self, text="Please enter a valid email address.", font=(
             'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
+
         def clearemailfield():
             emailfield.configure(fg="black")
             if emailfield.get() == EMAILTEXT:
@@ -294,20 +300,23 @@ class RegistrationPage(Frame):
                 if emailending in ["student.newinti.edu.my", "newinti.edu.my"]:
                     emailwarning.configure(fg="black")
                 else:
-                    emailwarning.configure(text="Email entered is not with INTI or incomplete")
+                    emailwarning.configure(
+                        text="Email entered is not with INTI or incomplete")
             except IndexError:
                 emailwarning.configure(text="You have not entered an email")
+
         def showwarninglabelaboveentry():
-            #configure emailwarning to show and become red when invalid email
+            # configure emailwarning to show and become red when invalid email
             emailwarning.grid(row=6, column=12, columnspan=8,
-                          rowspan=2, sticky=N+S+E+W, padx=5, pady=10)
-            emailwarning.configure(text ="Please enter a valid email.", fg="red")
+                              rowspan=2, sticky=N+S+E+W, padx=5, pady=10)
+            emailwarning.configure(
+                text="Please enter a valid email.", fg="red")
 
         def repopulateemailfield():
             try:
                 emailending = emailfield.get().split("@")[1]
                 if emailending not in ["student.newinti.edu.my", "newinti.edu.my"]:
-                    if emailfield=="":
+                    if emailfield == "":
                         emailfield.insert(0, EMAILTEXT)
                     emailfield.configure(fg="red")
                     showwarninglabelaboveentry()
@@ -330,7 +339,7 @@ class RegistrationPage(Frame):
                 passwordfield.delete(0, END)
             try:
                 passwordcontents = passwordfield.get()
-            except: 
+            except:
                 pass
 
         def repopulatepasswordfield():
@@ -353,6 +362,7 @@ class RegistrationPage(Frame):
                 confirmpasswordfield.insert(0, CONFPASSTEXT)
                 confirmpasswordfield.configure(show="")
                 confirmpasswordfield.configure(fg="red")
+
         def cleareveryentry():
             firstnamefield.delete(0, END)
             lastnamefield.delete(0, END)
@@ -369,43 +379,41 @@ class RegistrationPage(Frame):
             passwordfield.configure(fg="black")
             confirmpasswordfield.configure(fg="black")
 
-
         # Labels
         enterdetailslabel = Label(self, text="Please enter your details as shown in the entries.", font=(
             'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         enterdetailslabel.grid(row=0, column=1,
-                             rowspan=3, columnspan=20, sticky=N+S+E+W)
+                               rowspan=3, columnspan=20, sticky=N+S+E+W)
 
         # Entries
         firstnamefield = Entry(self, width=1, bg='#FFFFFF',
                                font=(FONTNAME, 18), justify='center')
-        firstnamefield.grid(row=4, column=2, 
+        firstnamefield.grid(row=4, column=2,
                             rowspan=2, columnspan=8, sticky=N+S+E+W)
         firstnamefield.insert(0, FIRSTNAME)
 
         lastnamefield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
         lastnamefield.grid(row=4, column=12,
-                             rowspan=2, columnspan=8, sticky=N+S+E+W)
+                           rowspan=2, columnspan=8, sticky=N+S+E+W)
         lastnamefield.insert(0, LASTNAME)
 
         emailfield = Entry(self, width=1, bg='#FFFFFF',
                            font=(FONTNAME, 18), justify='center')
         emailfield.grid(row=8, column=2,
-                         rowspan=2, columnspan=18, sticky=N+S+E+W)
+                        rowspan=2, columnspan=18, sticky=N+S+E+W)
         emailfield.insert(0, EMAILTEXT)
-
 
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
         passwordfield.grid(row=12, column=2,
-                             rowspan=2, columnspan=18, sticky=N+S+E+W)
+                           rowspan=2, columnspan=18, sticky=N+S+E+W)
         passwordfield.insert(0, PASSWORDTEXT)
 
         confirmpasswordfield = Entry(
             self, width=1, bg='#FFFFFF', font=(FONTNAME, 18), justify='center')
-        confirmpasswordfield.grid(row=16, column=2, 
-                                    rowspan=2, columnspan=18, sticky=N+S+E+W)
+        confirmpasswordfield.grid(row=16, column=2,
+                                  rowspan=2, columnspan=18, sticky=N+S+E+W)
         confirmpasswordfield.insert(0, CONFPASSTEXT)
 
         # Entry Binding
@@ -416,9 +424,12 @@ class RegistrationPage(Frame):
         emailfield.bind("<FocusIn>", lambda event: clearemailfield())
         emailfield.bind("<FocusOut>", lambda event: repopulateemailfield())
         passwordfield.bind("<FocusIn>", lambda event: clearpasswordfield())
-        passwordfield.bind("<FocusOut>", lambda event: repopulatepasswordfield())
-        confirmpasswordfield.bind("<FocusIn>", lambda event: clearconfpasswordfield())
-        confirmpasswordfield.bind("<FocusOut>", lambda event: repopulateconfpasswordfield())
+        passwordfield.bind(
+            "<FocusOut>", lambda event: repopulatepasswordfield())
+        confirmpasswordfield.bind(
+            "<FocusIn>", lambda event: clearconfpasswordfield())
+        confirmpasswordfield.bind(
+            "<FocusOut>", lambda event: repopulateconfpasswordfield())
 
         # Buttons
         signupbutton = Button(self, text="SIGN UP", font=(
@@ -428,9 +439,11 @@ class RegistrationPage(Frame):
 
         loginbutton = Button(self, text="Already have an account?\nClick here to sign in.", font=('Atkinson Hyperlegible', 18), width=1,
                              height=1, fg='#000000', command=lambda: [controller.show_frame(LoginPage),
-                              controller.show_frameleft(LoginPage2),
-                              _.changecontainersize(self, parent),
-                              cleareveryentry()], bg=OTHERPINK)
+                                                                      controller.show_frameleft(
+                                                                          LoginPage2),
+                                                                      _.changecontainersize(
+                                                                          self, parent),
+                                                                      cleareveryentry()], bg=OTHERPINK)
         loginbutton.grid(row=22, column=6, columnspan=10,
                          rowspan=2, sticky=N+S+E+W)
 
@@ -475,19 +488,17 @@ class RegistrationPage2(Frame):
         self.intibanner = Image.open("Home-Banner-INTI.png")
         self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
             (math.ceil(359 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
-        logolabel = Button(self, image=self.intibanner, anchor=CENTER, width=1, height=1)
+        logolabel = Button(self, image=self.intibanner,
+                           anchor=CENTER, width=1, height=1)
         logolabel.grid(row=4, column=5, columnspan=11,
-                        rowspan=5, sticky=N+S+E+W)
+                       rowspan=5, sticky=N+S+E+W)
         self.titleart = Image.open("DR7j7r0.png")
         self.titleart = ImageTk.PhotoImage(self.titleart.resize(
             (math.ceil(720 * dpi / 96), math.ceil(240 * dpi / 96)), Image.Resampling.LANCZOS))
-        titleartlabel = Button(self, image=self.titleart, anchor=CENTER, width=1, height=1)
+        titleartlabel = Button(self, image=self.titleart,
+                               anchor=CENTER, width=1, height=1)
         titleartlabel.grid(row=9, column=0, columnspan=21,
-                        rowspan=8, sticky=N+S+E+W)
-
-
-        
-        
+                           rowspan=8, sticky=N+S+E+W)
 
         # Buttons
 
@@ -514,52 +525,59 @@ class LoginPage(Frame):
 
             def revertcontainersize(self, container):
                 container.grid(row=3, column=18, columnspan=12,
-                             rowspan=12, sticky=N+S+E+W)
-        #Database Functions for Logging in and setting loginstate to student or teacher
+                               rowspan=12, sticky=N+S+E+W)
+        # Database Functions for Logging in and setting loginstate to student or teacher
         # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
         # If email is not found in database, it will return an error message.
         # If email is found in database, it will return a success message.
 
         conn = sqlite3.connect('registration.db')
         c = conn.cursor()
+
         def checkcredentials():
             global LOGGEDIN
             global LOGINSTATE
             if LOGGEDIN != "admin" and LOGGEDIN != "student" and LOGINSTATE != "logged in":
                 with conn:
-                    c.execute("SELECT * FROM registration WHERE email = ? AND password = ?", (emailfield.get(), passwordfield.get()))
+                    c.execute("SELECT * FROM registration WHERE email = ? AND password = ?",
+                              (emailfield.get(), passwordfield.get()))
                     for row in c.fetchall():
                         name = row[0]
                         email = row[2]
                         password = row[3]
                         role = row[4]
                         print("Your name is: ", name)
-                        print("Email is: ",email)
+                        print("Email is: ", email)
                         print("Password is :", password)
                         print("Your role is : ", role)
                     try:
                         if role == "student":
-                            messagebox.showinfo("Login Successful", "Welcome Student!")
+                            messagebox.showinfo(
+                                "Login Successful", "Welcome Student!")
                             LOGGEDIN = "student"
                             LOGINSTATE = "logged in"
                         elif role == "admin":
-                            messagebox.showinfo("Login Successful", "Welcome Admin!")
+                            messagebox.showinfo(
+                                "Login Successful", "Welcome Admin!")
                             LOGGEDIN = "admin"
                             LOGINSTATE = "logged in"
                         else:
-                            messagebox.showerror("Login Failed", "Invalid Email or Password")
+                            messagebox.showerror(
+                                "Login Failed", "Invalid Email or Password")
                     except UnboundLocalError:
-                        messagebox.showerror("Login Failed", "Invalid Email or Password")
+                        messagebox.showerror(
+                            "Login Failed", "Invalid Email or Password")
             else:
                 roles = LOGGEDIN
-                messagebox.showerror("Login Failed", f"You are already logged in as {roles}!")
-
+                messagebox.showerror(
+                    "Login Failed", f"You are already logged in as {roles}!")
 
         emailwarning = Label(self, text="Please enter a valid email address.", font=(
             'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        
+
         def signinbuttonpressed():
             checkcredentials()
+
         def clearemailfield():
             emailfield.configure(fg="black")
             if emailfield.get() == EMAILTEXT:
@@ -569,20 +587,23 @@ class LoginPage(Frame):
                 if emailending in ["student.newinti.edu.my", "newinti.edu.my"]:
                     emailwarning.configure(fg="black")
                 else:
-                    emailwarning.configure(text="Email entered is not with INTI or incomplete")
+                    emailwarning.configure(
+                        text="Email entered is not with INTI or incomplete")
             except IndexError:
                 emailwarning.configure(text="You have not entered an email")
+
         def showwarninglabelaboveentry():
-            #configure emailwarning to show and become red when invalid email
+            # configure emailwarning to show and become red when invalid email
             emailwarning.grid(row=6, column=12, columnspan=8,
-                          rowspan=2, sticky=N+S+E+W)
-            emailwarning.configure(text ="Please enter a valid email.", fg="red")
+                              rowspan=2, sticky=N+S+E+W)
+            emailwarning.configure(
+                text="Please enter a valid email.", fg="red")
 
         def repopulateemailfield():
             try:
                 emailending = emailfield.get().split("@")[1]
                 if emailending not in ["student.newinti.edu.my", "newinti.edu.my"]:
-                    if emailfield=="":
+                    if emailfield == "":
                         emailfield.insert(0, EMAILTEXT)
                     emailfield.configure(fg="red")
                     showwarninglabelaboveentry()
@@ -603,7 +624,7 @@ class LoginPage(Frame):
                 passwordfield.delete(0, END)
             try:
                 passwordcontents = passwordfield.get()
-            except: 
+            except:
                 pass
 
         def repopulatepasswordfield():
@@ -629,9 +650,9 @@ class LoginPage(Frame):
                         rowspan=2, sticky=N+S+E+W)
         emailfield.insert(0, EMAILTEXT)
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
-                                font=(FONTNAME, 18), justify='center')
+                              font=(FONTNAME, 18), justify='center')
         passwordfield.grid(row=11, column=2, columnspan=18,
-                            rowspan=2, sticky=N+S+E+W)
+                           rowspan=2, sticky=N+S+E+W)
         passwordfield.insert(0, PASSWORDTEXT)
         emailfield.bind("<FocusIn>", lambda a: clearemailfield())
         emailfield.bind("<FocusOut>", lambda a: repopulateemailfield())
@@ -641,42 +662,47 @@ class LoginPage(Frame):
         self.intibanner = Image.open("Home-Banner-INTI.png")
         self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
             (math.ceil(720 * dpi / 96), math.ceil(240 * dpi / 96)), Image.Resampling.LANCZOS))
-        logolabel = Button(self, image=self.intibanner, anchor=CENTER, width=1, height=1)
+        logolabel = Button(self, image=self.intibanner,
+                           anchor=CENTER, width=1, height=1)
         logolabel.grid(row=1, column=2, columnspan=18,
-                        rowspan=5, sticky=N+S+E+W)
-        
+                       rowspan=5, sticky=N+S+E+W)
+
         signinbutton = Button(self, text="SIGN IN", font=(
-            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW,fg='#000000', command=lambda: signinbuttonpressed())
+            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW, fg='#000000', command=lambda: signinbuttonpressed())
         signinbutton.grid(row=16, column=6, columnspan=9,
                           rowspan=2, sticky=N+S+E+W)
         ortext = Label(self, text="------OR------", font=('Arial', 18), width=1,
                        height=1, fg='#000000', bg='#FFF5E4')
         ortext.grid(row=18, column=6, columnspan=9,
                     rowspan=2, sticky=N+S+E+W)
-        
+
         signupbutton = Button(self, text="Not a member yet?\n Click here to sign up", font=(
             'Arial', 18), width=1, height=1, fg='#000000', command=lambda: [
             controller.show_frame(RegistrationPage), controller.show_frameleft(RegistrationPage2), _.changecontainersize(self, parent)], bg=OTHERPINK)
         signupbutton.grid(row=20, column=6, columnspan=9,
                           rowspan=2, sticky=N+S+E+W)
+
         def changestatetologgedin():
             global LOGGEDIN
             LOGGEDIN = "Now I'm logged in"
+
         def changedtologout():
             global LOGGEDIN
             global LOGINSTATE
             LOGGEDIN = "Now I'm logged out"
             LOGINSTATE = "Logged Out"
+
         def checkstate():
             global LOGGEDIN
             print(LOGGEDIN)
         signoutbutton = Button(self, text="SIGN OUT", font=(
-            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW,fg='#000000', command=lambda: changedtologout())
+            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW, fg='#000000', command=lambda: changedtologout())
         signoutbutton.grid(row=24, column=6, columnspan=9,
-                            rowspan=2, sticky=N+S+E+W)
-        checkstatebutton = Button(self, text="Check state", command= lambda:checkstate())
-        checkstatebutton.grid(row=22, column=6, columnspan=9,  
-                            rowspan=2, sticky=N+S+E+W)
+                           rowspan=2, sticky=N+S+E+W)
+        checkstatebutton = Button(
+            self, text="Check state", command=lambda: checkstate())
+        checkstatebutton.grid(row=22, column=6, columnspan=9,
+                              rowspan=2, sticky=N+S+E+W)
 
 
 class LoginPage2(Frame):
@@ -851,7 +877,7 @@ class MainPage2(Frame):
         # Buttons
         eventlistbutton = Button(self, text="Event List", font=(
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4', command=lambda: [controller.show_frame(EventView), controller.show_frameleft(EventView2),
-            _.keepcontainerlarge(parent)])
+                                                                                                _.keepcontainerlarge(parent)])
         eventlistbutton.grid(row=10, column=2, columnspan=4,
                              rowspan=4, sticky=N+S+E+W)
         eventregistrationbutton = Button(self, text="Event\nRegistration", font=(
@@ -865,12 +891,14 @@ class MainPage2(Frame):
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         todolabel.grid(row=5, column=14, columnspan=16,
                        rowspan=10, sticky=N+S+E+W)
-        
+
         self.originalimage = Image.open("laptopassets\Home-Banner-INTI.png")
         self.resultingimage = ImageTk.PhotoImage(self.originalimage.resize(
             (math.ceil(600 * dpi / 96), math.ceil(200 * dpi / 96)), Image.Resampling.LANCZOS))
-        imagelabel = Label(self, image=self.resultingimage, anchor=CENTER, width=1, height=1)
-        imagelabel.grid(row=17, column=14, columnspan=16, rowspan=5, sticky=N+S+E+W)
+        imagelabel = Label(self, image=self.resultingimage,
+                           anchor=CENTER, width=1, height=1)
+        imagelabel.grid(row=17, column=14, columnspan=16,
+                        rowspan=5, sticky=N+S+E+W)
 
 
 class EventView(Frame):

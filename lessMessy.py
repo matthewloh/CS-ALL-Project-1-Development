@@ -45,14 +45,6 @@ class MainWindow(Tk):
                 row=y, column=0, sticky=N+S+E+W)
         self.title("INTI Interactive System")
         self.container = Frame(self, bg=LIGHTPURPLE, borderwidth=1, relief="solid")
-        for x in range(15):
-            Grid.columnconfigure(self.container, x, weight=1, uniform='row')
-            Label(width=10, height=10, bg="grey", borderwidth=1, relief="solid").grid(
-                row=0, column=x, sticky=N+S+E+W)
-        for y in range(9):
-            Grid.rowconfigure(self.container, y, weight=1, uniform='row')
-            Label(width=10, height=10, bg="Pink", borderwidth=1, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
         self.container.grid(row=0, column=0, columnspan=30, rowspan=16, sticky=N+S+E+W)
         self.frames = {}
         
