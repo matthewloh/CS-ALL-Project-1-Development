@@ -101,32 +101,41 @@ class Window(Tk):
         def keepcontainerlarge(rightcontainer):
             rightcontainer.grid(row=2, column=16, rowspan=14,
                                 columnspan=14, sticky=N+S+E+W)
-        container3 = Frame(self, bg=NICEPURPLE)
-        container3.grid(row=0, column=0, rowspan=2,
-                        columnspan=20, sticky=N+S+E+W)
-        container3.grid_propagate(0)
-        signupbutton = Button(container3, text="Sign Up\n Page", bg=NICEBLUE, fg="white", font=(
+        
+        self.container3 = Frame(self, bg=NICEPURPLE)
+        if LOGGEDIN == "logged in" and LOGINSTATE == "Student":
+            self.container3.grid(row=0, column=0, rowspan=2,
+                            columnspan=20, sticky=N+S+E+W)
+        self.container3.grid_propagate(0)
+        signupbutton = Button(self.container3, text="Sign Up\n Page", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(RegistrationPage), self.show_frameleft(RegistrationPage2), revertcontainersizes(container2, container2), keepcontainerlarge(container)])
         signupbutton.grid(row=0, column=0, rowspan=1, sticky=N+S+E+W)
-        loginbutton = Button(container3, text="Login\nPage", bg=NICEBLUE, fg="white", font=(
+        loginbutton = Button(self.container3, text="Login\nPage", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(LoginPage), self.show_frameleft(LoginPage2), revertcontainersizes(container, container2), keepcontainerlarge(container)])
         loginbutton.grid(row=0, column=1, rowspan=1, sticky=N+S+E+W)
-        mainpagebutton = Button(container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(
+        mainpagebutton = Button(self.container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(MainPage), self.show_frameleft(MainPage2), makeleftcontainerhuge(container2)])
         mainpagebutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
-        eventlistbutton = Button(container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(
+        eventlistbutton = Button(self.container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventView), self.show_frameleft(EventView2), revertcontainersizes(container, container2), changecontainersizes(container, container2)])
         eventlistbutton.grid(row=0, column=3, rowspan=1, sticky=N+S+E+W)
-        eventregistrationbutton = Button(container3, text="Event\nRegistration", bg=NICEBLUE, fg="white", font=(
+        eventregistrationbutton = Button(self.container3, text="Event\nRegistration", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventRegistration), self.show_frameleft(EventRegistration2), revertcontainersizes(container, container2), changecontainersizes(container, container2)])
         eventregistrationbutton.grid(
             row=0, column=4, rowspan=1, sticky=N+S+E+W)
-        eventcreationbutton = Button(container3, text="Event\nCreation\n(ADMIN)", bg=NICEBLUE, fg="white", font=(
+        self.eventcreationbutton = Button(self.container3, text="Event\nCreation\n(ADMIN)", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(EventCreation), self.show_frameleft(EmptyRFrame), makeleftcontainerhuge(container2)])
-        eventcreationbutton.grid(row=0, column=5, rowspan=1, sticky=N+S+E+W)
-        viewparticipantsbutton = Button(container3, text="View\nParticipants\n(ADMIN)", bg=NICEBLUE, fg="white", font=(
+        
+        self.viewparticipantsbutton = Button(self.container3, text="View\nParticipants\n(ADMIN)", bg=NICEBLUE, fg="white", font=(
             FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(ViewParticipants), self.show_frameleft(EmptyRFrame), makeleftcontainerhuge(container2)])
-        viewparticipantsbutton.grid(row=0, column=6, rowspan=1, sticky=N+S+E+W)
+        
+        #Sign out button 
+        self.container4 = Frame(self, bg=NICEBLUE, width=1, height=1)
+        self.container4.grid(row=16, column=28, rowspan=2,
+                            columnspan=4, sticky=N+S+E+W)
+        signoutbutton = Button(self.container4, text="Sign Out", bg=NICEBLUE, fg="white", font=(
+            FONTFORBUTTONS, 20), borderwidth=1, relief="solid", command=lambda: [self.show_frame(LoginPage), self.show_frameleft(LoginPage2), keepcontainerlarge(container), self.signout()]) 
+        signoutbutton.grid(row=0, column=0, rowspan=2, columnspan=6, sticky=N+S+E+W)
 
         # container3.grid_rowconfigure(0, weight=1)
         # container3.grid_columnconfigure(0, weight=1)
@@ -153,7 +162,15 @@ class Window(Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frameleft(RegistrationPage2)
-
+    def show_container3(self):
+        self.container3.grid(row=0, column=0, rowspan=2,
+                            columnspan=20, sticky=N+S+E+W)
+    def signout(self):
+        self.container3.grid(row=0, column=0, rowspan=1,
+                            columnspan=1, sticky=N+S+E+W)  
+    def show_admin(self):
+        self.eventcreationbutton.grid(row=0, column=5, rowspan=1, sticky=N+S+E+W)
+        self.viewparticipantsbutton.grid(row=0, column=6, rowspan=1, sticky=N+S+E+W)
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
@@ -519,6 +536,8 @@ class LoginPage(Frame):
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
 
         class _(Window):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
             def changecontainersize(self, container):
                 container.grid(row=2, column=16, rowspan=14,
                                columnspan=14, sticky=N+S+E+W)
@@ -526,6 +545,7 @@ class LoginPage(Frame):
             def revertcontainersize(self, container):
                 container.grid(row=3, column=18, columnspan=12,
                                rowspan=12, sticky=N+S+E+W)
+        
         # Database Functions for Logging in and setting loginstate to student or teacher
         # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
         # If email is not found in database, it will return an error message.
@@ -550,17 +570,21 @@ class LoginPage(Frame):
                         print("Email is: ", email)
                         print("Password is :", password)
                         print("Your role is : ", role)
+                        print(row)
                     try:
                         if role == "student":
                             messagebox.showinfo(
                                 "Login Successful", "Welcome Student!")
                             LOGGEDIN = "student"
                             LOGINSTATE = "logged in"
+                            _.show_container3(controller)
                         elif role == "admin":
                             messagebox.showinfo(
                                 "Login Successful", "Welcome Admin!")
                             LOGGEDIN = "admin"
                             LOGINSTATE = "logged in"
+                            _.show_container3(controller)
+                            _.show_admin(controller)
                         else:
                             messagebox.showerror(
                                 "Login Failed", "Invalid Email or Password")
