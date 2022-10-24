@@ -49,7 +49,7 @@ class Window(Tk):
             windll.shcore.SetProcessDpiAwareness(1)
         except:
             print('ERROR. Could not set DPI awareness.')
-        dpiError = True
+            dpiError = True
         if dpiError:
             dpi = 96
         else:
@@ -156,9 +156,8 @@ class Window(Tk):
         self.signoutbutton = Button(self.container4, text="Sign Out", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                     borderwidth=1, relief="solid", height=3, width=10,
                                     command=lambda: [
-            self.show_frame(LoginPage),
-            self.show_frameleft(LoginPage2),
-            self.onelargeonesmallcont(),
+            self.show_frameleft(LoginPage),
+            self.singlecontainer(),
             self.signout()])
         self.signoutbutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
         self.studentbutton = Button(self.container4, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
@@ -398,7 +397,7 @@ class RegistrationPage(Frame):
             Grid.columnconfigure(self, x, weight=1, uniform='row')
             Label(self, height=2, bg=LIGHTPURPLE, borderwidth=1, relief="solid").grid(
                 row=0, column=x, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             Grid.rowconfigure(self, y, weight=1, uniform='row')
             Label(self, width=5, bg=LIGHTPURPLE, borderwidth=1, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
@@ -660,7 +659,7 @@ class RegistrationPage(Frame):
         controller.singlecontainer(),
         cleareveryentry()],
         bg=OTHERPINK)
-        loginbutton.grid(row=18, column=28, columnspan=10,
+        loginbutton.grid(row=16, column=28, columnspan=10,
                          rowspan=2, sticky=N+S+E+W)
         global LOGINID
         #tinybutton for testing
@@ -685,7 +684,7 @@ class RegistrationPage2(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -772,7 +771,7 @@ class LoginPage(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=1, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=1, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -988,7 +987,7 @@ class LoginPage2(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1028,7 +1027,7 @@ class MainPage2(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1207,7 +1206,7 @@ class EventView(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1245,7 +1244,7 @@ class EventView2(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1273,7 +1272,7 @@ class EventRegistration(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1421,7 +1420,7 @@ class EventRegistration2(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1471,7 +1470,7 @@ class EventCreation(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1509,7 +1508,7 @@ class ViewParticipants(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1589,7 +1588,7 @@ class FeedbackForm(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=0, uniform='x')
             Label(self, width=5, bg=LAVENDER, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
@@ -1853,7 +1852,7 @@ class Calendar(Frame):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, width=1, bg=LAVENDER, borderwidth=1, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(21):
+        for y in range(20):
             self.rowconfigure(y, weight=1, uniform='x')
             Label(self, height=1, width=5, bg=LAVENDER, bd=1, borderwidth=1, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
