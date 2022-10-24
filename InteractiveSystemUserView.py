@@ -1,5 +1,7 @@
 import subprocess
 import os
+from ctypes.wintypes import BOOL, HWND, LONG
+import ctypes
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -33,6 +35,18 @@ import math
 import sqlite3
 
 
+GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
+SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
+
+def get_handle(root) -> int:
+    root.update_idletasks()
+    # This gets the window's parent same as `ctypes.windll.user32.GetParent`
+    return GetWindowLongPtrW(root.winfo_id(), GWLP_HWNDPARENT)
+# Constants
+GWL_STYLE = -16
+GWLP_HWNDPARENT = -8
+WS_CAPTION = 0x00C00000
+WS_THICKFRAME = 0x00040000
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 PINK = "#FFE3E1"
 OTHERPINK = "#FA9494"
@@ -262,7 +276,13 @@ class Window(Tk):
 
         self.welcomelabel("Stranger", "Viewer")
 
-
+        self.closebutton = Button(self, text="Close", font=("Atkinson Hyperlegible", 14),
+                                    bg=DARKBLUE, fg="WHITE", width=1, height=1,
+                                    command=lambda:[
+            self.destroy()
+        ])
+        self.closebutton.grid(row=0, column=30, rowspan=2, columnspan=2, sticky=N+S+E+W)
+        self.closebutton.grid_propagate(0)
         self.frames = {}
 
         for F in (RegistrationPage, LoginPage, MainPage2, EventView, EventRegistration, EventCreation, ViewParticipants, Calendar, FeedbackForm):
@@ -1938,4 +1958,8 @@ class Calendar(Frame):
 
 if __name__ == "__main__":
     window = Window()
+    hwnd:int = get_handle(window)
+    style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
+    style &= ~(WS_CAPTION | WS_THICKFRAME)
+    SetWindowLongPtrW(hwnd, GWL_STYLE, style)
     window.mainloop()
