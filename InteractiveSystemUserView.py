@@ -1962,4 +1962,5 @@ if __name__ == "__main__":
     style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
     style &= ~(WS_CAPTION | WS_THICKFRAME)
     SetWindowLongPtrW(hwnd, GWL_STYLE, style)
+    window.state("zoomed")
     window.mainloop()
