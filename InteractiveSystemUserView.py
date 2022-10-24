@@ -80,7 +80,7 @@ class Window(Tk):
         else:
             dpi = self.winfo_fpixels('1i')
         self.geometry(
-            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
+            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1040 * dpi / 96)}')
         self.grid_propagate(False)
         self.title("INTI Interactive System")
         self.resizable(0, 0)
