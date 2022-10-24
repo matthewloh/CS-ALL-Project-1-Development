@@ -1,2 +1,1 @@
-
-        PASSWORDTEXT = "Please enter your password"
+root.mainloop()
