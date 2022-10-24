@@ -27,7 +27,7 @@ except:
     from tkcalendar import Calendar as tkCalendar
     from tkcalendar import DateEntry
 pyglet.font.add_file(r'fonts\AtkinsonHyperlegible.ttf')
-pyglet.font.add_file(r'fonts\AvenirNext.ttf')
+pyglet.font.add_file(r'fonts\AvenirNext-Medium.otf')
 pyglet.font.add_file(r'fonts\Helvetica.ttf')
 import math
 import sqlite3
@@ -412,7 +412,7 @@ class RegistrationPage(Frame):
         PASSWORDTEXT = "Please enter your password."
         CONFPASSTEXT = "Please confirm your password."
         # database functions
-        conn = sqlite3.connect('registration.db')
+        conn = sqlite3.connect('interactivesystem.db')
         c = conn.cursor()
         c.execute("""CREATE TABLE IF NOT EXISTS registration(
             first_name text NOT NULL,
@@ -747,7 +747,7 @@ class LoginPage(Frame):
         # If email is not found in database, it will return an error message.
         # If email is found in database, it will return a success message.
 
-        conn = sqlite3.connect('registration.db')
+        conn = sqlite3.connect('interactivesystem.db')
         c = conn.cursor()
 
         def checkcredentials():
@@ -873,7 +873,7 @@ class LoginPage(Frame):
         #            rowspan=2, sticky=N+S+E+W)
         EMAILTEXT = "Please enter your registered email address"
         PASSWORDTEXT = "Please enter your password"
-        FONTNAME = "Avenir Next"
+        FONTNAME = "Avenir Next Medium"
         # Buttons
         self.intibanner = Image.open(r"assets\Home-Banner-INTI.png")
         self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
@@ -1250,7 +1250,7 @@ class EventRegistration(Frame):
         # Database functions
 
         # Connect to database
-        conn = sqlite3.connect('registration.db')
+        conn = sqlite3.connect('interactivesystem.db')
         # Create cursor
         c = conn.cursor()
         # Create a table
@@ -1299,14 +1299,24 @@ class EventRegistration(Frame):
         label.grid(row=1, column=2, columnspan=18,
                    rowspan=2, sticky=N+S+E+W)
         #dropdown for events
-        conn = sqlite3.connect('registration.db')
+        conn = sqlite3.connect('interactivesystem.db')
         # Create cursor
         c = conn.cursor()
-        event_list = []
-        with conn:
-            c.execute("""SELECT event_name FROM eventcreation""")
-            for eventname in c.fetchall():
-                event_list.append(eventname)
+        event_list = [""]
+        try:
+            with conn:
+                c.execute("""SELECT event_name FROM eventcreation""")
+                for eventname in c.fetchall():
+                    event_list.append(eventname)
+        except sqlite3.OperationalError:
+            c.execute("""CREATE TABLE IF NOT EXISTS eventcreation (
+            event_name text NOT NULL,
+            eventkey_number text PRIMARY KEY NOT NULL, 
+            venue_name text,
+            hostname text NOT NULL
+            )""")
+
+
         eventdropdown = ttk.Combobox(
             self, values=event_list, width=1, state='readonly')
         eventdropdown.current(0)
@@ -1449,7 +1459,7 @@ class EventCreation(Frame):
         # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
 
         # Connect to database
-        conn = sqlite3.connect('registration.db')
+        conn = sqlite3.connect('interactivesystem.db')
         # Create cursor
         c = conn.cursor()
         # Create a table
@@ -1674,7 +1684,7 @@ class FeedbackForm(Frame):
             'Segoe Ui Semibold', 14), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=10, columnspan=22,
                    rowspan=2, sticky=N+S+E+W)
-        conn = sqlite3.connect('registration.db')
+        conn = sqlite3.connect('interactivesystem.db')
         c = conn.cursor()
         c.execute("""CREATE TABLE IF NOT EXISTS feedback(
             satisfactionquestion1 text NOT NULL,
