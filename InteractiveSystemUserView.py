@@ -1955,8 +1955,7 @@ class Calendar(Frame):
         date_pattern="yy-mm-dd")
         self.cal.grid(row=2, column=2, columnspan=21, rowspan=17, sticky=N+S+E+W)
 
-
-if __name__ == "__main__":
+def main():
     window = Window()
     hwnd:int = get_handle(window)
     style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
@@ -1964,3 +1963,7 @@ if __name__ == "__main__":
     SetWindowLongPtrW(hwnd, GWL_STYLE, style)
     window.state("zoomed")
     window.mainloop()
+
+
+if __name__ == "__main__":
+    main()
