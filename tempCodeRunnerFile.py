@@ -1,1 +1,1 @@
-Label
+root.mainloop()
