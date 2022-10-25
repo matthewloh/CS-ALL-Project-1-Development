@@ -33,6 +33,7 @@ pyglet.font.add_file(r'fonts\AvenirNext-Medium.otf')
 pyglet.font.add_file(r'fonts\Helvetica.ttf')
 import math
 import sqlite3
+import datetime
 
 
 GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
@@ -140,7 +141,7 @@ class Window(Tk):
         self.mainpagebutton = Button(self.container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                      borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
                                      command=lambda: [
-            self.show_frame(MainPage2), 
+            self.show_frame(MainPage), 
             self.singlecontainer()])
         self.eventlistbutton = Button(self.container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                       borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
@@ -176,16 +177,16 @@ class Window(Tk):
         # Sign out button
         self.bottomleftbuttons = Frame(
             self, bg=NAVYBLUE, width=1, height=1, borderwidth=2, relief="flat", padx=0, pady=0)
-        self.bottomleftbuttons.grid(row=16, column=0, rowspan=2, columnspan=24,
+        self.bottomleftbuttons.grid(row=16, column=0, rowspan=2, columnspan=16,
                              sticky=N+S+E+W)
         self.bottomleftbuttons.grid_propagate(0)
-        for x in range(14):
+        for x in range(16):
                 Grid.columnconfigure(self.bottomleftbuttons, x, weight=1, uniform='row')
-                Label(self.bottomleftbuttons, height=2, bg=LAVENDER,borderwidth=1,relief="solid").grid(
+                Label(self.bottomleftbuttons, height=2, bg=NAVYBLUE).grid(
                   row=0, column=x,rowspan=1, columnspan=2, sticky=N+S+E+W)
         for y in range(2):
                 Grid.rowconfigure(self.bottomleftbuttons, y, weight=1, uniform='row')
-                Label(self.bottomleftbuttons, width=5, bg=LAVENDER,borderwidth=1,relief="solid").grid(
+                Label(self.bottomleftbuttons, width=5, bg=NAVYBLUE).grid(
                     row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
 
         self.signoutbutton = Button(self.bottomleftbuttons, text="Sign Out", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
@@ -194,16 +195,16 @@ class Window(Tk):
             self.show_frame(LoginPage),
             self.singlecontainer(),
             self.signout()])
-        self.signoutbutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
+        self.signoutbutton.grid(row=0, column=0, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.studentbutton = Button(self.bottomleftbuttons, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                     borderwidth=1, relief="solid", height=3, width=10,
                                     command=lambda: [self.show_loggedin()])
-        self.studentbutton.grid(row=0, column=3, rowspan=1, sticky=N+S+E+W)
+        self.studentbutton.grid(row=0, column=3, rowspan=2,columnspan=3, sticky=N+S+E+W)
 
         self.adminbutton = Button(self.bottomleftbuttons, text="Admin\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                   borderwidth=1, relief="solid", height=3, width=10,
                                   command=lambda: [self.show_admin(), self.show_loggedin()])
-        self.adminbutton.grid(row=0, column=4, rowspan=1, sticky=N+S+E+W)
+        self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.container5 = Frame(self, bg=NAVYBLUE, width=1, height=1,
                                 borderwidth=0, relief="flat")
         self.container5.grid(row=2, column=0, rowspan=14, columnspan=2,
@@ -286,21 +287,20 @@ class Window(Tk):
 
         self.welcomelabel("Stranger", "Viewer")
         self.state('normal')
-        self.maximizebutton = Button(self, text="Max", font=("Atkinson Hyperlegible", 14),
-                                    bg=DARKBLUE, fg="WHITE", width=1, height=1,
-                                    command=lambda:
-                         [     
-
-            self.deletethewindowbar()
-   
-        ])
-        self.maximizebutton.grid(row=0, column=29, rowspan=2, columnspan=1, sticky=N+S+E+W)
-        self.minimizebutton = Button(self, text="Min", font=("Atkinson Hyperlegible", 14),
+        self.minimizebutton = Button(self, text="Show", font=("Atkinson Hyperlegible", 14),
                                     bg=DARKBLUE, fg="WHITE", width=1, height=1,
                                     command=lambda:[
-            self.state('normal')
+            self.showthewindowbar()
         ])
-        self.minimizebutton.grid(row=0, column=30, rowspan=2, columnspan=1, sticky=N+S+E+W)
+        self.minimizebutton.grid(row=0, column=30, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        self.minimizebutton.grid_propagate(0)
+        self.maximizebutton = Button(self, text="Hide", font=("Atkinson Hyperlegible", 14),
+                                    bg=DARKBLUE, fg="WHITE", width=1, height=1,
+                                    command=lambda:[     
+            self.deletethewindowbar()
+        ])
+        self.maximizebutton.grid(row=1, column=30, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        self.maximizebutton.grid_propagate(0)
         self.closewindowbutton = Button(self, text="Close", font=("Atkinson Hyperlegible", 14),
                                     bg=DARKBLUE, fg="WHITE", width=1, height=1,
                                     command=lambda:[
@@ -310,11 +310,13 @@ class Window(Tk):
         self.closewindowbutton.grid_propagate(0)
         self.frames = {}
 
-        for F in (RegistrationPage, LoginPage, MainPage2, EventView, EventRegistration, EventCreation, ViewParticipants, Calendar, FeedbackForm):
+        for F in (RegistrationPage, LoginPage, MainPage, 
+                EventView, EventRegistration, EventCreation,
+                ViewParticipants, Calendar, FeedbackForm):
             frame = F(self.container2, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
-        self.show_frame(RegistrationPage)
+        self.show_frame(LoginPage)
 
     def show_container3(self):
         self.container3.grid(row=0, column=0, rowspan=2,
@@ -413,6 +415,12 @@ class Window(Tk):
         hwnd:int = get_handle(self)
         style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
         style &= ~(WS_CAPTION | WS_THICKFRAME)
+        SetWindowLongPtrW(hwnd, GWL_STYLE, style)
+    
+    def showthewindowbar(self):
+        hwnd:int = get_handle(self)
+        style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
+        style |= (WS_CAPTION | WS_THICKFRAME)
         SetWindowLongPtrW(hwnd, GWL_STYLE, style)
 
     def show_frame(self, cont):
@@ -1016,7 +1024,7 @@ class LoginPage(Frame):
     def showalabel(self):
         self.label.grid()
 
-class MainPage2(Frame):
+class MainPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=LAVENDER)
         self.grid_columnconfigure(0, weight=1)
@@ -1794,7 +1802,7 @@ class FeedbackForm(Frame):
                          rowspan=1, sticky=NSEW)
 
         # Button
-        self.getanswers = Button(self, text="Cancel", command=lambda: [controller.show_frame(MainPage2)], bg=ORANGE, font=("Helvetica", 18))
+        self.getanswers = Button(self, text="Cancel", command=lambda: [controller.show_frame(MainPage)], bg=ORANGE, font=("Helvetica", 18))
         self.getanswers.grid(row=18, column=10, rowspan=2,
                              columnspan=6, sticky=N+S+E+W)
         self.getanswers.grid_propagate(0)
@@ -1839,7 +1847,7 @@ class Calendar(Frame):
 
         # b = Frame(self, bg=LAVENDER, width=1, height=1,borderwidth=1, relief="solid")
         # b.grid(row=15, column=9, rowspan=6, columnspan=12, sticky=N+S+E+W)
-        xbuttonlabel = Button(self, text="X", font=("Avenir Next", 18),height=1,width=1, bg=DARKBLUE, fg="white")
+        xbuttonlabel = Button(self, text="X", font=("Avenir Next Medium", 18),height=1,width=1, bg=DARKBLUE, fg="white")
         xbuttonlabel.grid(row=0, column=41, rowspan=2, columnspan=2, sticky=N+S+E+W)
         # Widgets
         label = Label(self, text="This is the Calendar", font=(
@@ -1847,11 +1855,33 @@ class Calendar(Frame):
         label.grid(row=0, column=2, columnspan=6,
                    rowspan=2, sticky=N+S+E+W)
         
-        self.cal = tkCalendar(self, background = DARKBLUE, foreground = 'white', bordercolor = DARKBLUE,
-        selectmode="day", year=2022, month=10, day=24,
-        font=("Avenir Next", 14),
-        date_pattern="yy-mm-dd")
+        self.cal = tkCalendar(self, 
+            background = DARKBLUE, foreground = 'white', 
+            bordercolor = ORANGE,
+            headersbackground = NAVYBLUE, headersforeground = 'white', 
+            selectbackground = NICEBLUE, selectforeground = 'black', 
+            selectmode="day", year=2022, month=10, day=24,
+            font=("Avenir Next Medium", 18),
+            date_pattern="dd-mm-yyyy")
         self.cal.grid(row=2, column=2, columnspan=21, rowspan=17, sticky=N+S+E+W)
+        self.cal.bind("<<CalendarSelected>>", self.print_sel)
+        #TkCalendar Add event
+        #TkCalendar theming 
+        self.cal.calevent_create(datetime.date(2022, 10, 24), "Event 1", "Event 1")
+        #Go back to current date button
+        self.gobackbutton = Button(self, text="Go back to current date", command=lambda: [self.go_to_today()], bg=ORANGE, font=("Atkinson Hyperlegible", 18))
+        self.gobackbutton.grid(row=9, column=24, rowspan=2,
+                             columnspan=6, sticky=N+S+E+W)
+        self.gobackbutton.grid_propagate(0)
+
+        #Calendar functions to return to current date and to go to next month
+    def print_sel(self, event):
+        print(self.cal.get_date())
+    
+    def go_to_today(self):
+        self.cal.selection_set(datetime.date.today())
+        self.cal.see(datetime.date.today())
+
 
 def main():
     window = Window()
