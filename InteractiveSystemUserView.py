@@ -288,21 +288,23 @@ class Window(Tk):
         self.welcomelabel("Stranger", "Viewer")
         self.state('normal')
         self.minimizebutton = Button(self, text="Show", font=("Atkinson Hyperlegible", 14),
-                                    bg=DARKBLUE, fg="WHITE", width=1, height=1,
+                                    bg="#fdbc40", fg="WHITE", width=1, height=1,
                                     command=lambda:[
+            self.state('normal'),
             self.showthewindowbar()
         ])
         self.minimizebutton.grid(row=0, column=30, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.minimizebutton.grid_propagate(0)
         self.maximizebutton = Button(self, text="Hide", font=("Atkinson Hyperlegible", 14),
-                                    bg=DARKBLUE, fg="WHITE", width=1, height=1,
-                                    command=lambda:[     
+                                    bg="#33c748", fg="WHITE", width=1, height=1,
+                                    command=lambda:[
+            self.state('zoomed'),     
             self.deletethewindowbar()
         ])
         self.maximizebutton.grid(row=1, column=30, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.maximizebutton.grid_propagate(0)
         self.closewindowbutton = Button(self, text="Close", font=("Atkinson Hyperlegible", 14),
-                                    bg=DARKBLUE, fg="WHITE", width=1, height=1,
+                                    bg="#fc5753", fg="WHITE", width=1, height=1,
                                     command=lambda:[
             self.destroy()
         ])
@@ -425,6 +427,7 @@ class Window(Tk):
 
     def show_frame(self, cont):
         frame = self.frames[cont]
+        frame.grid(row=0, column=0, sticky="nsew")
         frame.tkraise()
         
     def welcomelabel(self, name, role):
@@ -1847,20 +1850,23 @@ class Calendar(Frame):
 
         # b = Frame(self, bg=LAVENDER, width=1, height=1,borderwidth=1, relief="solid")
         # b.grid(row=15, column=9, rowspan=6, columnspan=12, sticky=N+S+E+W)
-        xbuttonlabel = Button(self, text="X", font=("Avenir Next Medium", 18),height=1,width=1, bg=DARKBLUE, fg="white")
+        def hidetheentireframe():
+            self.grid_remove()
+        xbuttonlabel = Button(self, text="X", font=("Avenir Next Medium", 18),height=1,width=1,
+         bg=DARKBLUE, fg="white",
+         command= lambda:hidetheentireframe())
         xbuttonlabel.grid(row=0, column=41, rowspan=2, columnspan=2, sticky=N+S+E+W)
         # Widgets
         label = Label(self, text="This is the Calendar", font=(
             'Segoe Ui Semibold', 14), width=1, height=1, fg='#000000', bg='#FFF5E4', justify="left")
         label.grid(row=0, column=2, columnspan=6,
                    rowspan=2, sticky=N+S+E+W)
-        
         self.cal = tkCalendar(self, 
             background = DARKBLUE, foreground = 'white', 
             bordercolor = ORANGE,
             headersbackground = NAVYBLUE, headersforeground = 'white', 
             selectbackground = NICEBLUE, selectforeground = 'black', 
-            selectmode="day", year=2022, month=10, day=24,
+            selectmode="day",
             font=("Avenir Next Medium", 18),
             date_pattern="dd-mm-yyyy")
         self.cal.grid(row=2, column=2, columnspan=21, rowspan=17, sticky=N+S+E+W)
@@ -1881,6 +1887,7 @@ class Calendar(Frame):
     def go_to_today(self):
         self.cal.selection_set(datetime.date.today())
         self.cal.see(datetime.date.today())
+
 
 
 def main():
