@@ -35,18 +35,18 @@ import math
 import sqlite3
 
 
-# GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
-# SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
+GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
+SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
 
-# def get_handle(root) -> int:
-#     root.update_idletasks()
-#     # This gets the window's parent same as `ctypes.windll.user32.GetParent`
-#     return GetWindowLongPtrW(root.winfo_id(), GWLP_HWNDPARENT)
-# # Constants
-# GWL_STYLE = -16
-# GWLP_HWNDPARENT = -8
-# WS_CAPTION = 0x00C00000
-# WS_THICKFRAME = 0x00040000
+def get_handle(root) -> int:
+    root.update_idletasks()
+    # This gets the window's parent same as `ctypes.windll.user32.GetParent`
+    return GetWindowLongPtrW(root.winfo_id(), GWLP_HWNDPARENT)
+# Constants
+GWL_STYLE = -16
+GWLP_HWNDPARENT = -8
+WS_CAPTION = 0x00C00000
+WS_THICKFRAME = 0x00040000
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 PINK = "#FFE3E1"
 OTHERPINK = "#FA9494"
@@ -80,7 +80,8 @@ class Window(Tk):
         else:
             dpi = self.winfo_fpixels('1i')
         self.geometry(
-            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
+            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}' + '+0+0')
+
         self.grid_propagate(False)
         self.title("INTI Interactive System")
         self.resizable(0, 0)
@@ -1837,11 +1838,10 @@ class Calendar(Frame):
 
 def main():
     window = Window()
-    # hwnd:int = get_handle(window)
-    # style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
-    # style &= ~(WS_CAPTION | WS_THICKFRAME)
-    # SetWindowLongPtrW(hwnd, GWL_STYLE, style)
-    # window.state("zoomed")
+    hwnd:int = get_handle(window)
+    style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
+    style &= ~(WS_CAPTION | WS_THICKFRAME)
+    SetWindowLongPtrW(hwnd, GWL_STYLE, style)
     window.mainloop()
 
 
