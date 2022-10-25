@@ -35,18 +35,18 @@ import math
 import sqlite3
 
 
-# GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
-# SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
+GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
+SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
 
-# def get_handle(root) -> int:
-#     root.update_idletasks()
-#     # This gets the window's parent same as `ctypes.windll.user32.GetParent`
-#     return GetWindowLongPtrW(root.winfo_id(), GWLP_HWNDPARENT)
-# # Constants
-# GWL_STYLE = -16
-# GWLP_HWNDPARENT = -8
-# WS_CAPTION = 0x00C00000
-# WS_THICKFRAME = 0x00040000
+def get_handle(root) -> int:
+    root.update_idletasks()
+    # This gets the window's parent same as `ctypes.windll.user32.GetParent`
+    return GetWindowLongPtrW(root.winfo_id(), GWLP_HWNDPARENT)
+# Constants
+GWL_STYLE = -16
+GWLP_HWNDPARENT = -8
+WS_CAPTION = 0x00C00000
+WS_THICKFRAME = 0x00040000
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONSTANTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 PINK = "#FFE3E1"
 OTHERPINK = "#FA9494"
@@ -80,7 +80,8 @@ class Window(Tk):
         else:
             dpi = self.winfo_fpixels('1i')
         self.geometry(
-            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
+            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1050 * dpi / 96)}')
+
         self.grid_propagate(False)
         self.title("INTI Interactive System")
         self.resizable(0, 0)
@@ -173,24 +174,33 @@ class Window(Tk):
             self.singlecontainer()])
 
         # Sign out button
-        self.container4 = Frame(
+        self.bottomleftbuttons = Frame(
             self, bg=NAVYBLUE, width=1, height=1, borderwidth=2, relief="flat", padx=0, pady=0)
-        self.container4.grid(row=16, column=0, rowspan=2, columnspan=24,
+        self.bottomleftbuttons.grid(row=16, column=0, rowspan=2, columnspan=24,
                              sticky=N+S+E+W)
-        self.container4.grid_propagate(0)
-        self.signoutbutton = Button(self.container4, text="Sign Out", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
+        self.bottomleftbuttons.grid_propagate(0)
+        for x in range(14):
+                Grid.columnconfigure(self.bottomleftbuttons, x, weight=1, uniform='row')
+                Label(self.bottomleftbuttons, height=2, bg=LAVENDER,borderwidth=1,relief="solid").grid(
+                  row=0, column=x,rowspan=1, columnspan=2, sticky=N+S+E+W)
+        for y in range(2):
+                Grid.rowconfigure(self.bottomleftbuttons, y, weight=1, uniform='row')
+                Label(self.bottomleftbuttons, width=5, bg=LAVENDER,borderwidth=1,relief="solid").grid(
+                    row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+
+        self.signoutbutton = Button(self.bottomleftbuttons, text="Sign Out", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                     borderwidth=1, relief="solid", height=3, width=10,
                                     command=lambda: [
             self.show_frame(LoginPage),
             self.singlecontainer(),
             self.signout()])
         self.signoutbutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
-        self.studentbutton = Button(self.container4, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
+        self.studentbutton = Button(self.bottomleftbuttons, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                     borderwidth=1, relief="solid", height=3, width=10,
                                     command=lambda: [self.show_loggedin()])
         self.studentbutton.grid(row=0, column=3, rowspan=1, sticky=N+S+E+W)
 
-        self.adminbutton = Button(self.container4, text="Admin\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
+        self.adminbutton = Button(self.bottomleftbuttons, text="Admin\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                   borderwidth=1, relief="solid", height=3, width=10,
                                   command=lambda: [self.show_admin(), self.show_loggedin()])
         self.adminbutton.grid(row=0, column=4, rowspan=1, sticky=N+S+E+W)
@@ -278,8 +288,11 @@ class Window(Tk):
         self.state('normal')
         self.maximizebutton = Button(self, text="Max", font=("Atkinson Hyperlegible", 14),
                                     bg=DARKBLUE, fg="WHITE", width=1, height=1,
-                                    command=lambda:[
-            self.state('zoomed')
+                                    command=lambda:
+                         [     
+
+            self.deletethewindowbar()
+   
         ])
         self.maximizebutton.grid(row=0, column=29, rowspan=2, columnspan=1, sticky=N+S+E+W)
         self.minimizebutton = Button(self, text="Min", font=("Atkinson Hyperlegible", 14),
@@ -396,6 +409,11 @@ class Window(Tk):
         randombutton.grid(row=13, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W,pady=5)
     def removethecontainer(self):
         self.randomframe.grid_remove()
+    def deletethewindowbar(self):
+        hwnd:int = get_handle(self)
+        style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
+        style &= ~(WS_CAPTION | WS_THICKFRAME)
+        SetWindowLongPtrW(hwnd, GWL_STYLE, style)
 
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -1837,11 +1855,7 @@ class Calendar(Frame):
 
 def main():
     window = Window()
-    # hwnd:int = get_handle(window)
-    # style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
-    # style &= ~(WS_CAPTION | WS_THICKFRAME)
-    # SetWindowLongPtrW(hwnd, GWL_STYLE, style)
-    # window.state("zoomed")
+
     window.mainloop()
 
 
