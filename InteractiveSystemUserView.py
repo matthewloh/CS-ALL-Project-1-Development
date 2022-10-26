@@ -6,6 +6,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
+from tkinter.font import Font
 from tkinter.filedialog import askopenfilename
 import io 
 
@@ -32,6 +33,9 @@ except:
     print('Done.')
     from tkcalendar import Calendar as tkCalendar
     from tkcalendar import DateEntry
+
+
+
 pyglet.font.add_file(r'fonts\AtkinsonHyperlegible.ttf')
 pyglet.font.add_file(r'fonts\AvenirNext-Medium.otf')
 pyglet.font.add_file(r'fonts\Helvetica.ttf')
@@ -1537,6 +1541,21 @@ class EventCreation(Frame):
                     rowspan=10, sticky=N+S+E+W)
         self.panel.grid_propagate(0)
         self.filename = ""
+
+        self.datentrywidget = DateEntry(self, height=1, width=1, background=NAVYBLUE, 
+        headersbackground = ORANGE,
+        font=("Avenir Next Medium",20), justify='center',
+        date_pattern='dd/mm/yyyy', ) 
+        self.datentrywidget.grid(row=3, column=3, columnspan=8,
+                            rowspan=2, sticky=N+S+E+W)
+        self.datentrywidget.grid_propagate(0)
+        self.datentrywidget.set_date(datetime.date.today())
+        self.datentrywidget.bind("<<DateEntrySelected>>", self.onDateSelected)
+    def onDateSelected(self, event):
+        self.date = self.datentrywidget.get_date()
+        print(self.date)
+
+
         # Widgets
     def upload_image(self):
         global dpi
@@ -1999,7 +2018,6 @@ class Calendar(Frame):
 
 def main():
     window = Window()
-
     window.mainloop()
 
 
