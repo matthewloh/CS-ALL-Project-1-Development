@@ -969,7 +969,23 @@ class LoginPage(Frame):
         # titleartlabel.grid(row=8, column=2, columnspan=20,
         #                    rowspan=8, sticky=N+S+E+W)
         #random label attributed to self
-
+        def resize():
+            dimensions = [controller.winfo_width(), controller.winfo_height()]
+            if controller.winfo_width() != dimensions[0] or controller.winfo_width != dimensions[1]:
+                self.backgroundimageoriginal = Image.open(r"Assets\Untitled(1).png")
+                self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+            (math.ceil(1694 * dpi / 96), math.ceil(853 * dpi / 96)), Image.Resampling.LANCZOS))
+                self.backgroundimagelabel.config(image=self.backgroundimage)
+        global eventID
+        eventID = None
+        controller.resizeDelay = 100
+        def resizeEvent(event):
+            global eventID
+            if eventID:
+                controller.after_cancel(eventID)
+            if controller.state() == "zoomed":
+                eventID = controller.after(controller.resizeDelay, resize)
+        controller.bind('<Configure>', resizeEvent)
         def aboutINTIcontainer():
             randomframe = Frame(controller, bg=NICEBLUE, width=1, height=1,
                                 borderwidth=1, relief="flat")
