@@ -5,6 +5,10 @@ import ctypes
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter import filedialog
+from tkinter.filedialog import askopenfilename
+import io 
+
 try:
     import pyglet
 except:
@@ -1302,6 +1306,9 @@ class EventRegistration(Frame):
 
         def defocus(event):
             event.widget.master.focus_set()
+            refresh()
+        def focusout(event):
+            self.read_blob(self.eventdropdown.get())
 
         # Widgets
         label = Label(self, text="This is the event registration page", font=(
@@ -1313,6 +1320,15 @@ class EventRegistration(Frame):
         # Create cursor
         c = conn.cursor()
         event_list = [""]
+        #refresh the event_list everytime the combobox is selected
+        def refresh():
+            c.execute("SELECT event_name FROM eventcreation")
+            event_list.clear()
+            event_list.append("")
+            for row in c.fetchall():
+                event_list.append(row[0])
+            self.eventdropdown['values'] = event_list
+        
         try:
             with conn:
                 c.execute("""SELECT event_name FROM eventcreation""")
@@ -1326,13 +1342,13 @@ class EventRegistration(Frame):
             hostname text NOT NULL
             )""")
 
-
-        eventdropdown = ttk.Combobox(
+        self.eventdropdown = ttk.Combobox(
             self, values=event_list, width=1, state='readonly')
-        eventdropdown.current(0)
-        eventdropdown.grid(row=1, column=2, columnspan=18,
+        self.eventdropdown.current(0)
+        self.eventdropdown.grid(row=1, column=2, columnspan=18,
                            rowspan=2, sticky=NSEW)
-        eventdropdown.bind('<FocusIn>', defocus)
+        self.eventdropdown.bind('<FocusIn>', defocus)
+        self.eventdropdown.bind('<<ComboboxSelected>>', focusout)
         
         separator = ttk.Separator(self, orient=HORIZONTAL)
         separator.grid(row=3, column=3, columnspan=16, pady=5, sticky=EW)
@@ -1390,6 +1406,21 @@ class EventRegistration(Frame):
             FONTNAME, 14), bg='White', command=lambda: submit())
         confirmbutton.grid(row=18, column=13, columnspan=6,
                            rowspan=2, sticky=N+S+E+W)
+        self.panel = Label(self, image="",width=1,height=1, bg=ORANGE)
+        self.panel.grid(row=4, column=22, columnspan=16,
+                    rowspan=10, sticky=N+S+E+W)
+        self.panel.grid_propagate(0)
+    def read_blob(self, event_name):
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT image FROM eventcreation WHERE event_name=?", (event_name,))
+            self.blobData = io.BytesIO(self.c.fetchone()[0])
+            self.img = Image.open(self.blobData)
+            self.img = ImageTk.PhotoImage(self.img.resize(
+                 (math.ceil(605 * dpi / 96), math.ceil(400 * dpi / 96)), Image.Resampling.LANCZOS))
+            self.panel.config(image=self.img)
+            self.panel.grid_propagate(0)
 
 class EventCreation(Frame):
     def __init__(self, parent, controller):
@@ -1406,43 +1437,21 @@ class EventCreation(Frame):
             Label(self, width=5, bg=PINK, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
         # Connect to database
-        conn = sqlite3.connect('interactivesystem.db')
+        self.conn = sqlite3.connect('interactivesystem.db')
         # Create cursor
-        c = conn.cursor()
+        self.c = self.conn.cursor()
         # Create a table
         # c.execute("DROP TABLE eventcreation;")
-        c.execute("""CREATE TABLE IF NOT EXISTS eventcreation (
+        self.c.execute("""CREATE TABLE IF NOT EXISTS eventcreation (
             event_name text NOT NULL,
             eventkey_number text PRIMARY KEY NOT NULL, 
             venue_name text,
-            hostname text NOT NULL
+            hostname text NOT NULL,
+            image BLOB NULL
             )""")
         # Send entries to database
 
-        def submit():
-            event_nametext = eventnamefield.get()
-            eventkey_number = eventkeyfield.get()
-            venue_name = venuenameentry.get()
-            hostname = hostnameentry.get()
-            information = (event_nametext, eventkey_number,
-                           venue_name, hostname)
-            try:
-                if event_nametext == "" or eventkey_number == "" or venue_name == "" or hostname == "":
-                    messagebox.showerror(
-                        "Error", "Please fill in all the fields")
-                else:
-                    with conn:
-                        c.execute(
-                            "INSERT INTO eventcreation VALUES (?,?,?,?)", information)
-                        messagebox.showinfo(
-                            "Success", "Event Creation Successful!")
-                        eventnamefield.delete(0, END)
-                        eventkeyfield.delete(0, END)
-                        venuenameentry.delete(0, END)
-                        hostnameentry.delete(0, END)
-                        controller.show_frame(EventView)
-            except sqlite3.IntegrityError:
-                messagebox.showerror("Error", "hostname already registered")
+       
 
         # Widgets
         label = Label(self, text="This is the event creation page", font=(
@@ -1466,25 +1475,53 @@ class EventCreation(Frame):
         hostnamelabel.grid(row=15, column=3, columnspan=2,
                         rowspan=2, sticky=N+S+E+W)
 
-        eventnamefield = Entry(self, width=1, bg='#FFFFFF',
+        self.eventnamefield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        eventnamefield.grid(row=6, column=3, columnspan=16,
+        self.eventnamefield.grid(row=6, column=3, columnspan=16,
                            rowspan=2, sticky=N+S+E+W)
-        eventnamefield.insert(0, "Event Name")
+        self.eventnamefield.insert(0, "Event Name")
 
-        eventkeyfield = Entry(self, width=1, bg='#FFFFFF',
+        self.eventkeyfield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        eventkeyfield.grid(row=9, column=5, columnspan=14,
+        self.eventkeyfield.grid(row=9, column=5, columnspan=14,
                            rowspan=2, sticky=N+S+E+W)
-        venuenameentry = Entry(self, width=1, bg='#FFFFFF',
+        self.venuenameentry = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        venuenameentry.grid(row=12, column=5, columnspan=14,
+        self.venuenameentry.grid(row=12, column=5, columnspan=14,
                            rowspan=2, sticky=N+S+E+W)
-        hostnameentry = Entry(self, width=1, bg='#FFFFFF',
+        self.hostnameentry = Entry(self, width=1, bg='#FFFFFF',
                            font=(FONTNAME, 18), justify='center')
-        hostnameentry.grid(row=15, column=5, columnspan=14,
+        self.hostnameentry.grid(row=15, column=5, columnspan=14,
                         rowspan=2, sticky=N+S+E+W)
-
+        # Upload image functionality
+        global dpi
+        self.readblobentry = Entry(self, width=1, bg='#FFFFFF',
+                                font=(FONTNAME, 12), justify='center')
+        self.readblobentry.grid(row=16, column=38, columnspan=4,
+                            rowspan=2, sticky=N+S+E+W)
+        self.readblobentry.insert(0, "Enter a event key to find image")
+        uploadimagebutton = Button(self, text="Upload Image", font=(
+            FONTNAME, 14), bg='#FFF5E4', command=lambda:self.upload_image())
+        uploadimagebutton.grid(row=15, column=22, columnspan=8,
+                                 rowspan=2, sticky=N+S+E+W)
+        submitbutton = Button(self, text="Submit", font=(
+            FONTNAME, 14), bg='#FFF5E4', command=lambda:self.submit())
+        submitbutton.grid(row=18, column=22, columnspan=8,
+                            rowspan=2, sticky=N+S+E+W)
+        deleteimagebutton = Button(self, text="Delete Image", font=(
+            FONTNAME, 14), bg='#FFF5E4', command=lambda:self.delete_image())
+        deleteimagebutton.grid(row=15, column=30, columnspan=8,
+                                    rowspan=2, sticky=N+S+E+W)
+        readblobbutton = Button(self, text="Read Blob", font=(
+            FONTNAME, 14), bg='#FFF5E4', command=lambda:self.read_blob(self.readblobentry.get()))
+        readblobbutton.grid(row=18, column=30, columnspan=8,
+                                    rowspan=2, sticky=N+S+E+W)
+        readblobbutton.grid_propagate(0)
+        #Store image into the eventcreation table 
+        # self.c.execute("ALTER TABLE eventcreation ADD COLUMN image BLOB")
+        # conn.commit()
+        # c.execute("SELECT * FROM eventcreation")
+        # print(c.fetchall())
         # Buttons
         cancelbutton = Button(self, text="Cancel", font=(FONTNAME, 14), bg='White', 
         command=lambda: [
@@ -1492,10 +1529,79 @@ class EventCreation(Frame):
         cancelbutton.grid(row=18, column=3, columnspan=6,
                           rowspan=2, sticky=N+S+E+W)
         confirmbutton = Button(self, text="Confirm", font=(
-            FONTNAME, 14), bg='White', command=lambda: submit())
+            FONTNAME, 14), bg='White', command=lambda: self.insert_blob())
         confirmbutton.grid(row=18, column=13, columnspan=6,
                            rowspan=2, sticky=N+S+E+W)
+        self.panel = Label(self, image="",width=1,height=1, bg=ORANGE)
+        self.panel.grid(row=4, column=22, columnspan=16,
+                    rowspan=10, sticky=N+S+E+W)
+        self.panel.grid_propagate(0)
+        self.filename = ""
         # Widgets
+    def upload_image(self):
+        global dpi
+        self.filename = filedialog.askopenfilename(initialdir="/",
+                                                title="Select A File",
+                                                filetypes=(("png files", "*.png"),("jpeg files", "*.jpg"), ("all files", "*.*")))
+        #This is the file we need to make as a blob
+        self.img = Image.open(self.filename)
+        self.img = ImageTk.PhotoImage(self.img.resize(
+            (math.ceil(605 * dpi / 96), math.ceil(400 * dpi / 96)), Image.Resampling.LANCZOS))
+        # Presents the images for future editing purposes or to just submit right away
+        #store self.filename in the global name space
+        self.panel.configure(image=self.img)
+
+    def convert_to_binary_data(self, filename):
+        # Convert digital data to binary format
+        with open(filename, 'rb') as file:
+            blobData = file.read()
+        return blobData
+    def insert_blob(self):
+            event_nametext = self.eventnamefield.get()
+            eventkey_number = self.eventkeyfield.get()
+            venue_name = self.venuenameentry.get()
+            hostname = self.hostnameentry.get()
+            self.filename = self.filename
+            self.blobData = self.convert_to_binary_data(self.filename)
+            # Insert BLOB into table
+            self.conn = sqlite3.connect('interactivesystem.db')
+            self.c = self.conn.cursor()
+            try:
+                with self.conn:
+                    self.c.execute("INSERT INTO eventcreation (event_name, eventkey_number, venue_name, hostname, image) VALUES (?, ?, ?, ?, ?)", (event_nametext, eventkey_number, venue_name, hostname, self.blobData))
+                    messagebox.showinfo("Success", "Event Created")
+            except sqlite3.IntegrityError:
+                messagebox.showerror("Error", "Event Key already exists")
+
+    def read_blob(self, eventkey_number):
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+
+        with self.conn:
+            self.c.execute("SELECT image FROM eventcreation WHERE eventkey_number = ?", (eventkey_number,))
+            self.blobData = io.BytesIO(self.c.fetchone()[0])
+            self.img = Image.open(self.blobData)
+            self.img = ImageTk.PhotoImage(self.img.resize(
+                 (math.ceil(605 * dpi / 96), math.ceil(400 * dpi / 96)), Image.Resampling.LANCZOS))
+            self.panel.config(image=self.img)
+            self.panel.grid_propagate(0)
+
+    def submit_image(self):
+        global dpi
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            with open(self.filename, 'rb') as f:
+                self.blob = f.read()
+            self.c.execute("UPDATE eventcreation SET image = ? WHERE eventkey = ?", (self.blob,
+            self.eventkeyfield.get()))
+            self.c.execute("SELECT * FROM eventcreation")
+            print(self.c.fetchall())
+    def delete_image(self):
+        self.panel.destroy()
+
+
+            
 
 
 class ViewParticipants(Frame):
@@ -1887,6 +1993,7 @@ class Calendar(Frame):
     def go_to_today(self):
         self.cal.selection_set(datetime.date.today())
         self.cal.see(datetime.date.today())
+    #read from the eventcreation table and add the events to the calendar
 
 
 
