@@ -306,7 +306,7 @@ class Window(Tk):
         self.maximizebutton = Button(self, text="Hide", font=("Atkinson Hyperlegible", 14),
                                     bg="#33c748", fg="WHITE", width=1, height=1,
                                     command=lambda:[
-            self.state('zoomed'),     
+            # self.state('zoomed'),     
             self.deletethewindowbar()
         ])
         self.maximizebutton.grid(row=1, column=30, rowspan=1, columnspan=1, sticky=N+S+E+W)
