@@ -42,7 +42,8 @@ pyglet.font.add_file(r'fonts\Helvetica.ttf')
 import math
 import sqlite3
 import datetime
-
+from ctypes import windll
+windll.shcore.SetProcessDpiAwareness(1)
 
 GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
 SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
@@ -67,27 +68,19 @@ LAVENDER = "#D2DAFF"
 LIGHTPURPLE = "#EEF1FF"
 DARKBLUE = "#3e477c"
 NAVYBLUE = "#27364d"
-dpi = 96
 LOGGEDINAS = "Viewer"
 LOGINSTATE = False
 LOGINID = "Viewer"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN WINDOW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
-
 class Window(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+        global dpiError
+        global dpi
         dpiError = False
-        try:
-            from ctypes import windll
-            windll.shcore.SetProcessDpiAwareness(1)
-        except:
-            print('ERROR. Could not set DPI awareness.')
-            dpiError = True
-        if dpiError:
-            dpi = 96
-        else:
-            dpi = self.winfo_fpixels('1i')
+        dpi = self.winfo_fpixels('1i')
+
         self.geometry(
             f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1050 * dpi / 96)}')
 
@@ -104,83 +97,89 @@ class Window(Tk):
                 row=y, column=0, sticky=N+S+E+W,)
         self.configure(background=LAVENDER)
 
-        def setstateofaccount(self, state):
-            self.stateofaccount = state
-            return self.stateofaccount
-        global LOGINID
-        print(setstateofaccount(self, LOGGEDINAS))
-        print(setstateofaccount(self, LOGINID))
-        # Right Container
-        # self.container = Frame(self,
-        #                   bg=LAVENDER,
-        #                   width=1, height=1)
-        # self.container.grid_propagate(0)
-        # self.container.grid(row=2, column=16,
-        #                rowspan=14, columnspan=12, sticky=N+S+E+W)
-        # self.container.grid_rowconfigure(0, weight=0)
-        # self.container.grid_columnconfigure(0, weight=0)
-        # Left Container
-        self.container2 = Frame(self, bg=LAVENDER)
-        self.container2.grid_propagate(0)
-        self.singlecontainer()
+        print(LOGINID)
+        print(LOGGEDINAS)       
+        #frame to contain  the entire container why didnt i think of this earlier looll
+        self.centercontainer = Frame(self, bg=LAVENDER)
+        self.centercontainer.grid(row=2, column=2, rowspan=14,
+                             columnspan=28, sticky=N+S+E+W) 
+        self.centercontainer.grid_propagate(0)
+        for x in range(28):
+            Grid.columnconfigure(self.centercontainer, x, weight=1, uniform='row')
+            Label(self.centercontainer, height=1, bg=LAVENDER).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        for y in range(16):
+            Grid.rowconfigure(self.centercontainer, y, weight=1, uniform='row')
+            Label(self.centercontainer, width=1, bg=LAVENDER).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
+                        
+        self.container2 = Frame(self.centercontainer, bg=LAVENDER)
+
+
         self.container2.grid_rowconfigure(0, weight=0)
         self.container2.grid_columnconfigure(0, weight=0)
-
-        # Top Container
-        # functions to change container sizes has been moved to the class
 
         FONTFORBUTTONS = "Bahnschrift Semibold"
         self.container3 = Frame(self, bg=DARKBLUE)
         self.container3.grid(row=0, column=0, rowspan=2,
-                             columnspan=32, sticky=N+S+E+W)
+                             columnspan=28, sticky=N+S+E+W)
+        for x in range(28):
+            Grid.columnconfigure(self.container3, x, weight=1, uniform='row')
+            Label(self.container3, height=1, bg=DARKBLUE).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        for y in range(2):
+            Grid.rowconfigure(self.container3, y, weight=1, uniform='row')
+            Label(self.container3, width=1, bg=DARKBLUE).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
+
         self.container3.grid_propagate(0)
         self.signupbutton = Button(self.container3, text="Sign Up\n Page", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20, "bold"),
-                                   borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                   borderwidth=2, relief="sunken", height=1,width=1, highlightthickness=0,
                                    command=lambda: [
-            self.show_frame(RegistrationPage),
-            self.singlecontainer()])
-        self.signupbutton.grid(row=0, column=0, rowspan=1, sticky=N+S+E+W)
+            self.show_frame(RegistrationPage)
+        ])
+        self.signupbutton.grid(row=0, column=0, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.loginbutton = Button(self.container3, text="Login\nPage", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                  borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                  borderwidth=2, relief="sunken", height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                   command=lambda: [
-            self.show_frame(LoginPage),
-            self.singlecontainer()])
-        self.loginbutton.grid(row=0, column=1, rowspan=1, sticky=N+S+E+W)
+            self.show_frame(LoginPage)
+        ])
+        self.loginbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.mainpagebutton = Button(self.container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                     borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                     borderwidth=2, relief="sunken", height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                      command=lambda: [
-            self.show_frame(MainPage), 
-            self.singlecontainer()])
+            self.show_frame(MainPage),
+            ])
         self.eventlistbutton = Button(self.container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                      borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                      borderwidth=2, relief="sunken", height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                       command=lambda: [
-            self.show_frame(EventView),
-            self.singlecontainer()])
+            self.show_frame(EventView)
+            ])
         self.eventregistrationbutton = Button(self.container3, text="Event\nRegistration", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                              borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                              borderwidth=2, relief="sunken",
+                                              height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                               command=lambda: [
-            self.show_frame(EventRegistration),
-            self.singlecontainer()])
+            self.show_frame(EventRegistration)
+            ])
         self.eventcreationbutton = Button(self.container3, text="Event\nCreation\n(ADMIN)", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                          borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                          borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                                           command=lambda: [
-            self.show_frame(EventCreation),
-            self.singlecontainer()])
+            self.show_frame(EventCreation)
+            ])
         self.viewparticipantsbutton = Button(self.container3, text="View\nParticipants\n(ADMIN)", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                             borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                             borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                                              command=lambda: [
-            self.show_frame(ViewParticipants),
-            self.singlecontainer()])
+            self.show_frame(ViewParticipants)
+            ])
         self.feedbackbutton = Button(self.container3, text="Feedback\nForm", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                            borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                            borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                             command=lambda: [
-            self.show_frame(FeedbackForm), 
-            self.singlecontainer()])
+            self.show_frame(FeedbackForm),
+            ])
         self.calendarbutton = Button(self.container3, text="Calendar", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                     borderwidth=1, relief="sunken", height=3, width=10, padx=15, pady=0, highlightthickness=0,
+                                     borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                                      command=lambda: [
-            self.show_frame(Calendar),
-            self.singlecontainer()])
+            self.show_frame(Calendar)])
 
         # Sign out button
         self.bottomleftbuttons = Frame(
@@ -198,20 +197,20 @@ class Window(Tk):
                     row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
 
         self.signoutbutton = Button(self.bottomleftbuttons, text="Sign Out", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                    borderwidth=1, relief="solid", height=3, width=10,
+                                    borderwidth=2, relief="solid", height=1,width=1,
                                     command=lambda: [
             self.show_frame(LoginPage),
-            self.singlecontainer(),
+
             self.signout()])
         self.signoutbutton.grid(row=0, column=0, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.studentbutton = Button(self.bottomleftbuttons, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                    borderwidth=1, relief="solid", height=3, width=10,
+                                    borderwidth=2, relief="solid", height=3, width=10,
                                     command=lambda: [self.show_loggedin()])
         self.studentbutton.grid(row=0, column=3, rowspan=2,columnspan=3, sticky=N+S+E+W)
 
         self.adminbutton = Button(self.bottomleftbuttons, text="Admin\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                  borderwidth=1, relief="solid", height=3, width=10,
-                                  command=lambda: [self.show_admin(), self.show_loggedin()])
+                                  borderwidth=2, relief="solid", height=3, width=10,
+                                  command=lambda: [self.show_admin()])
         self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.container5 = Frame(self, bg=NAVYBLUE, width=1, height=1,
                                 borderwidth=0, relief="flat")
@@ -242,16 +241,148 @@ class Window(Tk):
             self.make_a_container()])
 
         #Clickable Calendar Frame
+
+
+        self.welcomelabel("Stranger", "Viewer")
+        self.createcalendarframe()
+        self.createwindowmanagementframe()
+        self.frames = {}
+
+        for F in (RegistrationPage, LoginPage, MainPage, 
+                EventView, EventRegistration, EventCreation,
+                ViewParticipants, Calendar, FeedbackForm):
+            frame = F(self.centercontainer, self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0,rowspan=16,columnspan=28, sticky="nsew")
+        self.show_frame(LoginPage)
+
+    def signout(self):
+        self.mainpagebutton.grid_forget()
+        self.eventlistbutton.grid_forget()
+        self.eventregistrationbutton.grid_forget()
+        self.eventcreationbutton.grid_forget()
+        self.viewparticipantsbutton.grid_forget()
+        self.feedbackbutton.grid_forget()
+        self.calendarbutton.grid_forget()
+        self.sidecalendar.grid_forget()
+        self.bellbutton.grid_forget()
+        self.welcomelabel("Stranger", "Viewer")
+        global LOGGEDINAS
+        global LOGINSTATE
+        global LOGINID
+        LOGGEDINAS = "Viewer"
+        LOGINSTATE = False
+        LOGINID = "Viewer"
+
+    def show_loggedin(self):
+        self.mainpagebutton.grid(row=0, column=6, rowspan=2, columnspan=3,sticky=N+S+E+W)
+        self.eventlistbutton.grid(row=0, column=9, rowspan=2, columnspan=3, sticky=N+S+E+W)
+        self.eventregistrationbutton.grid(row=0, column=12, rowspan=2,columnspan=3,sticky=N+S+E+W)
+        self.calendarbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.feedbackbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.sidecalendar.grid(row=6, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+
+    def show_admin(self):
+        self.mainpagebutton.grid(row=0, column=6, rowspan=2, columnspan=3,sticky=N+S+E+W)
+        self.eventlistbutton.grid(row=0, column=9, rowspan=2, columnspan=3, sticky=N+S+E+W)
+        self.eventregistrationbutton.grid(row=0, column=12, rowspan=2,columnspan=3,  sticky=N+S+E+W)
+        self.eventcreationbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.viewparticipantsbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.calendarbutton.grid(row=0, column=21, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.feedbackbutton.grid(row=0, column=24, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.sidecalendar.grid(row=6, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+
+    def welcomelabel(self, name, role):
+        welcomeframe = Frame(self, bg=NICEBLUE, width=1, height=1,
+                            borderwidth=1, relief="flat")
+        welcomeframe.grid(row=16, column=20, rowspan=2, columnspan=12,
+                            sticky=N+S+E+W)
+        welcomeframe.grid_propagate(0)
+        for x in range(8):
+            Grid.columnconfigure(welcomeframe, x, weight=1, uniform='row')
+            Label(welcomeframe, height=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
+                row=0, column=x, sticky=N+S+E+W)
+        for y in range(2):
+            Grid.rowconfigure(welcomeframe, y, weight=1, uniform='row')
+            Label(welcomeframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
+                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
+        namelabel = Button(welcomeframe, text="", font=("Atkinson Hyperlegible", 18), fg="white",bg=DARKBLUE)
+        namelabel.grid(row=0, column=0, rowspan=2, columnspan=8, sticky=N+S+E+W)
+        namelabel.configure(text=f"Welcome {name.capitalize()} as {role.capitalize()}!\nWe are glad to have you here!")
+        namelabel.grid_propagate(0)
+
+    def deletethewindowbar(self):
+        hwnd:int = get_handle(self)
+        style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
+        style &= ~(WS_CAPTION | WS_THICKFRAME)
+        SetWindowLongPtrW(hwnd, GWL_STYLE, style)
+    
+    def showthewindowbar(self):
+        hwnd:int = get_handle(self)
+        style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
+        style |= (WS_CAPTION | WS_THICKFRAME)
+        SetWindowLongPtrW(hwnd, GWL_STYLE, style)
+
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+
+    def make_a_container(self):
+        self.randomframe.grid_remove()
+        self.randomframe.grid(row=7, column=2, rowspan=6, columnspan=6,
+                            sticky=N+S+E+W)
+    #Window management button frame
+    def createwindowmanagementframe(self):
+        self.windowmanagementframe = Frame(self, bg=NAVYBLUE, width=1, height=1,
+                                    borderwidth=0, relief="flat")
+        self.windowmanagementframe.grid(row=0, column=30, rowspan=2, columnspan=2,
+                                    sticky=N+S+E+W)
+        self.windowmanagementframe.grid_propagate(0)
+        for x in range(2):
+            Grid.columnconfigure(self.windowmanagementframe, x, weight=1, uniform='row')
+            Label(self.windowmanagementframe, height=1, bg=NAVYBLUE).grid(
+                row=0, column=x, rowspan=2, columnspan=1, sticky=N+S+E+W)
+        for y in range(2):
+            Grid.rowconfigure(self.windowmanagementframe, y, weight=1, uniform='row')
+            Label(self.windowmanagementframe, width=1, bg=NAVYBLUE).grid(
+                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+
+        self.minimizebutton = Button(self.windowmanagementframe, text="Show", font=("Atkinson Hyperlegible", 14),
+                                    bg="#fdbc40", fg="WHITE", width=1, height=1,
+                                    command=lambda:[
+            self.state('normal'),
+            self.showthewindowbar()
+        ])
+        self.minimizebutton.grid(row=0, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        self.minimizebutton.grid_propagate(0)
+        self.maximizebutton = Button(self.windowmanagementframe, text="Hide", font=("Atkinson Hyperlegible", 14),
+                                    bg="#33c748", fg="WHITE", width=1, height=1,
+                                    command=lambda:[
+            self.state('zoomed'),
+            self.deletethewindowbar()
+        ])
+        self.maximizebutton.grid(row=1, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        self.maximizebutton.grid_propagate(0)
+        self.closewindowbutton = Button(self.windowmanagementframe, text="Close", font=("Atkinson Hyperlegible", 14),
+                                    bg="#fc5753", fg="WHITE", width=1, height=1,
+                                    command=lambda:[
+            self.destroy()
+        ])
+        self.closewindowbutton.grid(row=0, column=1, rowspan=2, columnspan=1, sticky=N+S+E+W)
+        self.closewindowbutton.grid_propagate(0)
+    def createcalendarframe(self):
         self.randomframe = Frame(self, bg=PINK, width=1, height=1,
                                     borderwidth=1, relief="flat")
         self.randomframe.grid_propagate(0)
         for x in range(12):
             Grid.columnconfigure(self.randomframe, x, weight=1, uniform='row')
-            Label(self.randomframe, height=1, bg=LIGHTPURPLE, borderwidth=1, relief="solid").grid(
+            Label(self.randomframe, height=1, bg=LIGHTPURPLE).grid(
                 row=0, column=x, sticky=N+S+E+W)
         for y in range(12):
             Grid.rowconfigure(self.randomframe, y, weight=1, uniform='row')
-            Label(self.randomframe, width=1, bg=LIGHTPURPLE, borderwidth=1, relief="solid").grid(
+            Label(self.randomframe, width=1, bg=LIGHTPURPLE).grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
         self.introlabel = Label(self.randomframe, text="What would you\nlike to do?",
                             font=("Atkinson Hyperlegible", 14), width=1, height=1,
@@ -263,7 +394,6 @@ class Window(Tk):
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
             command=lambda:[
                 self.show_frame(Calendar),
-                self.singlecontainer(),
                 self.randomframe.grid_remove()
             ])
         self.loggedinaslabel = Label(self.randomframe, 
@@ -292,171 +422,7 @@ class Window(Tk):
         self.signoutbutton.grid_propagate(0)
         self.studentbutton.grid_propagate(0)
         self.adminbutton.grid_propagate(0)
-
-        self.welcomelabel("Stranger", "Viewer")
-        self.state('normal')
-        self.minimizebutton = Button(self, text="Show", font=("Atkinson Hyperlegible", 14),
-                                    bg="#fdbc40", fg="WHITE", width=1, height=1,
-                                    command=lambda:[
-            self.state('normal'),
-            self.showthewindowbar()
-        ])
-        self.minimizebutton.grid(row=0, column=30, rowspan=1, columnspan=1, sticky=N+S+E+W)
-        self.minimizebutton.grid_propagate(0)
-        self.maximizebutton = Button(self, text="Hide", font=("Atkinson Hyperlegible", 14),
-                                    bg="#33c748", fg="WHITE", width=1, height=1,
-                                    command=lambda:[
-            self.state('zoomed'),     
-            self.deletethewindowbar()
-        ])
-        self.maximizebutton.grid(row=1, column=30, rowspan=1, columnspan=1, sticky=N+S+E+W)
-        self.maximizebutton.grid_propagate(0)
-        self.closewindowbutton = Button(self, text="Close", font=("Atkinson Hyperlegible", 14),
-                                    bg="#fc5753", fg="WHITE", width=1, height=1,
-                                    command=lambda:[
-            self.destroy()
-        ])
-        self.closewindowbutton.grid(row=0, column=31, rowspan=2, columnspan=1, sticky=N+S+E+W)
-        self.closewindowbutton.grid_propagate(0)
-        self.frames = {}
-
-        for F in (RegistrationPage, LoginPage, MainPage, 
-                EventView, EventRegistration, EventCreation,
-                ViewParticipants, Calendar, FeedbackForm):
-            frame = F(self.container2, self)
-            self.frames[F] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
-        self.show_frame(LoginPage)
-
-    def show_container3(self):
-        self.container3.grid(row=0, column=0, rowspan=2,
-                             columnspan=20, sticky=N+S+E+W)
-                            
-    def signout(self):
-        self.mainpagebutton.grid_forget()
-        self.eventlistbutton.grid_forget()
-        self.eventregistrationbutton.grid_forget()
-        self.eventcreationbutton.grid_forget()
-        self.viewparticipantsbutton.grid_forget()
-        self.feedbackbutton.grid_forget()
-        self.calendarbutton.grid_forget()
-        self.sidecalendar.grid_forget()
-        self.bellbutton.grid_forget()
-        self.welcomelabel("Stranger", "Viewer")
-        global LOGGEDINAS
-        global LOGINSTATE
-        global LOGINID
-        LOGGEDINAS = "Viewer"
-        LOGINSTATE = False
-        LOGINID = "Viewer"
-
-
-    def show_loggedin(self):
-        self.mainpagebutton.grid(row=0, column=2, rowspan=1, sticky=N+S+E+W)
-        self.eventlistbutton.grid(row=0, column=3, rowspan=1, sticky=N+S+E+W)
-        self.eventregistrationbutton.grid(row=0, column=4, rowspan=1, sticky=N+S+E+W)
-        self.calendarbutton.grid(row=0, column=7, rowspan=1, sticky=N+S+E+W)
-        self.feedbackbutton.grid(row=0, column=8, rowspan=1, sticky=N+S+E+W)
-        self.sidecalendar.grid(row=7, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-        self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-
-    def show_admin(self):
-        self.eventcreationbutton.grid(
-            row=0, column=5, rowspan=1, sticky=N+S+E+W)
-        self.viewparticipantsbutton.grid(
-            row=0, column=6, rowspan=1, sticky=N+S+E+W)
-
-    def onelargeonesmallcont(self): #used in sign up page, login page, event list, event registration
-        self.container2.grid(row=3, column=2, columnspan=13,
-                               rowspan=12, sticky=N+S+E+W)
-
-    def doublelargecontainers(self): #used in event list, event registration
-        self.container2.grid(row=2, column=2, columnspan=14,
-                               rowspan=14, sticky=N+S+E+W)
-
-    def singlecontainer(self): # used for container on the left, on main page, event creation, view participants, calendar, feedbackform 
-        self.container2.grid(row=2, column=2, rowspan=14,
-                            columnspan=28, sticky=N+S+E+W)
-    def singlecalendarcontainer(self):
-        self.container2.grid(row=2, column=2, rowspan=14,
-                            columnspan=26, sticky=N+S+E+W)
-
         
-    def revertcontainer3(self):
-        self.container3.grid(row=0, column=0, rowspan=2,
-                             columnspan=32, sticky=N+S+E+W)
-    
-    def shiftcontainer3over(self):
-        self.container3.grid(row=0, column=5, rowspan=2,
-                             columnspan=32, sticky=N+S+E+W)
-    def make_a_container(self):
-        self.randomframe.grid_remove()
-        self.randomframe.grid(row=7, column=2, rowspan=6, columnspan=6,
-                            sticky=N+S+E+W)
-
-
-    def makecontainer(self):
-        randomframe = Frame(self, bg=PINK, width=1, height=1,
-                                borderwidth=1, relief="flat")
-        randomframe.grid(row=2, column=2, rowspan=14, columnspan=14,
-                             sticky=N+S+E+W)
-        randomframe.grid_propagate(0)
-        self.randomframe = randomframe
-        for x in range(14):
-            Grid.columnconfigure(self.randomframe, x, weight=1, uniform='row')
-            Label(randomframe, height=1, bg=LIGHTPURPLE, borderwidth=1, relief="solid").grid(
-                row=0, column=x, sticky=N+S+E+W)
-        for y in range(14):
-            Grid.rowconfigure(self.randomframe, y, weight=1, uniform='row')
-            Label(randomframe, width=1, bg=LIGHTPURPLE, borderwidth=1, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
-        randomlabel = Label(self.randomframe, text="random", bg=DARKBLUE)
-        randomlabel.grid(row=0, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W,pady=5)
-        randomlabel.grid_propagate(0)
-        randombutton = Button(self.randomframe, text="random", bg=DARKBLUE, fg="WHITE", command=lambda:[
-            self.show_frame(EventView),
-            self.doublelargecontainers(),
-            self.randomframe.grid_remove()
-        ])
-        randombutton.grid(row=13, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W,pady=5)
-    def removethecontainer(self):
-        self.randomframe.grid_remove()
-    def deletethewindowbar(self):
-        hwnd:int = get_handle(self)
-        style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
-        style &= ~(WS_CAPTION | WS_THICKFRAME)
-        SetWindowLongPtrW(hwnd, GWL_STYLE, style)
-    
-    def showthewindowbar(self):
-        hwnd:int = get_handle(self)
-        style:int = GetWindowLongPtrW(hwnd, GWL_STYLE)
-        style |= (WS_CAPTION | WS_THICKFRAME)
-        SetWindowLongPtrW(hwnd, GWL_STYLE, style)
-
-    def show_frame(self, cont):
-        frame = self.frames[cont]
-        frame.grid(row=0, column=0, sticky="nsew")
-        frame.tkraise()
-        
-    def welcomelabel(self, name, role):
-        welcomeframe = Frame(self, bg=NICEBLUE, width=1, height=1,
-                            borderwidth=1, relief="flat")
-        welcomeframe.grid(row=16, column=20, rowspan=2, columnspan=12,
-                            sticky=N+S+E+W)
-        welcomeframe.grid_propagate(0)
-        # self.welcomeframe = welcomeframe
-        for x in range(8):
-            Grid.columnconfigure(welcomeframe, x, weight=1, uniform='row')
-            Label(welcomeframe, height=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
-                row=0, column=x, sticky=N+S+E+W)
-        for y in range(2):
-            Grid.rowconfigure(welcomeframe, y, weight=1, uniform='row')
-            Label(welcomeframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
-        namelabel = Button(welcomeframe, text="", font=("Atkinson Hyperlegible", 18), fg="white",bg=DARKBLUE)
-        namelabel.grid(row=0, column=0, rowspan=2, columnspan=8, sticky=N+S+E+W)
-        namelabel.configure(text=f"Welcome {name.capitalize()} as {role.capitalize()}!\nWe are glad to have you here!")
-        namelabel.grid_propagate(0)
 
 class RegistrationPage(Frame):
     def __init__(self, parent, controller):
@@ -535,7 +501,7 @@ class RegistrationPage(Frame):
                             "Success", "You have successfully registered.")
                         controller.show_frame(LoginPage)
                         cleareveryentry()
-                        controller.singlecontainer()
+                        
             except sqlite3.IntegrityError:
                 messagebox.showerror("Error", "Email already in use.")
             except IndexError:
@@ -723,7 +689,6 @@ class RegistrationPage(Frame):
         font=('Atkinson Hyperlegible', 18), width=1, height=1, borderwidth=0,
         fg='#000000', command=lambda: [
         controller.show_frame(LoginPage),
-        controller.singlecontainer(),
         cleareveryentry()],
         bg=OTHERPINK)
         loginbutton.grid(row=17, column=28, columnspan=10,
@@ -751,7 +716,6 @@ class RegistrationPage(Frame):
                                anchor=CENTER, width=1, height=1)
         titleartlabel.grid(row=9, column=2, columnspan=17,
                            rowspan=8, sticky=N+S+E+W)
-        #random label attributed to self
 
         def aboutINTIcontainer():
             randomframe = Frame(controller, bg=NICEBLUE, width=1, height=1,
@@ -774,13 +738,7 @@ class RegistrationPage(Frame):
             randombutton = Button(randomframe, text="click me to close ", font=("Comic Sans Ms", 18), bg=DARKBLUE, fg="WHITE", command=lambda:[
             randomframe.grid_forget()])
             randombutton.grid(row=6, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W,pady=5)
-        # button = Button(self, text="random", bg=DARKBLUE, fg="WHITE", command=lambda:[
-        #     make_a_container()])
-        # button.grid(row=1, column=1,rowspan=1,columnspan=2, sticky=N+S+E+W)
-    def hidealabel(self):
-        self.label.grid_remove()
-    def showalabel(self):
-        self.label.grid()
+
 
 class LoginPage(Frame):
     def __init__(self, parent, controller):
@@ -795,24 +753,10 @@ class LoginPage(Frame):
             self.rowconfigure(y, weight=1, uniform='x')
             Label(self, width=5, bg=LIGHTPURPLE, bd=1, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
-
-        class _(Window):
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-
-            def changecontainersize(self, container):
-                container.grid(row=2, column=16, rowspan=14,
-                               columnspan=14, sticky=N+S+E+W)
-
-            def revertcontainersize(self, container):
-                container.grid(row=3, column=18, columnspan=12,
-                               rowspan=12, sticky=N+S+E+W)
-
         # Database Functions for Logging in and setting loginstate to student or teacher
         # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
         # If email is not found in database, it will return an error message.
         # If email is found in database, it will return a success message.
-
         conn = sqlite3.connect('interactivesystem.db')
         c = conn.cursor()
 
@@ -868,8 +812,6 @@ class LoginPage(Frame):
                 messagebox.showerror(
                     "Login Failed", f"You are already logged in as {roles}!")
 
-        emailwarning = Label(self, text="Please enter a valid email address.", font=(
-            'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
 
         def signinbuttonpressed():
             checkcredentials()
@@ -941,44 +883,66 @@ class LoginPage(Frame):
         PASSWORDTEXT = "Please enter your password"
         FONTNAME = "Avenir Next Medium"
         # Buttons
-        self.intibanner = Image.open(r"assets\Home-Banner-INTI.png")
-        self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
-            (math.ceil(720 * dpi / 96), math.ceil(240 * dpi / 96)), Image.Resampling.LANCZOS))
-        logolabel = Button(self, image=self.intibanner,
-                           anchor=CENTER, width=1, height=1)
-        logolabel.grid(row=1, column=24, columnspan=18,
-                       rowspan=5, sticky=N+S+E+W)
+        # self.intibanner = Image.open(r"assets\Home-Banner-INTI.png")
+        # self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
+        #     (math.ceil(720 * dpi / 96), math.ceil(240 * dpi / 96)), Image.Resampling.LANCZOS))
+        # logolabel = Button(self, image=self.intibanner,
+        #                    anchor=CENTER, width=1, height=1)
+        # logolabel.grid(row=1, column=24, columnspan=18,
+        #                rowspan=5, sticky=N+S+E+W)
+        self.backgroundimageoriginal = Image.open(r"Assets\Untitled(1).png")
+        self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+            (math.ceil(1680 * dpi / 96), math.ceil(820 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
+        self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
+        self.backgroundimagelabel.grid_propagate(0)
+        self.signinbuttonimage = Image.open(r"registrationpagestuff\build\assets\button_1.png")
+        self.signinbuttonimage = ImageTk.PhotoImage(self.signinbuttonimage.resize(
+            (math.ceil(507 * dpi / 96), math.ceil(77 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.signinbutton = Button(self, image=self.signinbuttonimage, width=1, height=1,
+        bg=LIGHTPURPLE, borderwidth=0, command=lambda:signinbuttonpressed())
+        self.signinbutton.grid(row=15, column=26, rowspan=2, columnspan=13, sticky=N+S+E+W)
+        self.signinbutton.grid_propagate(0)
+        self.signupbuttonimage = Image.open(r"registrationpagestuff\build\assets\button_2.png")
+        self.signupbuttonimage = ImageTk.PhotoImage(self.signupbuttonimage.resize(
+            (math.ceil(507 * dpi / 96), math.ceil(77 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.signupbutton = Button(self, image=self.signupbuttonimage, width=1, height=1,
+        bg=LIGHTPURPLE, borderwidth=0, command=lambda:controller.show_frame(RegistrationPage))
+        self.signupbutton.grid(row=18, column=26, rowspan=2, columnspan=13, sticky=N+S+E+W)
+        self.signupbutton.grid_propagate(0)
+        emailwarning = Label(self, text="Please enter a valid email address.", font=(
+            'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
         emailfield = Entry(self, width=1, bg='#FFFFFF',
-                           font=(FONTNAME, 18), justify='center')
-        emailfield.grid(row=7, column=24, columnspan=18,
+                           font=(FONTNAME, 14), justify='center')
+        emailfield.grid(row=9, column=27, columnspan=11,
                         rowspan=2, sticky=N+S+E+W)
+        emailfield.grid_configure(padx=10, pady=10)
         emailfield.insert(0, EMAILTEXT)
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
-                              font=(FONTNAME, 18), justify='center')
-        passwordfield.grid(row=10, column=24, columnspan=18,
+                              font=(FONTNAME, 14), justify='center')
+        passwordfield.grid(row=12, column=27, columnspan=11,
                            rowspan=2, sticky=N+S+E+W)
+        passwordfield.grid_configure(padx=10,pady=10)
         passwordfield.insert(0, PASSWORDTEXT)
         emailfield.bind("<FocusIn>", lambda a: clearemailfield())
         emailfield.bind("<FocusOut>", lambda a: repopulateemailfield())
         passwordfield.bind("<FocusIn>", lambda a: clearpasswordfield())
         passwordfield.bind("<FocusOut>", lambda a: repopulatepasswordfield())
 
-        signinbutton = Button(self, text="SIGN IN", font=(
-            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW, fg='#000000', command=lambda: signinbuttonpressed())
-        signinbutton.grid(row=13, column=28, columnspan=9,
-                          rowspan=2, sticky=N+S+E+W)
-        ortext = Label(self, text="------OR------", font=('Arial', 18), width=1,
-                       height=1, fg='#000000', bg='#FFF5E4')
-        ortext.grid(row=15, column=28, columnspan=9,
-                    rowspan=1, sticky=N+S+E+W)
+        # signinbutton = Button(self, text="SIGN IN", font=(
+        #     'Arial', 18), width=1, height=1, bg=LIGHTYELLOW, fg='#000000', command=lambda: signinbuttonpressed())
+        # signinbutton.grid(row=13, column=28, columnspan=9,
+        #                   rowspan=2, sticky=N+S+E+W)
+        # ortext = Label(self, text="------OR------", font=('Arial', 18), width=1,
+        #                height=1, fg='#000000', bg='#FFF5E4')
+        # ortext.grid(row=15, column=28, columnspan=9,
+        #             rowspan=1, sticky=N+S+E+W)
 
-        signupbutton = Button(self, text="Not a member yet?\n Click here to sign up", font=(
-            'Arial', 18), width=1, height=1, fg='#000000', command=lambda: [
-            controller.show_frame(RegistrationPage),
-            controller.singlecontainer()
-            ], bg=OTHERPINK)
-        signupbutton.grid(row=16, column=28, columnspan=9,
-                          rowspan=2, sticky=N+S+E+W)
+        # signupbutton = Button(self, text="Not a member yet?\n Click here to sign up", font=(
+        #     'Arial', 18), width=1, height=1, fg='#000000', command=lambda: [
+        #     controller.show_frame(RegistrationPage)], bg=OTHERPINK)
+        # signupbutton.grid(row=16, column=28, columnspan=9,
+        #                   rowspan=2, sticky=N+S+E+W)
         def changedtologout():
             global LOGGEDINAS
             global LOGINSTATE
@@ -987,23 +951,23 @@ class LoginPage(Frame):
         def checkstate():
             global LOGGEDINAS
             print(LOGGEDINAS)
-        signoutbutton = Button(self, text="SIGN OUT", font=(
-            'Arial', 18), width=1, height=1, bg=LIGHTYELLOW, fg='#000000', command=lambda: changedtologout())
-        signoutbutton.grid(row=18, column=28, columnspan=9,
-                           rowspan=2, sticky=N+S+E+W)
+        # signoutbutton = Button(self, text="SIGN OUT", font=(
+        #     'Arial', 18), width=1, height=1, bg=LIGHTYELLOW, fg='#000000', command=lambda: changedtologout())
+        # signoutbutton.grid(row=18, column=28, columnspan=9,
+                        #    rowspan=2, sticky=N+S+E+W)
         checkstatebutton = Button(
             self, text="Check state", command=lambda: checkstate())
         checkstatebutton.grid(row=17, column=40, columnspan=4,
                               rowspan=2, sticky=N+S+E+W)
 
-        self.titleart = Image.open(r"assets\DR7j7r0.png")
-        self.titleart = ImageTk.PhotoImage(self.titleart.resize(
-            (math.ceil(780 * dpi / 96), math.ceil(320 * dpi / 96)), Image.Resampling.LANCZOS))
-        titleartlabel = Button(self, image=self.titleart,
-                               background= NICEBLUE, 
-                               anchor=CENTER, width=1, height=1)
-        titleartlabel.grid(row=8, column=2, columnspan=20,
-                           rowspan=8, sticky=N+S+E+W)
+        # self.titleart = Image.open(r"assets\DR7j7r0.png")
+        # self.titleart = ImageTk.PhotoImage(self.titleart.resize(
+        #     (math.ceil(780 * dpi / 96), math.ceil(320 * dpi / 96)), Image.Resampling.LANCZOS))
+        # titleartlabel = Button(self, image=self.titleart,
+        #                        background= NICEBLUE, 
+        #                        anchor=CENTER, width=1, height=1)
+        # titleartlabel.grid(row=8, column=2, columnspan=20,
+        #                    rowspan=8, sticky=N+S+E+W)
         #random label attributed to self
 
         def aboutINTIcontainer():
@@ -1027,9 +991,7 @@ class LoginPage(Frame):
             randombutton = Button(randomframe, text="click me to close ", font=("Comic Sans Ms", 18), bg=DARKBLUE, fg="WHITE", command=lambda:[
             randomframe.grid_forget()])
             randombutton.grid(row=6, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W,pady=5)
-        # button = Button(self, text="random", bg=DARKBLUE, fg="WHITE", command=lambda:[
-        #     make_a_container()])
-        # button.grid(row=1, column=1,rowspan=1,columnspan=2, sticky=N+S+E+W)
+
     def hidealabel(self):
         self.label.grid_remove()
     def showalabel(self):
@@ -1048,36 +1010,6 @@ class MainPage(Frame):
             self.rowconfigure(y, weight=1, uniform='x')
             Label(self, width=5, bg=LAVENDER, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
-
-        class _(Window):
-            def revertcontainersize(self, container):
-                container.grid(row=3, column=2, columnspan=13,
-                               rowspan=12, sticky=N+S+E+W)
-
-            def changecontainersize(self, container):
-                container.grid(row=2, column=2, rowspan=14,
-                               columnspan=28, sticky=N+S+E+W)
-
-            def makeleftcontainerhuge(leftcontainer):
-                leftcontainer.grid(row=2, column=2, rowspan=14,
-                                   columnspan=28, sticky=N+S+E+W)
-
-            def revertcontainersizes(rightcontainer, leftcontainer):
-                rightcontainer.grid(row=3, column=17, columnspan=13,
-                                    rowspan=12, sticky=N+S+E+W)
-                leftcontainer.grid(row=3, column=2, columnspan=13,
-                                   rowspan=12, sticky=N+S+E+W)
-
-            def keepcontainerlarge(rightcontainer):
-                rightcontainer.grid(row=2, column=2, rowspan=14,
-                                    columnspan=28, sticky=N+S+E+W)
-
-        # sizebutton = Button(
-        #     self, text="Big", command=lambda: _.changecontainersize(self, parent))
-        # sizebutton.grid(row=1, column=1, sticky=N+S+E+W)
-        # unsizebutton = Button(
-        #     self, text="Small", command=lambda: _.revertcontainersize(self, parent))
-        # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
 
         # Picture
         self.originalimage = Image.open(r"assets\Home-Banner-INTI.png")
@@ -1145,7 +1077,7 @@ class MainPage(Frame):
         feedbackbutton = Button(self, image=self.feedbackimage, width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
         controller.show_frame(FeedbackForm),
-        controller.singlecontainer()])
+        ])
         feedbackbutton.grid(row=8, column=2, columnspan=16,
                             rowspan=4, sticky=N+S+E+W)
         imagelabel = Label(self, image=self.feedbackimage,
@@ -1154,7 +1086,6 @@ class MainPage(Frame):
         eventnamebutton = Button(self, text="Event 1", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.singlecontainer(),
         controller.show_frame(EventView)])
 
         eventnamebutton.grid(row=15, column=2, columnspan=16,
@@ -1162,7 +1093,6 @@ class MainPage(Frame):
         eventsnamebutton = Button(self, text="Event 2", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.singlecontainer(),
         controller.show_frame(EventView)])
         eventsnamebutton.grid(row=16, column=2, columnspan=16,
                               rowspan=1, sticky=N+S+E+W)
@@ -1170,7 +1100,6 @@ class MainPage(Frame):
         aneventnamebutton = Button(self, text="Event 3", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.singlecontainer(),
         controller.show_frame(EventView)])
         aneventnamebutton.grid(row=17, column=2, columnspan=16,
                                rowspan=1, sticky=N+S+E+W)
@@ -1178,7 +1107,6 @@ class MainPage(Frame):
         theeventnamebutton = Button(self, text="Event 4", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.singlecontainer(),
         controller.show_frame(EventView)])
         theeventnamebutton.grid(row=18, column=2, columnspan=16,
                                 rowspan=1, sticky=N+S+E+W)
@@ -1186,7 +1114,6 @@ class MainPage(Frame):
         eventlistbutton = Button(self, text="Event List", font=(
         'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.singlecontainer(),
         controller.show_frame(EventView)])
         eventlistbutton.grid(row=16, column=20, columnspan=5,
                              rowspan=3, sticky=N+S+E+W)
@@ -1194,7 +1121,7 @@ class MainPage(Frame):
         eventregistrationbutton = Button(self, text="Event\nRegistration", font=(
         'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4',  command=lambda:
         [controller.show_frame(EventRegistration),
-        controller.singlecontainer()])
+        ])
         eventregistrationbutton.grid(row=16, column=28, columnspan=5,
                                      rowspan=3, sticky=N+S+E+W)
 
@@ -1202,7 +1129,7 @@ class MainPage(Frame):
             'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4', command=
             lambda: [
             controller.show_frame(Calendar),
-            controller.singlecontainer()])
+            ])
         calendarbutton.grid(row=16, column=36, columnspan=5,
                             rowspan=3, sticky=N+S+E+W)
 
@@ -1697,16 +1624,16 @@ class ViewParticipants(Frame):
 
 class FeedbackForm(Frame):
     def __init__(self, parent, controller):
-        Frame.__init__(self, parent, bg=NICEPURPLE)
+        Frame.__init__(self, parent, bg=PINK)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=NICEPURPLE, borderwidth=0, relief="solid").grid(
+            Label(self, height=2, bg=PINK, borderwidth=0, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=NICEPURPLE, borderwidth=0, relief="solid").grid(
+            Label(self, width=5, bg=PINK, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
 
 
