@@ -93,8 +93,8 @@ class Window(Tk):
                 row=0, column=x, sticky=N+S+E+W)
         for y in range(18):
             self.rowconfigure(y, weight=1, uniform='row')
-            Label(width=1, bg=NICEPURPLE, bd=1).grid(
-                row=y, column=0, sticky=N+S+E+W,)
+            Label(width=1, bg=NICEPURPLE).grid(
+                row=y, column=0, sticky=N+S+E+W)
         self.configure(background=LAVENDER)
 
         print(LOGINID)
@@ -241,8 +241,8 @@ class Window(Tk):
             self.make_a_container()])
 
         #Clickable Calendar Frame
-
-
+        #bind escape to close the window 
+        self.bind("<Escape>", lambda e: self.destroy())
         self.welcomelabel("Stranger", "Viewer")
         self.createcalendarframe()
         self.createwindowmanagementframe()
@@ -254,7 +254,8 @@ class Window(Tk):
             frame = F(self.centercontainer, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0,rowspan=16,columnspan=28, sticky="nsew")
-        self.show_frame(LoginPage)
+        #Shows the loading frame
+        self.show_frame(EventCreation)
 
     def signout(self):
         self.mainpagebutton.grid_forget()
@@ -431,12 +432,12 @@ class RegistrationPage(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LIGHTPURPLE, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
-        for y in range(20):
+            Label(self, height=2, bg=LIGHTPURPLE).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LIGHTPURPLE, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=LIGHTPURPLE).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         # constants
         FONTNAME = "Avenir Next Medium"
         FIRSTNAME = "First Name"
@@ -507,23 +508,6 @@ class RegistrationPage(Frame):
             except IndexError:
                 emailwarning.configure(text="You have not entered an email")
                 messagebox.showerror("Error", "Please enter a valid email.")
-
-        # class _(Window):
-        #     def changecontainersize(self, container):
-        #         container.grid(row=2, column=16, rowspan=14,
-        #                        columnspan=14, sticky=N+S+E+W)
-
-        #     def revertcontainersize(self, container):
-        #         container.grid(row=3, column=17, columnspan=13,
-        #                        rowspan=12, sticky=N+S+E+W)
-        # sizebutton = Button(
-        #     self, text="Big", command=lambda: _.changecontainersize(self, parent))
-        # sizebutton.grid(row=1, column=1, sticky=N+S+E+W)
-        # unsizebutton = Button(
-        #     self, text="Small", command=lambda: _.revertcontainersize(self, parent))
-        # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
-
-        # functions to clear the entry boxes
 
         def clearnamefields():
             if firstnamefield.get() == FIRSTNAME:
@@ -597,7 +581,7 @@ class RegistrationPage(Frame):
             else:
                 passwordfield.configure(show="*")
 
-        SCAMTEXT = "Please confirm your  password"
+        SCAMTEXT = "Please confirm your password "
         def clearconfpasswordfield():
             confirmpasswordfield.configure(fg="black")
             confirmpasswordfield.configure(show="*")
@@ -663,6 +647,7 @@ class RegistrationPage(Frame):
         confirmpasswordfield.grid(row=12, column=24,
                                   rowspan=2, columnspan=18, sticky=N+S+E+W)
         confirmpasswordfield.insert(0, CONFPASSTEXT)
+        confirmpasswordfield.grid_propagate(0)
 
         # Entry Binding
         firstnamefield.bind("<FocusIn>", lambda event: clearnamefields())
@@ -684,6 +669,7 @@ class RegistrationPage(Frame):
             'Arial', 18), width=1, height=1, fg='#000000', command=lambda: checkfields(), bg=LIGHTYELLOW)
         signupbutton.grid(row=15, column=28, columnspan=10,
                           rowspan=2, sticky=N+S+E+W)
+        signupbutton.grid_propagate(0)
 
         loginbutton = Button(self, text="Already have an account?\nClick here to sign in.",
         font=('Atkinson Hyperlegible', 18), width=1, height=1, borderwidth=0,
@@ -693,11 +679,14 @@ class RegistrationPage(Frame):
         bg=OTHERPINK)
         loginbutton.grid(row=17, column=28, columnspan=10,
                          rowspan=2, sticky=N+S+E+W)
+        loginbutton.grid_propagate(0)
 
         label = Label(self, text="This is the registration page on left frame\nCome back later, still under construction!", font=(
             'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=2, columnspan=17,
                    rowspan=2, sticky=N+S+E+W)
+        label.grid_propagate(0)
+        
 
         self.intibanner = Image.open(r"assets\Home-Banner-INTI.png")
         self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
@@ -708,6 +697,7 @@ class RegistrationPage(Frame):
                            command = lambda:aboutINTIcontainer())
         self.logolabel.grid(row=4, column=5, columnspan=11,
                        rowspan=5, sticky=N+S+E+W)
+        self.logolabel.grid_propagate(0)
         self.titleart = Image.open(r"assets\DR7j7r0.png")
         self.titleart = ImageTk.PhotoImage(self.titleart.resize(
             (math.ceil(700 * dpi / 96), math.ceil(220 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -716,6 +706,7 @@ class RegistrationPage(Frame):
                                anchor=CENTER, width=1, height=1)
         titleartlabel.grid(row=9, column=2, columnspan=17,
                            rowspan=8, sticky=N+S+E+W)
+        titleartlabel.grid_propagate(0)
 
         def aboutINTIcontainer():
             randomframe = Frame(controller, bg=NICEBLUE, width=1, height=1,
@@ -747,12 +738,12 @@ class LoginPage(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LIGHTPURPLE, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=2, bg=LIGHTPURPLE).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LIGHTPURPLE, bd=1, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=LIGHTPURPLE).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         # Database Functions for Logging in and setting loginstate to student or teacher
         # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
         # If email is not found in database, it will return an error message.
@@ -890,40 +881,42 @@ class LoginPage(Frame):
         #                    anchor=CENTER, width=1, height=1)
         # logolabel.grid(row=1, column=24, columnspan=18,
         #                rowspan=5, sticky=N+S+E+W)
-        self.backgroundimageoriginal = Image.open(r"Assets\Untitled(1).png")
+        self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
         self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
             (math.ceil(1680 * dpi / 96), math.ceil(820 * dpi / 96)), Image.Resampling.LANCZOS))
         self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
         self.backgroundimagelabel.grid_propagate(0)
-        self.signinbuttonimage = Image.open(r"registrationpagestuff\build\assets\button_1.png")
+        self.signinbuttonimage = Image.open(r"Assets\signinbutton.png")
         self.signinbuttonimage = ImageTk.PhotoImage(self.signinbuttonimage.resize(
             (math.ceil(507 * dpi / 96), math.ceil(77 * dpi / 96)), Image.Resampling.LANCZOS))
         self.signinbutton = Button(self, image=self.signinbuttonimage, width=1, height=1,
         bg=LIGHTPURPLE, borderwidth=0, command=lambda:signinbuttonpressed())
-        self.signinbutton.grid(row=15, column=26, rowspan=2, columnspan=13, sticky=N+S+E+W)
+        self.signinbutton.grid(row=14, column=26, rowspan=2, columnspan=13,padx=24, pady=7, sticky=N+S+E+W)
         self.signinbutton.grid_propagate(0)
-        self.signupbuttonimage = Image.open(r"registrationpagestuff\build\assets\button_2.png")
+        self.signupbuttonimage = Image.open(r"Assets\signupbutton.png")
         self.signupbuttonimage = ImageTk.PhotoImage(self.signupbuttonimage.resize(
-            (math.ceil(507 * dpi / 96), math.ceil(77 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(480 * dpi / 96), math.ceil(108 * dpi / 96)), Image.Resampling.LANCZOS))
         self.signupbutton = Button(self, image=self.signupbuttonimage, width=1, height=1,
-        bg=LIGHTPURPLE, borderwidth=0, command=lambda:controller.show_frame(RegistrationPage))
-        self.signupbutton.grid(row=18, column=26, rowspan=2, columnspan=13, sticky=N+S+E+W)
+        bg=LIGHTPURPLE, borderwidth=1, relief="flat", command=lambda:controller.show_frame(RegistrationPage))
+        self.signupbutton.grid(row=18, column=26, rowspan=2, columnspan=12, padx=24, pady=7,sticky=N+S+E+W)
         self.signupbutton.grid_propagate(0)
         emailwarning = Label(self, text="Please enter a valid email address.", font=(
             'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        emailfield = Entry(self, width=1, bg='#FFFFFF',
+        emailfield = Entry(self, width=1, bg='#FFFFFF', highlightthickness=1,
                            font=(FONTNAME, 14), justify='center')
-        emailfield.grid(row=9, column=27, columnspan=11,
+        emailfield.grid(row=7, column=25, columnspan=14,
                         rowspan=2, sticky=N+S+E+W)
-        emailfield.grid_configure(padx=10, pady=10)
+        emailfield.grid_configure(padx=3, pady=6)
         emailfield.insert(0, EMAILTEXT)
-        passwordfield = Entry(self, width=1, bg='#FFFFFF',
+        emailfield.grid_propagate(0)
+        passwordfield = Entry(self, width=1, bg='#FFFFFF', highlightthickness=1,
                               font=(FONTNAME, 14), justify='center')
-        passwordfield.grid(row=12, column=27, columnspan=11,
+        passwordfield.grid(row=11, column=25, columnspan=14,
                            rowspan=2, sticky=N+S+E+W)
-        passwordfield.grid_configure(padx=10,pady=10)
+        passwordfield.grid_configure(padx=3,pady=7)
         passwordfield.insert(0, PASSWORDTEXT)
+        passwordfield.grid_propagate(0)
         emailfield.bind("<FocusIn>", lambda a: clearemailfield())
         emailfield.bind("<FocusOut>", lambda a: repopulateemailfield())
         passwordfield.bind("<FocusIn>", lambda a: clearpasswordfield())
@@ -959,6 +952,7 @@ class LoginPage(Frame):
             self, text="Check state", command=lambda: checkstate())
         checkstatebutton.grid(row=17, column=40, columnspan=4,
                               rowspan=2, sticky=N+S+E+W)
+        checkstatebutton.grid_propagate(0)
 
         # self.titleart = Image.open(r"assets\DR7j7r0.png")
         # self.titleart = ImageTk.PhotoImage(self.titleart.resize(
@@ -972,7 +966,7 @@ class LoginPage(Frame):
         def resize():
             dimensions = [controller.winfo_width(), controller.winfo_height()]
             if controller.winfo_width() != dimensions[0] or controller.winfo_width != dimensions[1]:
-                self.backgroundimageoriginal = Image.open(r"Assets\Untitled(1).png")
+                self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
                 self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
             (math.ceil(1694 * dpi / 96), math.ceil(853 * dpi / 96)), Image.Resampling.LANCZOS))
                 self.backgroundimagelabel.config(image=self.backgroundimage)
@@ -1020,12 +1014,12 @@ class MainPage(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=2, bg=LAVENDER).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LAVENDER, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=LAVENDER).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
         # Picture
         self.originalimage = Image.open(r"assets\Home-Banner-INTI.png")
@@ -1166,12 +1160,12 @@ class EventView(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LAVENDER, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=2, bg=LAVENDER).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LAVENDER, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=LAVENDER).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
         class _(Window):
             def changecontainersize(self, container):
@@ -1203,12 +1197,12 @@ class EventRegistration(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=2, bg=PINK).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=PINK).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
         # Connect to database
         conn = sqlite3.connect('interactivesystem.db')
@@ -1260,13 +1254,14 @@ class EventRegistration(Frame):
         # Widgets
         label = Label(self, text="This is the event registration page", font=(
             'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        label.grid(row=0, column=2, columnspan=18,
+        label.grid(row=1, column=2, columnspan=18,
                    rowspan=1, sticky=N+S+E+W)
+        label.grid_propagate(0)
         #dropdown for events
         conn = sqlite3.connect('interactivesystem.db')
         # Create cursor
         c = conn.cursor()
-        event_list = [""]
+        event_list = ["Select an event"]
         #refresh the event_list everytime the combobox is selected
         def refresh():
             c.execute("SELECT event_name FROM eventcreation")
@@ -1296,25 +1291,29 @@ class EventRegistration(Frame):
                            rowspan=2, sticky=NSEW)
         self.eventdropdown.bind('<FocusIn>', defocus)
         self.eventdropdown.bind('<<ComboboxSelected>>', focusout)
+        self.eventdropdown.grid_propagate(0)
         
         separator = ttk.Separator(self, orient=HORIZONTAL)
         separator.grid(row=3, column=3, columnspan=16, pady=5, sticky=EW)
-        icpasslabel = Label(self, text="NRIC/\nPassport No.",
+        icpasslabel = Label(self, text="IC No.",
                             font=(FONTNAME, 10), bg='#FFF5E4')
         icpasslabel.grid(row=7, column=3, columnspan=2,
                          rowspan=2, sticky=N+S+E+W)
+        icpasslabel.grid_propagate(0)
         phonenumberlabel = Label(
-            self, text="Phone\nNumber", font=(FONTNAME, 14), bg='#FFF5E4')
+            self, text="Phone\nNo", font=(FONTNAME, 10), bg='#FFF5E4')
         phonenumberlabel.grid(
             row=10, column=3, columnspan=2, rowspan=2, sticky=N+S+E+W)
         emaillabel = Label(self, text="Email", font=(
             FONTNAME, 14), bg='#FFF5E4')
         emaillabel.grid(row=13, column=3, columnspan=2,
                         rowspan=2, sticky=N+S+E+W)
+        emaillabel.grid_propagate(0)
         addresslabel = Label(self, text="Address",
-                             font=(FONTNAME, 14), bg='#FFF5E4')
+                             font=(FONTNAME, 10), bg='#FFF5E4')
         addresslabel.grid(row=16, column=3, columnspan=2,
                           rowspan=2, sticky=N+S+E+W)
+        addresslabel.grid_propagate(0)
 
         # radio_1 = ttk.Radiobutton(self, text="Male  ", variable=var, value=0)
         # radio_1.grid(row=9, column=5,rowspan=2, columnspan=2, pady=(0, 10), sticky=NS)
@@ -1372,17 +1371,15 @@ class EventRegistration(Frame):
 class EventCreation(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=PINK)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
         FONTNAME = "Arial"
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=1, bg=PINK).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=PINK).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         # Connect to database
         self.conn = sqlite3.connect('interactivesystem.db')
         # Create cursor
@@ -1405,60 +1402,76 @@ class EventCreation(Frame):
             'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         label.grid(row=1, column=2, columnspan=18,
                    rowspan=2, sticky=N+S+E+W)
+        label.grid_propagate(0)
 
        
         separator = ttk.Separator(self, orient=HORIZONTAL)
         separator.grid(row=5, column=3, columnspan=16, pady=5, sticky=EW)
-        eventkeylabel = Label(self, text="Event Key \nNumber.",
-                            font=(FONTNAME, 10), bg='#FFF5E4')
-        eventkeylabel.grid(row=9, column=3, columnspan=2,
-                         rowspan=2, sticky=N+S+E+W)
+        separator.grid_propagate(0)
+        eventkeylabel = Label(self, text="Event\nNo.",
+                            font=(FONTNAME, 14), bg='#FFF5E4')
+        eventkeylabel.grid(row=12, column=3, columnspan=2,
+                            rowspan=2, sticky=N+S+E+W)
+        eventkeylabel.grid_propagate(0)
         venuenamelabel = Label(
-            self, text="Venue Name", font=(FONTNAME, 14), bg='#FFF5E4')
+            self, text="Venue\nName", font=(FONTNAME, 14), bg='#FFF5E4')
         venuenamelabel.grid(
-            row=12, column=3, columnspan=2, rowspan=2, sticky=N+S+E+W)
-        hostnamelabel = Label(self, text="Host Name", font=(
+            row=15, column=3, columnspan=2, rowspan=2, sticky=N+S+E+W)
+        venuenamelabel.grid_propagate(0)
+        hostnamelabel = Label(self, text="Host\nName", font=(
             FONTNAME, 14), bg='#FFF5E4')
-        hostnamelabel.grid(row=15, column=3, columnspan=2,
+        hostnamelabel.grid(row=15, column=12, columnspan=2,
                         rowspan=2, sticky=N+S+E+W)
+        hostnamelabel.grid_propagate(0)
 
         self.eventnamefield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
         self.eventnamefield.grid(row=6, column=3, columnspan=16,
                            rowspan=2, sticky=N+S+E+W)
         self.eventnamefield.insert(0, "Event Name")
-
+        self.eventnamefield.grid_propagate(0)
         self.eventkeyfield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        self.eventkeyfield.grid(row=9, column=5, columnspan=14,
+        self.eventkeyfield.grid(row=12, column=5, columnspan=6,
                            rowspan=2, sticky=N+S+E+W)
+        self.eventkeyfield.grid_propagate(0)
         self.venuenameentry = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        self.venuenameentry.grid(row=12, column=5, columnspan=14,
+        self.venuenameentry.grid(row=15, column=5, columnspan=6,
                            rowspan=2, sticky=N+S+E+W)
+        self.venuenameentry.grid_propagate(0)
         self.hostnameentry = Entry(self, width=1, bg='#FFFFFF',
                            font=(FONTNAME, 18), justify='center')
-        self.hostnameentry.grid(row=15, column=5, columnspan=14,
+        self.hostnameentry.grid(row=15, column=15, columnspan=6,
                         rowspan=2, sticky=N+S+E+W)
+        self.hostnameentry.grid_propagate(0)
+        self.eventdescription = Entry(self, width=1, bg='#FFFFFF',
+                              font=(FONTNAME, 18), justify='center')
+        self.eventdescription.grid(row=9, column=3, columnspan=16,
+                            rowspan=2, sticky=N+S+E+W)
+        self.eventdescription.grid_propagate(0)
         # Upload image functionality
         global dpi
         self.readblobentry = Entry(self, width=1, bg='#FFFFFF',
                                 font=(FONTNAME, 12), justify='center')
         self.readblobentry.grid(row=16, column=38, columnspan=4,
                             rowspan=2, sticky=N+S+E+W)
-        self.readblobentry.insert(0, "Enter a event key to find image")
+        self.readblobentry.insert(0, "Enter a event key\n to find image")
         uploadimagebutton = Button(self, text="Upload Image", font=(
             FONTNAME, 14), bg='#FFF5E4', command=lambda:self.upload_image())
         uploadimagebutton.grid(row=15, column=22, columnspan=8,
                                  rowspan=2, sticky=N+S+E+W)
+        uploadimagebutton.grid_propagate(0)
         submitbutton = Button(self, text="Submit", font=(
             FONTNAME, 14), bg='#FFF5E4', command=lambda:self.submit())
         submitbutton.grid(row=18, column=22, columnspan=8,
                             rowspan=2, sticky=N+S+E+W)
+        submitbutton.grid_propagate(0)
         deleteimagebutton = Button(self, text="Delete Image", font=(
             FONTNAME, 14), bg='#FFF5E4', command=lambda:self.delete_image())
         deleteimagebutton.grid(row=15, column=30, columnspan=8,
                                     rowspan=2, sticky=N+S+E+W)
+                                    
         readblobbutton = Button(self, text="Read Blob", font=(
             FONTNAME, 14), bg='#FFF5E4', command=lambda:self.read_blob(self.readblobentry.get()))
         readblobbutton.grid(row=18, column=30, columnspan=8,
@@ -1470,32 +1483,105 @@ class EventCreation(Frame):
         # c.execute("SELECT * FROM eventcreation")
         # print(c.fetchall())
         # Buttons
-        cancelbutton = Button(self, text="Cancel", font=(FONTNAME, 14), bg='White', 
+        cancelbutton = Button(self, text="Cancel", font=(FONTNAME, 10), bg='White', 
         command=lambda: [
         controller.show_frame(EventView)])
         cancelbutton.grid(row=18, column=3, columnspan=6,
                           rowspan=2, sticky=N+S+E+W)
+        cancelbutton.grid_propagate(0)
         confirmbutton = Button(self, text="Confirm", font=(
             FONTNAME, 14), bg='White', command=lambda: self.insert_blob())
         confirmbutton.grid(row=18, column=13, columnspan=6,
                            rowspan=2, sticky=N+S+E+W)
+        confirmbutton.grid_propagate(0)
         self.panel = Label(self, image="",width=1,height=1, bg=ORANGE)
         self.panel.grid(row=4, column=22, columnspan=16,
                     rowspan=10, sticky=N+S+E+W)
         self.panel.grid_propagate(0)
         self.filename = ""
-
-        self.datentrywidget = DateEntry(self, height=1, width=1, background=NAVYBLUE, 
+        #start date
+        self.fromlabel = Label(self, text="Start Date", font=(FONTNAME, 10), bg=NICEBLUE)
+        self.fromlabel.grid(row=3, column=2, columnspan=2,  
+                          rowspan=1, sticky=N+S+E+W)    
+        self.date_entrywidget = DateEntry(self, height=1, width=1, background=NAVYBLUE, 
         headersbackground = ORANGE,
         font=("Avenir Next Medium",20), justify='center',
-        date_pattern='dd/mm/yyyy', ) 
-        self.datentrywidget.grid(row=3, column=3, columnspan=8,
-                            rowspan=2, sticky=N+S+E+W)
-        self.datentrywidget.grid_propagate(0)
-        self.datentrywidget.set_date(datetime.date.today())
-        self.datentrywidget.bind("<<DateEntrySelected>>", self.onDateSelected)
+        date_pattern='dd/mm/yyyy') 
+        self.date_entrywidget.grid(row=3, column=4, columnspan=5,
+                            rowspan=1, sticky=N+S+E+W)
+        self.date_entrywidget.grid_propagate(0)
+        #end date
+
+        self.tolabel = Label(self, text="End Date", font=(FONTNAME, 10), bg=NICEBLUE)
+        self.tolabel.grid(row=4, column=2, columnspan=2,
+                            rowspan=1, sticky=N+S+E+W)
+    
+        self.date_entrywidget2 = DateEntry(self, height=1, width=1, background=NAVYBLUE,
+        headersbackground = ORANGE,
+        font=("Avenir Next Medium",20), justify='center',
+        date_pattern='dd/mm/yyyy')
+        self.date_entrywidget2.grid(row=4, column=4, columnspan=5,
+                            rowspan=1, sticky=N+S+E+W)
+        self.date_entrywidget2.grid_propagate(0)
+        
+        #time entry widget using two entries for hour and minutes and then am pm 
+        #start time label
+        starttimelabel = Label(self, text="Start Time", font=(FONTNAME, 10), bg=NICEBLUE)
+        starttimelabel.grid(row=3, column=9, columnspan=2,
+                            rowspan=1, sticky=N+S+E+W)
+        self.hourentry = Entry(self, width=1, bg='#FFFFFF',
+                                font=(FONTNAME, 18), justify='center')
+        self.hourentry.grid(row=3, column=11, columnspan=3,
+                            rowspan=1, sticky=N+S+E+W)
+        self.hourentry.insert(0, "Hour")
+        self.minentry = Entry(self, width=1, bg='#FFFFFF',
+                                font=(FONTNAME, 18), justify='center')
+        self.minentry.grid(row=3, column=15, columnspan=3,
+                            rowspan=1, sticky=N+S+E+W)
+        self.minentry.insert(0, "Min")
+        #Am pm menu 
+        self.am_pm = StringVar(self)
+        self.am_pm.set("AM") # default value
+        self.am_pm_menu = OptionMenu(self, self.am_pm, "AM", "PM")
+        self.am_pm_menu.config(width=1, font=(FONTNAME, 18), bg='White')
+        self.am_pm_menu.grid(row=3, column=18, columnspan=2,
+                            rowspan=1, sticky=N+S+E+W)
+        #: label for start time
+        colonlabel = Label(self, text=":", font=(FONTNAME, 12), bg=NICEBLUE)
+        colonlabel.grid(row=3, column=14, columnspan=1,
+                            rowspan=1, sticky=N+S+E+W) 
+        #: label for end time
+        colonlabel2 = Label(self, text=":", font=(FONTNAME, 12), bg=NICEBLUE)
+        colonlabel2.grid(row=4, column=14, columnspan=1,
+                            rowspan=1, sticky=N+S+E+W)  
+        #End time entry widget
+        endtimelabel = Label(self, text="End Time", font=(FONTNAME, 12), bg=NICEBLUE)
+        endtimelabel.grid(row=4, column=9, columnspan=2,
+                            rowspan=1, sticky=N+S+E+W)  
+        self.endhourentry = Entry(self, width=1, bg='#FFFFFF',
+                                font=(FONTNAME, 18), justify='center')
+        self.endhourentry.grid(row=4, column=11, columnspan=3,
+                            rowspan=1, sticky=N+S+E+W)
+        self.endhourentry.insert(0, "Hour")
+        self.endminentry = Entry(self, width=1, bg='#FFFFFF',
+                                font=(FONTNAME, 18), justify='center')
+        self.endminentry.grid(row=4, column=15, columnspan=3,
+                            rowspan=1, sticky=N+S+E+W)
+        self.endminentry.insert(0, "Min")
+        #Am pm menu
+        self.endam_pm = StringVar(self)
+        self.endam_pm.set("AM") # default value
+        self.endam_pm_menu = OptionMenu(self, self.endam_pm, "AM", "PM")
+        self.endam_pm_menu.config(width=1, font=(FONTNAME, 12), bg='White')
+        self.endam_pm_menu.grid(row=4, column=18, columnspan=2,
+                            rowspan=1, sticky=N+S+E+W)
+        
+
+        self.date_entrywidget.grid_propagate(0)
+        self.date_entrywidget.set_date(datetime.date.today())
+        self.date_entrywidget.bind("<<DateEntrySelected>>", self.onDateSelected)
     def onDateSelected(self, event):
-        self.date = self.datentrywidget.get_date()
+        self.date = self.date_entrywidget.get_date()
         print(self.date)
 
 
@@ -1560,7 +1646,7 @@ class EventCreation(Frame):
             self.c.execute("SELECT * FROM eventcreation")
             print(self.c.fetchall())
     def delete_image(self):
-        self.panel.destroy()
+        self.panel.configure(image="")
 
 
             
@@ -1573,12 +1659,12 @@ class ViewParticipants(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=2, bg=PINK).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=PINK).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
         class _(Window):
             def revertcontainersize(self, container):
@@ -1616,7 +1702,7 @@ class ViewParticipants(Frame):
                        rowspan=2, sticky=NSEW)
 
         textentry = Entry(self, width=1, bg="white", fg='#000000', font=(
-            "Helvetica", 18), justify="center", bd=1, borderwidth=1, relief="solid")
+            "Helvetica", 18), justify="center", bd=1)
         textentry.grid(row=16, column=12, columnspan=18,
                        rowspan=2, sticky=NSEW)
 
@@ -1645,12 +1731,12 @@ class FeedbackForm(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=2, bg=PINK).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=PINK).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
 
         class _(Window):
@@ -1909,14 +1995,14 @@ class Calendar(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(43):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=NICEPURPLE, borderwidth=0, relief="solid").grid(
-                row=0, column=x, rowspan=1, columnspan=2, sticky=N+S+E+W)
+            Label(self, height=2, bg=NICEPURPLE).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=NICEPURPLE, borderwidth=0, relief="solid").grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
+            Label(self, width=5, bg=NICEPURPLE).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
-        # b = Frame(self, bg=LAVENDER, width=1, height=1,borderwidth=1, relief="solid")
+        # b = Frame(self, bg=LAVENDER, width=1, height=)
         # b.grid(row=15, column=9, rowspan=6, columnspan=12, sticky=N+S+E+W)
         def hidetheentireframe():
             self.grid_remove()
