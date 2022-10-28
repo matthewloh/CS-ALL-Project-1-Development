@@ -2141,7 +2141,7 @@ class CalendarPage(Frame):
             Label(self.subframe, text=f"Event organizer: {row[5]}", width=1,height=1,
             bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
                 row=8, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
-            Label(self.subframe, text=f"Event location: {row[7]}", width=1,height=1,
+            Label(self.subframe, text=f"Host name: {row[7]}", width=1,height=1,
             bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
                 row=10, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
             Label(self.subframe, text=f"Venue: {row[6]}", width=1,height=1,
