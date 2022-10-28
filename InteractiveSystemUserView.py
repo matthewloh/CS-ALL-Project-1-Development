@@ -6,7 +6,6 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
-from tkinter.font import Font
 from tkinter.filedialog import askopenfilename
 import io 
 
@@ -83,8 +82,6 @@ class Window(Tk):
 
         self.geometry(
             f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1050 * dpi / 96)}')
-
-        self.grid_propagate(False)
         self.title("INTI Interactive System")
         self.resizable(0, 0)
         for x in range(32):
@@ -100,7 +97,7 @@ class Window(Tk):
         print(LOGINID)
         print(LOGGEDINAS)       
         #frame to contain  the entire container why didnt i think of this earlier looll
-        self.centercontainer = Frame(self, bg=LAVENDER)
+        self.centercontainer = Frame(self, bg=LAVENDER, highlightcolor=NAVYBLUE, highlightthickness=2)
         self.centercontainer.grid(row=2, column=2, rowspan=14,
                              columnspan=28, sticky=N+S+E+W) 
         self.centercontainer.grid_propagate(0)
@@ -113,23 +110,23 @@ class Window(Tk):
             Label(self.centercontainer, width=1, bg=LAVENDER).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
                         
-        self.container2 = Frame(self.centercontainer, bg=LAVENDER)
+        self.container2 = Frame(self.centercontainer, bg=LAVENDER, highlightcolor=NAVYBLUE, highlightthickness=2)
 
 
         self.container2.grid_rowconfigure(0, weight=0)
         self.container2.grid_columnconfigure(0, weight=0)
 
         FONTFORBUTTONS = "Bahnschrift Semibold"
-        self.container3 = Frame(self, bg=DARKBLUE)
+        self.container3 = Frame(self, bg=DARKBLUE, relief="raised")
         self.container3.grid(row=0, column=0, rowspan=2,
-                             columnspan=28, sticky=N+S+E+W)
-        for x in range(28):
+                             columnspan=30, sticky=N+S+E+W)
+        for x in range(30):
             Grid.columnconfigure(self.container3, x, weight=1, uniform='row')
             Label(self.container3, height=1, bg=DARKBLUE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(2):
             Grid.rowconfigure(self.container3, y, weight=1, uniform='row')
-            Label(self.container3, width=1, bg=DARKBLUE).grid(
+            Label(self.container3, height=1, width=1, bg=DARKBLUE).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
         self.container3.grid_propagate(0)
@@ -200,7 +197,6 @@ class Window(Tk):
                                     borderwidth=2, relief="solid", height=1,width=1,
                                     command=lambda: [
             self.show_frame(LoginPage),
-
             self.signout()])
         self.signoutbutton.grid(row=0, column=0, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.studentbutton = Button(self.bottomleftbuttons, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
@@ -253,9 +249,9 @@ class Window(Tk):
                 ViewParticipants, CalendarPage, FeedbackForm):
             frame = F(self.centercontainer, self)
             self.frames[F] = frame
-            frame.grid(row=0, column=0,rowspan=16,columnspan=28, sticky="nsew")
+            frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky="nsew")
         #Shows the loading frame
-        self.show_frame(CalendarPage)
+        self.show_frame(LoginPage)
 
     def signout(self):
         self.mainpagebutton.grid_forget()
@@ -281,7 +277,7 @@ class Window(Tk):
         self.eventregistrationbutton.grid(row=0, column=12, rowspan=2,columnspan=3,sticky=N+S+E+W)
         self.calendarbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.feedbackbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=N+S+E+W)
-        self.sidecalendar.grid(row=6, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        self.sidecalendar.grid(row=7, column=0, rowspan=2, columnspan=2, sticky=NSEW)
         self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def show_admin(self):
@@ -292,7 +288,7 @@ class Window(Tk):
         self.viewparticipantsbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.calendarbutton.grid(row=0, column=21, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.feedbackbutton.grid(row=0, column=24, rowspan=2,columnspan=3, sticky=N+S+E+W)
-        self.sidecalendar.grid(row=6, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        self.sidecalendar.grid(row=7, column=0, rowspan=2, columnspan=2, sticky=NSEW)
         self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def welcomelabel(self, name, role):
@@ -2052,9 +2048,10 @@ class CalendarPage(Frame):
                    rowspan=2, sticky=N+S+E+W)
         self.cal = tkCalendar(self, width=1, height=1,
             background = DARKBLUE, foreground = 'white', 
-            bordercolor = ORANGE,
+            bordercolor = ORANGE, 
             headersbackground = NAVYBLUE, headersforeground = 'white', 
-            selectbackground = NICEBLUE, selectforeground = 'black', 
+            selectbackground = NICEBLUE, selectforeground = 'black',
+            showothermonthdays = False,
             selectmode="day",
             font=("Avenir Next Medium", 18),
             date_pattern="dd-mm-yyyy")
@@ -2062,10 +2059,14 @@ class CalendarPage(Frame):
         self.cal.bind("<<CalendarSelected>>", self.generate_buttons)
 
         #Go back to current date button
-        self.gobackbutton = Button(self, text="Go back to current date", command=lambda: [self.go_to_today()], bg=ORANGE, font=("Atkinson Hyperlegible", 18))
+        self.gobackbutton = Button(self, text="Change view to current date", command=lambda: [self.go_to_today()], bg=ORANGE, font=("Atkinson Hyperlegible", 18))
         self.gobackbutton.grid(row=19, column=3, rowspan=2,
                              columnspan=6, sticky=N+S+E+W)
         self.gobackbutton.grid_propagate(0)
+        self.refreshbutton = Button(self, text="Refresh", command=lambda: [self.add_events()], bg=ORANGE, font=("Atkinson Hyperlegible", 18))
+        self.refreshbutton.grid(row=19, column=10, rowspan=2,
+                                columnspan=6, sticky=N+S+E+W)
+        self.refreshbutton.grid_propagate(0)
         self.buttonframe=Frame(self, bg = ORANGE, relief=RAISED)
         self.buttonframe.grid(row=4, column=24, rowspan=15, columnspan=17, sticky=N+S+E+W)
         self.buttonframe.grid_propagate(0)
