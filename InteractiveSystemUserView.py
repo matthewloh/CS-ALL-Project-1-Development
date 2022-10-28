@@ -179,7 +179,7 @@ class Window(Tk):
         self.calendarbutton = Button(self.container3, text="Calendar", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                      borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                                      command=lambda: [
-            self.show_frame(Calendar)])
+            self.show_frame(CalendarPage)])
 
         # Sign out button
         self.bottomleftbuttons = Frame(
@@ -250,12 +250,12 @@ class Window(Tk):
 
         for F in (RegistrationPage, LoginPage, MainPage, 
                 EventView, EventRegistration, EventCreation,
-                ViewParticipants, Calendar, FeedbackForm):
+                ViewParticipants, CalendarPage, FeedbackForm):
             frame = F(self.centercontainer, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0,rowspan=16,columnspan=28, sticky="nsew")
         #Shows the loading frame
-        self.show_frame(EventCreation)
+        self.show_frame(CalendarPage)
 
     def signout(self):
         self.mainpagebutton.grid_forget()
@@ -394,7 +394,7 @@ class Window(Tk):
             text="View Calendar", font=("Atkinson Hyperlegible", 14),
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
             command=lambda:[
-                self.show_frame(Calendar),
+                self.show_frame(CalendarPage),
                 self.randomframe.grid_remove()
             ])
         self.loggedinaslabel = Label(self.randomframe, 
@@ -1138,7 +1138,7 @@ class MainPage(Frame):
         calendarbutton = Button(self, text="Calendar", font=(
             'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4', command=
             lambda: [
-            controller.show_frame(Calendar),
+            controller.show_frame(CalendarPage),
             ])
         calendarbutton.grid(row=16, column=36, columnspan=5,
                             rowspan=3, sticky=N+S+E+W)
@@ -1360,7 +1360,7 @@ class EventRegistration(Frame):
         self.conn = sqlite3.connect('interactivesystem.db')
         self.c = self.conn.cursor()
         with self.conn:
-            self.c.execute("SELECT image FROM eventcreation WHERE event_name=?", (event_name,))
+            self.c.execute("SELECT event_image FROM eventcreation WHERE event_name=?", (event_name,))
             self.blobData = io.BytesIO(self.c.fetchone()[0])
             self.img = Image.open(self.blobData)
             self.img = ImageTk.PhotoImage(self.img.resize(
@@ -1385,13 +1385,19 @@ class EventCreation(Frame):
         # Create cursor
         self.c = self.conn.cursor()
         # Create a table
-        # c.execute("DROP TABLE eventcreation;")
+        # self.c.execute("""DROP TABLE eventcreation""")
         self.c.execute("""CREATE TABLE IF NOT EXISTS eventcreation (
-            event_name text NOT NULL,
-            eventkey_number text PRIMARY KEY NOT NULL, 
-            venue_name text,
-            hostname text NOT NULL,
-            image BLOB NULL
+            eventkey_number TEXT PRIMARY KEY NOT NULL, 
+            event_name TEXT NOT NULL,
+            event_description TEXT NOT NULL,
+            event_startdate TEXT NOT NULL,
+            event_enddate TEXT NOT NULL,
+            event_starttime TEXT NOT NULL,
+            event_endtime TEXT NOT NULL,
+            event_organizer TEXT NOT NULL,
+            venue_name TEXT,
+            host_name TEXT NOT NULL,
+            event_image BLOB NULL
             )""")
         # Send entries to database
 
@@ -1406,7 +1412,7 @@ class EventCreation(Frame):
 
        
         separator = ttk.Separator(self, orient=HORIZONTAL)
-        separator.grid(row=5, column=3, columnspan=16, pady=5, sticky=EW)
+        separator.grid(row=5, column=3, columnspan=17, pady=5, sticky=EW)
         separator.grid_propagate(0)
         eventkeylabel = Label(self, text="Event\nNo.",
                             font=(FONTNAME, 14), bg='#FFF5E4')
@@ -1414,19 +1420,28 @@ class EventCreation(Frame):
                             rowspan=2, sticky=N+S+E+W)
         eventkeylabel.grid_propagate(0)
         venuenamelabel = Label(
-            self, text="Venue\nName", font=(FONTNAME, 14), bg='#FFF5E4')
+            self, text="Venue\nName",
+            width=1,height=1,
+            font=(FONTNAME, 14), bg='#FFF5E4')
         venuenamelabel.grid(
             row=15, column=3, columnspan=2, rowspan=2, sticky=N+S+E+W)
         venuenamelabel.grid_propagate(0)
-        hostnamelabel = Label(self, text="Host\nName", font=(
-            FONTNAME, 14), bg='#FFF5E4')
+        hostnamelabel = Label(self, text="Host\nName", 
+        font=(FONTNAME, 14),
+        width=1,height=1,
+        bg='#FFF5E4')
         hostnamelabel.grid(row=15, column=12, columnspan=2,
                         rowspan=2, sticky=N+S+E+W)
         hostnamelabel.grid_propagate(0)
+        organizinglabel = Label(self, text="Organized\nBy", font=(
+            FONTNAME, 14), bg='#FFF5E4', width=1, height=1)
+        organizinglabel.grid(row=12, column=12, columnspan=2,
+                            rowspan=2, sticky=N+S+E+W)
+        organizinglabel.grid_propagate(0)
 
         self.eventnamefield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        self.eventnamefield.grid(row=6, column=3, columnspan=16,
+        self.eventnamefield.grid(row=6, column=3, columnspan=17,
                            rowspan=2, sticky=N+S+E+W)
         self.eventnamefield.insert(0, "Event Name")
         self.eventnamefield.grid_propagate(0)
@@ -1435,6 +1450,12 @@ class EventCreation(Frame):
         self.eventkeyfield.grid(row=12, column=5, columnspan=6,
                            rowspan=2, sticky=N+S+E+W)
         self.eventkeyfield.grid_propagate(0)
+        self.organizerfield = Entry(self, width=1, bg='#FFFFFF',
+                                font=(FONTNAME, 18), justify='center')
+        self.organizerfield.grid(row=12, column=14, columnspan=6,
+                                    rowspan=2, sticky=N+S+E+W)
+        self.organizerfield.grid_propagate(0)
+        self.organizerfield.insert(0, "Organizing School")
         self.venuenameentry = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
         self.venuenameentry.grid(row=15, column=5, columnspan=6,
@@ -1442,13 +1463,14 @@ class EventCreation(Frame):
         self.venuenameentry.grid_propagate(0)
         self.hostnameentry = Entry(self, width=1, bg='#FFFFFF',
                            font=(FONTNAME, 18), justify='center')
-        self.hostnameentry.grid(row=15, column=15, columnspan=6,
+        self.hostnameentry.grid(row=15, column=14, columnspan=6,
                         rowspan=2, sticky=N+S+E+W)
         self.hostnameentry.grid_propagate(0)
         self.eventdescription = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        self.eventdescription.grid(row=9, column=3, columnspan=16,
+        self.eventdescription.grid(row=9, column=3, columnspan=17,
                             rowspan=2, sticky=N+S+E+W)
+        self.eventdescription.insert(0, "Event Description")
         self.eventdescription.grid_propagate(0)
         # Upload image functionality
         global dpi
@@ -1457,18 +1479,18 @@ class EventCreation(Frame):
         self.readblobentry.grid(row=16, column=38, columnspan=4,
                             rowspan=2, sticky=N+S+E+W)
         self.readblobentry.insert(0, "Enter a event key\n to find image")
-        uploadimagebutton = Button(self, text="Upload Image", font=(
-            FONTNAME, 14), bg='#FFF5E4', command=lambda:self.upload_image())
+        uploadimagebutton = Button(self, text="Upload Image", width=1,height=1,
+        font=(FONTNAME, 14), bg='#FFF5E4', command=lambda:self.upload_image())
         uploadimagebutton.grid(row=15, column=22, columnspan=8,
                                  rowspan=2, sticky=N+S+E+W)
         uploadimagebutton.grid_propagate(0)
-        submitbutton = Button(self, text="Submit", font=(
+        submitbutton = Button(self, text="Submit", width=1,height=1, font=(
             FONTNAME, 14), bg='#FFF5E4', command=lambda:self.submit())
         submitbutton.grid(row=18, column=22, columnspan=8,
                             rowspan=2, sticky=N+S+E+W)
         submitbutton.grid_propagate(0)
-        deleteimagebutton = Button(self, text="Delete Image", font=(
-            FONTNAME, 14), bg='#FFF5E4', command=lambda:self.delete_image())
+        deleteimagebutton = Button(self, text="Delete Image", width=1,height=1,
+        font=(FONTNAME, 14), bg='#FFF5E4', command=lambda:self.delete_image())
         deleteimagebutton.grid(row=15, column=30, columnspan=8,
                                     rowspan=2, sticky=N+S+E+W)
                                     
@@ -1483,20 +1505,23 @@ class EventCreation(Frame):
         # c.execute("SELECT * FROM eventcreation")
         # print(c.fetchall())
         # Buttons
-        cancelbutton = Button(self, text="Cancel", font=(FONTNAME, 10), bg='White', 
+        cancelbutton = Button(self, text="Cancel", 
+        width=1,height=1,
+        font=(FONTNAME, 10), bg='White', 
         command=lambda: [
         controller.show_frame(EventView)])
         cancelbutton.grid(row=18, column=3, columnspan=6,
                           rowspan=2, sticky=N+S+E+W)
         cancelbutton.grid_propagate(0)
-        confirmbutton = Button(self, text="Confirm", font=(
-            FONTNAME, 14), bg='White', command=lambda: self.insert_blob())
+        confirmbutton = Button(self, text="Confirm",
+        width=1,height=1,
+        font=(FONTNAME, 14), bg='White', command=lambda: self.insert_blob())
         confirmbutton.grid(row=18, column=13, columnspan=6,
                            rowspan=2, sticky=N+S+E+W)
         confirmbutton.grid_propagate(0)
         self.panel = Label(self, image="",width=1,height=1, bg=ORANGE)
-        self.panel.grid(row=4, column=22, columnspan=16,
-                    rowspan=10, sticky=N+S+E+W)
+        self.panel.grid(row=1, column=22, columnspan=18,
+                    rowspan=12, sticky=N+S+E+W)
         self.panel.grid_propagate(0)
         self.filename = ""
         #start date
@@ -1594,7 +1619,7 @@ class EventCreation(Frame):
         #This is the file we need to make as a blob
         self.img = Image.open(self.filename)
         self.img = ImageTk.PhotoImage(self.img.resize(
-            (math.ceil(605 * dpi / 96), math.ceil(400 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(706 * dpi / 96), math.ceil(468 * dpi / 96)), Image.Resampling.LANCZOS))
         # Presents the images for future editing purposes or to just submit right away
         #store self.filename in the global name space
         self.panel.configure(image=self.img)
@@ -1605,18 +1630,29 @@ class EventCreation(Frame):
             blobData = file.read()
         return blobData
     def insert_blob(self):
-            event_nametext = self.eventnamefield.get()
             eventkey_number = self.eventkeyfield.get()
+            event_nametext = self.eventnamefield.get()
+            event_descriptiontext = self.eventdescription.get()
+            event_startdate = self.date_entrywidget.get_date()
+            event_enddate = self.date_entrywidget2.get_date()
+            event_starttime = self.hourentry.get() + ":" + self.minentry.get() + " " + self.am_pm.get()
+            event_endtime = self.endhourentry.get() + ":" + self.endminentry.get() + " " + self.endam_pm.get()
+            event_organizer = self.organizerfield.get()
             venue_name = self.venuenameentry.get()
             hostname = self.hostnameentry.get()
             self.filename = self.filename
             self.blobData = self.convert_to_binary_data(self.filename)
+            information = (eventkey_number, event_nametext, event_descriptiontext, event_startdate, event_enddate, event_starttime, event_endtime, event_organizer, venue_name, hostname, self.blobData)
             # Insert BLOB into table
             self.conn = sqlite3.connect('interactivesystem.db')
             self.c = self.conn.cursor()
             try:
                 with self.conn:
-                    self.c.execute("INSERT INTO eventcreation (event_name, eventkey_number, venue_name, hostname, image) VALUES (?, ?, ?, ?, ?)", (event_nametext, eventkey_number, venue_name, hostname, self.blobData))
+                    #alter the table to add event description, event key, event date, event start time, 
+                    # event end time, event organizer, venue name, host name
+                    self.c.execute("""INSERT INTO eventcreation
+                    (eventkey_number, event_name, event_description, event_startdate, event_enddate, event_starttime, event_endtime, event_organizer, venue_name, host_name, event_image) VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
+                    (information))
                     messagebox.showinfo("Success", "Event Created")
             except sqlite3.IntegrityError:
                 messagebox.showerror("Error", "Event Key already exists")
@@ -1624,13 +1660,12 @@ class EventCreation(Frame):
     def read_blob(self, eventkey_number):
         self.conn = sqlite3.connect('interactivesystem.db')
         self.c = self.conn.cursor()
-
         with self.conn:
             self.c.execute("SELECT image FROM eventcreation WHERE eventkey_number = ?", (eventkey_number,))
             self.blobData = io.BytesIO(self.c.fetchone()[0])
             self.img = Image.open(self.blobData)
             self.img = ImageTk.PhotoImage(self.img.resize(
-                 (math.ceil(605 * dpi / 96), math.ceil(400 * dpi / 96)), Image.Resampling.LANCZOS))
+                 (math.ceil(706 * dpi / 96), math.ceil(468 * dpi / 96)), Image.Resampling.LANCZOS))
             self.panel.config(image=self.img)
             self.panel.grid_propagate(0)
 
@@ -1988,7 +2023,7 @@ class FeedbackForm(Frame):
                         rowspan=18, sticky=N+S+E+W)
 
 
-class Calendar(Frame):
+class CalendarPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=PINK)
         self.grid_columnconfigure(0, weight=1)
@@ -2015,7 +2050,7 @@ class Calendar(Frame):
             'Segoe Ui Semibold', 14), width=1, height=1, fg='#000000', bg='#FFF5E4', justify="left")
         label.grid(row=0, column=2, columnspan=6,
                    rowspan=2, sticky=N+S+E+W)
-        self.cal = tkCalendar(self, 
+        self.cal = tkCalendar(self, width=1, height=1,
             background = DARKBLUE, foreground = 'white', 
             bordercolor = ORANGE,
             headersbackground = NAVYBLUE, headersforeground = 'white', 
@@ -2024,24 +2059,117 @@ class Calendar(Frame):
             font=("Avenir Next Medium", 18),
             date_pattern="dd-mm-yyyy")
         self.cal.grid(row=2, column=2, columnspan=21, rowspan=17, sticky=N+S+E+W)
-        self.cal.bind("<<CalendarSelected>>", self.print_sel)
-        #TkCalendar Add event
-        #TkCalendar theming 
-        self.cal.calevent_create(datetime.date(2022, 10, 24), "Event 1", "Event 1")
+        self.cal.bind("<<CalendarSelected>>", self.generate_buttons)
+
         #Go back to current date button
         self.gobackbutton = Button(self, text="Go back to current date", command=lambda: [self.go_to_today()], bg=ORANGE, font=("Atkinson Hyperlegible", 18))
-        self.gobackbutton.grid(row=9, column=24, rowspan=2,
+        self.gobackbutton.grid(row=19, column=3, rowspan=2,
                              columnspan=6, sticky=N+S+E+W)
         self.gobackbutton.grid_propagate(0)
+        self.buttonframe=Frame(self, bg = ORANGE, relief=RAISED)
+        self.buttonframe.grid(row=4, column=24, rowspan=15, columnspan=17, sticky=N+S+E+W)
+        self.buttonframe.grid_propagate(0)
+        self.detailslabel = Label(self, text="Click on an event to view the details.", font = ("Avenir Next Medium", 18), background=LIGHTYELLOW)
+        self.detailslabel.grid(row=2, column=24, rowspan=2, columnspan=17, sticky=N+S+E+W)
+        self.add_events()
+    def generate_buttons(self, event):
+        detailslabel = self.detailslabel 
+        for widgets in self.buttonframe.winfo_children():
+            widgets.destroy()
+        for x in range(15):
+            self.buttonframe.columnconfigure(x, weight=1, uniform='x')
+            Label(self.buttonframe, height=1, bg=ORANGE).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        for y in range(15):
+            self.buttonframe.rowconfigure(y, weight=1, uniform='x')
+            Label(self.buttonframe, width=1, bg=ORANGE).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        date = self.cal.selection_get()
+        self.c.execute("""SELECT count(*) FROM eventcreation WHERE event_startdate = ?""", (date,))
+        self.eventnumber = self.c.fetchall()
+        for row in self.eventnumber:
+            detailslabel.configure(text=f"Event details: There is/are {row[0]} event(s)\noccurring on {date}")
+        self.c.execute("""SELECT event_name FROM eventcreation WHERE event_startdate = ?""", (date,))
+        self.eventnames = self.c.fetchall()
+        startingrowno = 0
+        for index, name in list(enumerate(self.eventnames)):
+            #Unpacking the tuple (name) to get the string
+            name = name[0]
+            Label(self.buttonframe, text=f"Event name: {name}", width=1, height=1, 
+            bg = LIGHTYELLOW, fg = "black", relief="groove",
+            font = ("Avenir Next Medium", 18)).grid(row=0+startingrowno, column=0, rowspan=2, columnspan=11, sticky=N+S+E+W)
+            Button(self.buttonframe, text="View details", width=1, height=1,
+            bg = PINK, fg = "black", relief="groove",
+            font = ("Avenir Next Medium", 18),
+            # lambda command fix thanks to https://stackoverflow.com/questions/17677649/tkinter-assign-button-command-in-a-for-loop-with-lambda
+            command=lambda name=name:self.createdetails(name)).grid(row=0+startingrowno, column=11, rowspan=2, columnspan=4, sticky=N+S+E+W)
+            startingrowno += 2
 
-        #Calendar functions to return to current date and to go to next month
-    def print_sel(self, event):
-        print(self.cal.get_date())
+    def createdetails(self, name):
+        #A frame to display the details of the event
+        self.subframe = Frame(self.buttonframe, bg = NICEBLUE, relief=RAISED, height=1,width=1)
+        self.subframe.grid(row=0, column=0, rowspan=15, columnspan=15, sticky=N+S+E+W)
+        for x in range(15):
+            self.subframe.columnconfigure(x, weight=1, uniform='x')
+            Label(self.subframe, height=1, bg=LIGHTYELLOW).grid(
+                row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        for y in range(15):
+            self.subframe.rowconfigure(y, weight=1, uniform='x')
+            Label(self.subframe, width=1, bg=LIGHTYELLOW).grid(
+                row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
+        self.subframe.grid_propagate(0)
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        self.c.execute("""SELECT 
+        event_name, event_startdate, event_enddate, event_starttime, event_endtime, event_organizer, venue_name, host_name FROM eventcreation WHERE event_name = ?""", (name,))
+        self.eventdetails = self.c.fetchall()
+        for row in self.eventdetails:
+            Label(self.subframe, text="Event details", width=1,height=1,
+            bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
+                row=0, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+            Label(self.subframe, text=f"Event name: {row[0]}", width=1,height=1,
+            bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
+                row=2, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+            Label(self.subframe, text=f"Event Date: From {row[1]} to {row[2]}", width=1,height=1,
+            bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
+                row=4, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+            Label(self.subframe, text=f"Event time: {row[3]} - {row[4]}", width=1,height=1,
+            bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
+                row=6, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+            Label(self.subframe, text=f"Event organizer: {row[5]}", width=1,height=1,
+            bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
+                row=8, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+            Label(self.subframe, text=f"Event location: {row[7]}", width=1,height=1,
+            bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
+                row=10, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+            Label(self.subframe, text=f"Venue: {row[6]}", width=1,height=1,
+            bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
+                row=12, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+            Button(self.subframe, text="Back", width=1, height=1,
+            bg = PINK, fg = "black", relief="groove",
+            font = ("Avenir Next Medium", 18),
+            command=lambda: self.subframe.grid_remove()).grid(row=14, column=0, rowspan=2, columnspan=15, sticky=N+S+E+W)
+
     
     def go_to_today(self):
         self.cal.selection_set(datetime.date.today())
         self.cal.see(datetime.date.today())
     #read from the eventcreation table and add the events to the calendar
+    def add_events(self):
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        self.c.execute("SELECT event_startdate, event_name FROM eventcreation")
+        self.rows = self.c.fetchall()
+        for row in self.rows:
+            #convert to datetime 
+            self.date = datetime.datetime.strptime(row[0], r'%Y-%m-%d').date()
+            self.cal.calevent_create(self.date, row[1], 'all')
+
+            
+
+    
 
 
 
