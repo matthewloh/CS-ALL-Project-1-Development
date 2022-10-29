@@ -81,7 +81,7 @@ class Window(Tk):
         dpi = self.winfo_fpixels('1i')
 
         self.geometry(
-            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
+            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1050 * dpi / 96)}')
         self.title("INTI Interactive System")
         self.resizable(0, 0)
         for x in range(32):
@@ -113,8 +113,6 @@ class Window(Tk):
         self.container2 = Frame(self.centercontainer, bg=LAVENDER, highlightcolor=NAVYBLUE, highlightthickness=2)
 
 
-        self.container2.grid_rowconfigure(0, weight=0)
-        self.container2.grid_columnconfigure(0, weight=0)
 
         FONTFORBUTTONS = "Bahnschrift Semibold"
         self.container3 = Frame(self, bg=DARKBLUE)
@@ -357,8 +355,8 @@ class Window(Tk):
         self.maximizebutton = Button(self.windowmanagementframe, text="Hide", font=("Atkinson Hyperlegible", 14),
                                     bg="#33c748", fg="WHITE", width=1, height=1,
                                     command=lambda:[
-            self.state('zoomed'),
-            self.deletethewindowbar()
+            self.deletethewindowbar(),
+            self.state('zoomed')
         ])
         self.maximizebutton.grid(row=1, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.maximizebutton.grid_propagate(0)
