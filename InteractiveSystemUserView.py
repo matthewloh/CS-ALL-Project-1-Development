@@ -886,14 +886,14 @@ class LoginPage(Frame):
         self.backgroundimagelabel.grid_propagate(0)
         self.signinbuttonimage = Image.open(r"Assets\signinbutton.png")
         self.signinbuttonimage = ImageTk.PhotoImage(self.signinbuttonimage.resize(
-            (math.ceil(440 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(444 * dpi / 96), math.ceil(81 * dpi / 96)), Image.Resampling.LANCZOS))
         self.signinbutton = Button(self, image=self.signinbuttonimage, width=1, height=1,
         bg=LIGHTPURPLE, relief="flat",command=lambda:signinbuttonpressed())
         self.signinbutton.grid(row=15, column=26, rowspan=2, columnspan=11, sticky=N+S+E+W)
         self.signinbutton.grid_propagate(0)
         self.signupbuttonimage = Image.open(r"Assets\signupbutton.png")
         self.signupbuttonimage = ImageTk.PhotoImage(self.signupbuttonimage.resize(
-            (math.ceil(600 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(605 * dpi / 96), math.ceil(81 * dpi / 96)), Image.Resampling.LANCZOS))
         self.signupbutton = Button(self, image=self.signupbuttonimage, width=1, height=1,
         bg=LIGHTPURPLE, borderwidth=1, relief="flat", command=lambda:controller.show_frame(RegistrationPage))
         self.signupbutton.grid(row=18, column=24, rowspan=2, columnspan=15,sticky=N+S+E+W)
@@ -959,7 +959,7 @@ class LoginPage(Frame):
             if controller.winfo_width() != dimensions[0] or controller.winfo_width != dimensions[1]:
                 self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
                 self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(1694 * dpi / 96), math.ceil(853 * dpi / 96)), Image.Resampling.LANCZOS))
                 self.backgroundimagelabel.config(image=self.backgroundimage)
         global eventID
         eventID = None
