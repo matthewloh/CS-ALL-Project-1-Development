@@ -110,7 +110,7 @@ class Window(Tk):
             Label(self.centercontainer, width=1, bg=LAVENDER).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
                         
-        self.container2 = Frame(self.centercontainer, bg=LAVENDER, highlightcolor=NAVYBLUE, highlightthickness=2)
+        self.container2 = Frame(self.centercontainer, bg=LAVENDER)
 
 
 
@@ -129,52 +129,62 @@ class Window(Tk):
 
         self.container3.grid_propagate(0)
         self.signupbutton = Button(self.container3, text="Sign Up\n Page", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20, "bold"),
-                                   borderwidth=2, relief="sunken", height=1,width=1, highlightthickness=0,
+                                   borderwidth=2, relief="raised", height=1,width=1, highlightthickness=2,
                                    command=lambda: [
-            self.show_frame(RegistrationPage)
-        ])
+            self.show_frame(RegistrationPage),
+            self.togglebuttonrelief(self.signupbutton)
+            ])
         self.signupbutton.grid(row=0, column=0, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.loginbutton = Button(self.container3, text="Login\nPage", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                  borderwidth=2, relief="sunken", height=1, width=1, padx=15, pady=0, highlightthickness=0,
+                                  borderwidth=2, relief="raised", height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                   command=lambda: [
-            self.show_frame(LoginPage)
-        ])
+            self.show_frame(LoginPage),
+            self.togglebuttonrelief(self.loginbutton)
+            ])
         self.loginbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.mainpagebutton = Button(self.container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                     borderwidth=2, relief="sunken", height=1, width=1, padx=15, pady=0, highlightthickness=0,
+                                     borderwidth=2, relief="raised", height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                      command=lambda: [
             self.show_frame(MainPage),
+            self.togglebuttonrelief(self.mainpagebutton)
             ])
         self.eventlistbutton = Button(self.container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                      borderwidth=2, relief="sunken", height=1, width=1, padx=15, pady=0, highlightthickness=0,
+                                      borderwidth=2, relief="raised", height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                       command=lambda: [
-            self.show_frame(EventView)
+            self.show_frame(EventView),
+            self.togglebuttonrelief(self.eventlistbutton)
             ])
         self.eventregistrationbutton = Button(self.container3, text="Event\nRegistration", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                              borderwidth=2, relief="sunken",
+                                              borderwidth=2, relief="raised",
                                               height=1, width=1, padx=15, pady=0, highlightthickness=0,
                                               command=lambda: [
-            self.show_frame(EventRegistration)
+            self.show_frame(EventRegistration),
+            self.togglebuttonrelief(self.eventregistrationbutton)
             ])
         self.eventcreationbutton = Button(self.container3, text="Event\nCreation\n(ADMIN)", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                          borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                                          borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                                           command=lambda: [
-            self.show_frame(EventCreation)
+            self.show_frame(EventCreation),
+            self.togglebuttonrelief(self.eventcreationbutton)
             ])
         self.viewparticipantsbutton = Button(self.container3, text="View\nParticipants\n(ADMIN)", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                             borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                                             borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                                              command=lambda: [
-            self.show_frame(ViewParticipants)
+            self.show_frame(ViewParticipants),
+            self.togglebuttonrelief(self.viewparticipantsbutton)
             ])
         self.feedbackbutton = Button(self.container3, text="Feedback\nForm", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                            borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                            borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                             command=lambda: [
             self.show_frame(FeedbackForm),
+            self.togglebuttonrelief(self.feedbackbutton)
             ])
         self.calendarbutton = Button(self.container3, text="Calendar", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                     borderwidth=2, relief="sunken", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                                     borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
                                      command=lambda: [
-            self.show_frame(CalendarPage)])
+            self.show_frame(CalendarPage),
+            self.togglebuttonrelief(self.calendarbutton)
+            ])
 
         # Sign out button
         self.bottomleftbuttons = Frame(
@@ -250,6 +260,7 @@ class Window(Tk):
             frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky="nsew")
         #Shows the loading frame
         self.show_frame(LoginPage)
+        self.togglebuttonrelief(self.loginbutton)
 
     def signout(self):
         self.mainpagebutton.grid_forget()
@@ -367,6 +378,18 @@ class Window(Tk):
         ])
         self.closewindowbutton.grid(row=0, column=1, rowspan=2, columnspan=1, sticky=N+S+E+W)
         self.closewindowbutton.grid_propagate(0)
+    #this function toggles the relief to sunken every time the mouse clicks the button
+    def togglebuttonrelief(self, button):
+        self.buttonlist = [self.signupbutton, self.loginbutton, self.mainpagebutton,
+        self.calendarbutton, self.eventlistbutton, self.eventregistrationbutton,
+        self.eventcreationbutton, self.viewparticipantsbutton, self.feedbackbutton, self.calendarbutton]
+        #sets every button to raised by default on click
+        for b in self.buttonlist:
+            b.configure(relief="raised")
+        if button['relief'] == 'raised':
+            button['relief'] = 'sunken'
+        else:
+            button['relief'] = 'raised'
     def createcalendarframe(self):
         self.randomframe = Frame(self, bg=PINK, width=1, height=1,
                                     borderwidth=1, relief="flat")
@@ -389,6 +412,7 @@ class Window(Tk):
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
             command=lambda:[
                 self.show_frame(CalendarPage),
+                self.togglebuttonrelief(self.calendarbutton),
                 self.randomframe.grid_remove()
             ])
         self.loggedinaslabel = Label(self.randomframe, 
@@ -495,6 +519,7 @@ class RegistrationPage(Frame):
                         messagebox.showinfo(
                             "Success", "You have successfully registered.")
                         controller.show_frame(LoginPage)
+                        controller.togglebuttonrelief(controller.loginbutton)
                         cleareveryentry()
                         
             except sqlite3.IntegrityError:
@@ -692,6 +717,7 @@ class RegistrationPage(Frame):
         font=('Atkinson Hyperlegible', 14), width=1, height=1,
         fg='#000000', command=lambda: [
         controller.show_frame(LoginPage),
+        controller.togglebuttonrelief(controller.loginbutton),
         cleareveryentry()],
         bg=OTHERPINK)
         loginbutton.grid(row=18, column=28, columnspan=9,
@@ -893,7 +919,8 @@ class LoginPage(Frame):
         self.signupbuttonimage = ImageTk.PhotoImage(self.signupbuttonimage.resize(
             (math.ceil(605 * dpi / 96), math.ceil(81 * dpi / 96)), Image.Resampling.LANCZOS))
         self.signupbutton = Button(self, image=self.signupbuttonimage, width=1, height=1,
-        bg=LIGHTPURPLE, borderwidth=1, relief="flat", command=lambda:controller.show_frame(RegistrationPage))
+        bg=LIGHTPURPLE, borderwidth=1, relief="flat", command=lambda:[controller.show_frame(RegistrationPage),
+        controller.togglebuttonrelief(controller.signupbutton)])
         self.signupbutton.grid(row=18, column=24, rowspan=2, columnspan=15,sticky=N+S+E+W)
         self.signupbutton.grid_propagate(0)
         emailwarning = Label(self, text="Please enter a valid email address.", font=(
@@ -1076,6 +1103,7 @@ class MainPage(Frame):
         feedbackbutton = Button(self, image=self.feedbackimage, width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
         controller.show_frame(FeedbackForm),
+        controller.togglebuttonrelief(controller.feedbackbutton)
         ])
         feedbackbutton.grid(row=8, column=2, columnspan=16,
                             rowspan=4, sticky=N+S+E+W)
@@ -1085,42 +1113,47 @@ class MainPage(Frame):
         eventnamebutton = Button(self, text="Event 1", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.show_frame(EventView)])
+        controller.show_frame(EventView),
+        controller.togglebuttonrelief(controller.eventlistbutton)])
 
         eventnamebutton.grid(row=15, column=2, columnspan=16,
                              rowspan=1, sticky=N+S+E+W)
         eventsnamebutton = Button(self, text="Event 2", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.show_frame(EventView)])
+        controller.show_frame(EventView),
+        controller.togglebuttonrelief(controller.eventlistbutton)])
         eventsnamebutton.grid(row=16, column=2, columnspan=16,
                               rowspan=1, sticky=N+S+E+W)
 
         aneventnamebutton = Button(self, text="Event 3", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.show_frame(EventView)])
+        controller.show_frame(EventView),
+        controller.togglebuttonrelief(controller.eventlistbutton)])
         aneventnamebutton.grid(row=17, column=2, columnspan=16,
                                rowspan=1, sticky=N+S+E+W)
 
         theeventnamebutton = Button(self, text="Event 4", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.show_frame(EventView)])
+        controller.show_frame(EventView),
+        controller.togglebuttonrelief(controller.eventlistbutton)])
         theeventnamebutton.grid(row=18, column=2, columnspan=16,
                                 rowspan=1, sticky=N+S+E+W)
 
         eventlistbutton = Button(self, text="Event List", font=(
         'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.show_frame(EventView)])
+        controller.show_frame(EventView),
+        controller.togglebuttonrelief(controller.eventlistbutton)])
         eventlistbutton.grid(row=16, column=20, columnspan=5,
                              rowspan=3, sticky=N+S+E+W)
 
         eventregistrationbutton = Button(self, text="Event\nRegistration", font=(
         'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4',  command=lambda:
         [controller.show_frame(EventRegistration),
-        ])
+        controller.togglebuttonrelief(controller.eventregistrationbutton)])
         eventregistrationbutton.grid(row=16, column=28, columnspan=5,
                                      rowspan=3, sticky=N+S+E+W)
 
@@ -1128,7 +1161,7 @@ class MainPage(Frame):
             'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4', command=
             lambda: [
             controller.show_frame(CalendarPage),
-            ])
+            controller.togglebuttonrelief(controller.calendarbutton)])
         calendarbutton.grid(row=16, column=36, columnspan=5,
                             rowspan=3, sticky=N+S+E+W)
 
@@ -1136,8 +1169,8 @@ class MainPage(Frame):
         self.logoutimage = ImageTk.PhotoImage(self.logoutimage.resize(
             (math.ceil(38 * dpi / 96), math.ceil(38 * dpi / 96)), Image.Resampling.LANCZOS)),
         logoutbutton = Button(self,image=self.logoutimage , width=1, height=1, fg='#000000', bg='#FFF5E4',command=lambda:
-            [controller.show_frame(LoginPage), controller.signout()
-            ])
+            [controller.show_frame(LoginPage), controller.togglebuttonrelief(controller.loginbutton),
+            controller.signout()])
         logoutbutton.grid(row=0, column=41, columnspan=1, rowspan=1, sticky=N+S+E+W)
         imagelabel = Label(self, image=self.logoutimage, anchor=CENTER, width=1, height=1)
 
@@ -1231,6 +1264,7 @@ class EventRegistration(Frame):
                         emailentry.delete(0, END)
                         addressentry.delete(0, END)
                         controller.show_frame(EventView)
+                        controller.togglebuttonrelief(controller.eventlistbutton)
             except sqlite3.IntegrityError:
                 messagebox.showerror("Error", "Email already registered")
 
@@ -1334,7 +1368,8 @@ class EventRegistration(Frame):
                           rowspan=2, sticky=N+S+E+W)
         # Buttons
         cancelbutton = Button(self, text="Cancel", font=(FONTNAME, 14), bg='White', command=lambda: [
-        controller.show_frame(EventView)])
+        controller.show_frame(EventView),
+        controller.togglebuttonrelief(controller.eventlistbutton)])
         cancelbutton.grid(row=18, column=3, columnspan=6,
                           rowspan=2, sticky=N+S+E+W)
         confirmbutton = Button(self, text="Confirm", font=(
@@ -1498,7 +1533,8 @@ class EventCreation(Frame):
         width=1,height=1,
         font=(FONTNAME, 10), bg='White', 
         command=lambda: [
-        controller.show_frame(EventView)])
+        controller.show_frame(EventView),
+        controller.togglebuttonrelief(controller.eventlistbutton)])
         cancelbutton.grid(row=18, column=3, columnspan=6,
                           rowspan=2, sticky=N+S+E+W)
         cancelbutton.grid_propagate(0)
@@ -1960,8 +1996,9 @@ class FeedbackForm(Frame):
                          rowspan=1, sticky=NSEW)
 
         # Button
-        self.getanswers = Button(self, text="Cancel", command=lambda: [controller.show_frame(MainPage)], bg=ORANGE,
-        font=("Helvetica", 18), width=1, height=1)
+        self.getanswers = Button(self, text="Cancel", command=lambda: [controller.show_frame(MainPage), 
+        controller.togglebuttonrelief(controller.mainpagebutton)],
+        bg=ORANGE, font=("Helvetica", 18), width=1, height=1)
         self.getanswers.grid(row=18, column=10, rowspan=2,
                              columnspan=6, sticky=N+S+E+W)
         self.getanswers.grid_propagate(0)
