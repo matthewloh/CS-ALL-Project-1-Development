@@ -81,7 +81,7 @@ class Window(Tk):
         dpi = self.winfo_fpixels('1i')
 
         self.geometry(
-            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1050 * dpi / 96)}')
+            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1049 * dpi / 96)}')
         self.title("INTI Interactive System")
         self.resizable(0, 0)
         for x in range(32):
@@ -878,7 +878,7 @@ class LoginPage(Frame):
         #                rowspan=5, sticky=N+S+E+W)
         self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
         self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
         self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
         self.backgroundimagelabel.grid_propagate(0)
@@ -957,7 +957,7 @@ class LoginPage(Frame):
             if controller.winfo_width() != dimensions[0] or controller.winfo_width != dimensions[1]:
                 self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
                 self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-            (math.ceil(1694 * dpi / 96), math.ceil(853 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
                 self.backgroundimagelabel.config(image=self.backgroundimage)
         global eventID
         eventID = None
