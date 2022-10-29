@@ -81,7 +81,7 @@ class Window(Tk):
         dpi = self.winfo_fpixels('1i')
 
         self.geometry(
-            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1050 * dpi / 96)}')
+            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
         self.title("INTI Interactive System")
         self.resizable(0, 0)
         for x in range(32):
@@ -97,7 +97,7 @@ class Window(Tk):
         print(LOGINID)
         print(LOGGEDINAS)       
         #frame to contain  the entire container why didnt i think of this earlier looll
-        self.centercontainer = Frame(self, bg=LAVENDER, highlightcolor=NAVYBLUE, highlightthickness=2)
+        self.centercontainer = Frame(self, bg=LAVENDER)
         self.centercontainer.grid(row=2, column=2, rowspan=14,
                              columnspan=28, sticky=N+S+E+W) 
         self.centercontainer.grid_propagate(0)
@@ -117,7 +117,7 @@ class Window(Tk):
         self.container2.grid_columnconfigure(0, weight=0)
 
         FONTFORBUTTONS = "Bahnschrift Semibold"
-        self.container3 = Frame(self, bg=DARKBLUE, relief="raised")
+        self.container3 = Frame(self, bg=DARKBLUE)
         self.container3.grid(row=0, column=0, rowspan=2,
                              columnspan=30, sticky=N+S+E+W)
         for x in range(30):
@@ -426,13 +426,13 @@ class RegistrationPage(Frame):
         Frame.__init__(self, parent, bg=LIGHTPURPLE)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LIGHTPURPLE).grid(
+            Label(self, width=2, bg=LIGHTPURPLE, relief="flat").grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LIGHTPURPLE).grid(
+            Label(self, width=5, bg=LIGHTPURPLE, relief="flat").grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         # constants
         FONTNAME = "Avenir Next Medium"
@@ -556,8 +556,6 @@ class RegistrationPage(Frame):
                     emailfield.insert(0, EMAILTEXT)
                 emailfield.configure(fg="red")
                 showwarninglabelaboveentry()
-        passwordwarning = Label(self, text="Please enter a valid password.", font=(
-            'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
 
         def clearpasswordfield():
             passwordfield.configure(fg="black")
@@ -609,39 +607,43 @@ class RegistrationPage(Frame):
 
         # Labels
         enterdetailslabel = Label(self, text="Please enter your details as shown in the entries.", font=(
-            'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+            'Atkinson Hyperlegible', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
         enterdetailslabel.grid(row=0, column=24,
-                               rowspan=2, columnspan=18, sticky=N+S+E+W)
+                               rowspan=2, columnspan=17, sticky=N+S+E+W)
 
         # Entries
         firstnamefield = Entry(self, width=1, bg='#FFFFFF',
                                font=(FONTNAME, 18), justify='center')
         firstnamefield.grid(row=3, column=24,
-                            rowspan=2, columnspan=8, sticky=N+S+E+W)
+                            rowspan=2, columnspan=7, sticky=N+S+E+W)
         firstnamefield.insert(0, FIRSTNAME)
+        firstnamefield.grid_propagate(0)
 
         lastnamefield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
         lastnamefield.grid(row=3, column=34,
-                           rowspan=2, columnspan=8, sticky=N+S+E+W)
+                           rowspan=2, columnspan=7, sticky=N+S+E+W)
         lastnamefield.insert(0, LASTNAME)
+        lastnamefield.grid_propagate(0)
 
         emailfield = Entry(self, width=1, bg='#FFFFFF',
                            font=(FONTNAME, 18), justify='center')
         emailfield.grid(row=6, column=24,
-                        rowspan=2, columnspan=18, sticky=N+S+E+W)
+                        rowspan=2, columnspan=17, sticky=N+S+E+W)
         emailfield.insert(0, EMAILTEXT)
+        emailfield.grid_propagate(0)
 
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
         passwordfield.grid(row=9, column=24,
-                           rowspan=2, columnspan=18, sticky=N+S+E+W)
+                           rowspan=2, columnspan=17, sticky=N+S+E+W)
         passwordfield.insert(0, PASSWORDTEXT)
+        passwordfield.grid_propagate(0)
 
         confirmpasswordfield = Entry(
             self, width=1, bg='#FFFFFF', font=(FONTNAME, 18), justify='center')
         confirmpasswordfield.grid(row=12, column=24,
-                                  rowspan=2, columnspan=18, sticky=N+S+E+W)
+                                  rowspan=2, columnspan=17, sticky=N+S+E+W)
         confirmpasswordfield.insert(0, CONFPASSTEXT)
         confirmpasswordfield.grid_propagate(0)
 
@@ -660,28 +662,6 @@ class RegistrationPage(Frame):
         confirmpasswordfield.bind(
             "<FocusOut>", lambda event: repopulateconfpasswordfield())
 
-        # Buttons
-        signupbutton = Button(self, text="SIGN UP", takefocus=1, font=(
-            'Arial', 18), width=1, height=1, fg='#000000', command=lambda: checkfields(), bg=LIGHTYELLOW)
-        signupbutton.grid(row=15, column=28, columnspan=10,
-                          rowspan=2, sticky=N+S+E+W)
-        signupbutton.grid_propagate(0)
-
-        loginbutton = Button(self, text="Already have an account?\nClick here to sign in.",
-        font=('Atkinson Hyperlegible', 18), width=1, height=1, borderwidth=0,
-        fg='#000000', command=lambda: [
-        controller.show_frame(LoginPage),
-        cleareveryentry()],
-        bg=OTHERPINK)
-        loginbutton.grid(row=17, column=28, columnspan=10,
-                         rowspan=2, sticky=N+S+E+W)
-        loginbutton.grid_propagate(0)
-
-        label = Label(self, text="This is the registration page on left frame\nCome back later, still under construction!", font=(
-            'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        label.grid(row=1, column=2, columnspan=17,
-                   rowspan=2, sticky=N+S+E+W)
-        label.grid_propagate(0)
         
 
         self.intibanner = Image.open(r"assets\Home-Banner-INTI.png")
@@ -696,14 +676,35 @@ class RegistrationPage(Frame):
         self.logolabel.grid_propagate(0)
         self.titleart = Image.open(r"assets\DR7j7r0.png")
         self.titleart = ImageTk.PhotoImage(self.titleart.resize(
-            (math.ceil(700 * dpi / 96), math.ceil(220 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(680 * dpi / 96), math.ceil(320 * dpi / 96)), Image.Resampling.LANCZOS))
         titleartlabel = Button(self, image=self.titleart,
                                background= NICEBLUE, 
                                anchor=CENTER, width=1, height=1)
-        titleartlabel.grid(row=9, column=2, columnspan=17,
+        titleartlabel.grid(row=10, column=2, columnspan=17,
                            rowspan=8, sticky=N+S+E+W)
         titleartlabel.grid_propagate(0)
+        # Buttons
+        signupbutton = Button(self, text="SIGN UP", width=1, height=1, font=(
+            'Atkinson Hyperlegible', 14), fg='#000000', command=lambda: checkfields(), bg=LIGHTYELLOW)
+        signupbutton.grid(row=15, column=28, columnspan=9,
+                          rowspan=2, sticky=N+S+E+W)
+        signupbutton.grid_propagate(0)
 
+        loginbutton = Button(self, text="Click here to sign in.",
+        font=('Atkinson Hyperlegible', 14), width=1, height=1,
+        fg='#000000', command=lambda: [
+        controller.show_frame(LoginPage),
+        cleareveryentry()],
+        bg=OTHERPINK)
+        loginbutton.grid(row=18, column=28, columnspan=9,
+                         rowspan=2, sticky=N+S+E+W)
+        loginbutton.grid_propagate(0)
+
+        label = Label(self, text="This is the registration page on left frame\nCome back later, still under construction!", font=(
+            'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        label.grid(row=1, column=2, columnspan=17,
+                   rowspan=2, sticky=N+S+E+W)
+        label.grid_propagate(0)
         def aboutINTIcontainer():
             randomframe = Frame(controller, bg=NICEBLUE, width=1, height=1,
                                 borderwidth=1, relief="flat")
@@ -719,12 +720,12 @@ class RegistrationPage(Frame):
                 Grid.rowconfigure(randomframe, y, weight=1, uniform='row')
                 Label(randomframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
                     row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
-            randomlabel = Label(randomframe, text="INTI COLLEGE LOL", font=("Comic Sans Ms", 18), fg="white",bg=DARKBLUE)
+            randomlabel = Label(randomframe, text="INTI COLLEGE LOL", font=("Comic Sans Ms", 18), width=1,height=1, fg="white",bg=DARKBLUE)
             randomlabel.grid(row=0, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W)
             randomlabel.grid_propagate(0)
             randombutton = Button(randomframe, text="click me to close ", font=("Comic Sans Ms", 18), bg=DARKBLUE, fg="WHITE", command=lambda:[
             randomframe.grid_forget()])
-            randombutton.grid(row=6, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W,pady=5)
+            randombutton.grid(row=6, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W)
 
 
 class LoginPage(Frame):
@@ -732,7 +733,7 @@ class LoginPage(Frame):
         Frame.__init__(self, parent, bg=LIGHTPURPLE)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LIGHTPURPLE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
@@ -879,38 +880,36 @@ class LoginPage(Frame):
         #                rowspan=5, sticky=N+S+E+W)
         self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
         self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-            (math.ceil(1680 * dpi / 96), math.ceil(820 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
         self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
         self.backgroundimagelabel.grid_propagate(0)
         self.signinbuttonimage = Image.open(r"Assets\signinbutton.png")
         self.signinbuttonimage = ImageTk.PhotoImage(self.signinbuttonimage.resize(
-            (math.ceil(507 * dpi / 96), math.ceil(77 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(440 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
         self.signinbutton = Button(self, image=self.signinbuttonimage, width=1, height=1,
-        bg=LIGHTPURPLE, borderwidth=0, command=lambda:signinbuttonpressed())
-        self.signinbutton.grid(row=14, column=26, rowspan=2, columnspan=13,padx=24, pady=7, sticky=N+S+E+W)
+        bg=LIGHTPURPLE, relief="flat",command=lambda:signinbuttonpressed())
+        self.signinbutton.grid(row=15, column=26, rowspan=2, columnspan=11, sticky=N+S+E+W)
         self.signinbutton.grid_propagate(0)
         self.signupbuttonimage = Image.open(r"Assets\signupbutton.png")
         self.signupbuttonimage = ImageTk.PhotoImage(self.signupbuttonimage.resize(
-            (math.ceil(480 * dpi / 96), math.ceil(108 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(600 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
         self.signupbutton = Button(self, image=self.signupbuttonimage, width=1, height=1,
         bg=LIGHTPURPLE, borderwidth=1, relief="flat", command=lambda:controller.show_frame(RegistrationPage))
-        self.signupbutton.grid(row=18, column=26, rowspan=2, columnspan=12, padx=24, pady=7,sticky=N+S+E+W)
+        self.signupbutton.grid(row=18, column=24, rowspan=2, columnspan=15,sticky=N+S+E+W)
         self.signupbutton.grid_propagate(0)
         emailwarning = Label(self, text="Please enter a valid email address.", font=(
             'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
         emailfield = Entry(self, width=1, bg='#FFFFFF', highlightthickness=1,
                            font=(FONTNAME, 14), justify='center')
-        emailfield.grid(row=7, column=25, columnspan=14,
+        emailfield.grid(row=7, column=25, columnspan=13,
                         rowspan=2, sticky=N+S+E+W)
-        emailfield.grid_configure(padx=3, pady=6)
         emailfield.insert(0, EMAILTEXT)
         emailfield.grid_propagate(0)
         passwordfield = Entry(self, width=1, bg='#FFFFFF', highlightthickness=1,
                               font=(FONTNAME, 14), justify='center')
-        passwordfield.grid(row=11, column=25, columnspan=14,
+        passwordfield.grid(row=12, column=25, columnspan=13,
                            rowspan=2, sticky=N+S+E+W)
-        passwordfield.grid_configure(padx=3,pady=7)
         passwordfield.insert(0, PASSWORDTEXT)
         passwordfield.grid_propagate(0)
         emailfield.bind("<FocusIn>", lambda a: clearemailfield())
@@ -932,11 +931,7 @@ class LoginPage(Frame):
         #     controller.show_frame(RegistrationPage)], bg=OTHERPINK)
         # signupbutton.grid(row=16, column=28, columnspan=9,
         #                   rowspan=2, sticky=N+S+E+W)
-        def changedtologout():
-            global LOGGEDINAS
-            global LOGINSTATE
-            LOGGEDINAS = "Viewer"
-            LOGINSTATE = False
+
         def checkstate():
             global LOGGEDINAS
             print(LOGGEDINAS)
@@ -964,7 +959,7 @@ class LoginPage(Frame):
             if controller.winfo_width() != dimensions[0] or controller.winfo_width != dimensions[1]:
                 self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
                 self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-            (math.ceil(1694 * dpi / 96), math.ceil(853 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
                 self.backgroundimagelabel.config(image=self.backgroundimage)
         global eventID
         eventID = None
@@ -1008,7 +1003,7 @@ class MainPage(Frame):
         Frame.__init__(self, parent, bg=LAVENDER)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
@@ -1145,7 +1140,7 @@ class MainPage(Frame):
         logoutbutton = Button(self,image=self.logoutimage , width=1, height=1, fg='#000000', bg='#FFF5E4',command=lambda:
             [controller.show_frame(LoginPage), controller.signout()
             ])
-        logoutbutton.grid(row=0, column=42, columnspan=1, rowspan=1, sticky=N+S+E+W)
+        logoutbutton.grid(row=0, column=41, columnspan=1, rowspan=1, sticky=N+S+E+W)
         imagelabel = Label(self, image=self.logoutimage, anchor=CENTER, width=1, height=1)
 
 
@@ -1154,7 +1149,7 @@ class EventView(Frame):
         Frame.__init__(self, parent, bg=LAVENDER)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LAVENDER).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
@@ -1191,7 +1186,7 @@ class EventRegistration(Frame):
         FONTNAME = "Avenir Next"
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=PINK).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
@@ -1368,7 +1363,7 @@ class EventCreation(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=PINK)
         FONTNAME = "Arial"
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=1, bg=PINK).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
@@ -1688,7 +1683,7 @@ class ViewParticipants(Frame):
         Frame.__init__(self, parent, bg=PINK)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=PINK).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
@@ -1760,38 +1755,14 @@ class FeedbackForm(Frame):
         Frame.__init__(self, parent, bg=PINK)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK).grid(
+            Label(self, height=2, bg=PINK, relief="flat").grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK).grid(
+            Label(self, width=5, bg=PINK, relief="flat").grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
-
-
-        class _(Window):
-            def revertcontainersize(self, container):
-                container.grid(row=3, column=2, columnspan=13,
-                               rowspan=12, sticky=N+S+E+W)
-
-            def changecontainersize(self, container):
-                container.grid(row=2, column=2, rowspan=14,
-                               columnspan=28, sticky=N+S+E+W)
-
-            def makeleftcontainerhuge(leftcontainer):
-                leftcontainer.grid(row=2, column=2, rowspan=14,
-                                   columnspan=28, sticky=N+S+E+W)
-
-            def revertcontainersizes(rightcontainer, leftcontainer):
-                rightcontainer.grid(row=3, column=17, columnspan=13,
-                                    rowspan=12, sticky=N+S+E+W)
-                leftcontainer.grid(row=3, column=2, columnspan=13,
-                                   rowspan=12, sticky=N+S+E+W)
-
-            def keepcontainerlarge(rightcontainer):
-                rightcontainer.grid(row=2, column=2, rowspan=14,
-                                    columnspan=14, sticky=N+S+E+W)
 
         # Widgets
         label = Label(self, text="This is a feedback form to help us improve our app.\nPlease answer the questions below to the best of your ability.\nThank you for your time!", font=(
@@ -1843,36 +1814,37 @@ class FeedbackForm(Frame):
         yesnooptions = ["No", "Yes"]
 
         # Label
-        question1label = Label(self, text="How would you rate our announcement system for your overall experience? ", font=(
-            "Helvetica", 14), bg=LIGHTYELLOW)
+        question1label = Label(self, text="How would you rate our announcement system for your overall experience? ",
+        font=("Helvetica", 14), width=1, height=1,
+        bg=LIGHTYELLOW)
         question1label.grid(row=4, column=10, columnspan=22,
                             rowspan=1, sticky=NSEW)
         question1answer = StringVar()
         question1answer.set("Neutral")  # Satisfaction Q
-
-        question2label = Label(self, text="Is this system very helpful to you that you are not miss or neglect any event? ", font=(
-            "Helvetica", 14), bg=LIGHTYELLOW)
+        question2label = Label(self, text="Is this system very helpful to you that you are not miss or neglect any event? ", 
+        font=("Helvetica", 14), width=1, height=1,
+        bg=LIGHTYELLOW)
         question2label.grid(row=6, column=10, columnspan=22,
                             rowspan=1, sticky=NSEW)
         question2answer = StringVar()
         question2answer.set("Neutral")  # Satisfaction Q
-
-        question3label = Label(self, text="How likely are you to recommend our app to your friends?", font=(
-            "Helvetica", 14), bg=LIGHTYELLOW)
+        question3label = Label(self, text="How likely are you to recommend our app to your friends?",
+        font=("Helvetica", 14), bg=LIGHTYELLOW)
         question3label.grid(row=8, column=10, columnspan=22,
                             rowspan=1, sticky=NSEW)
         question3answer = StringVar()
         question3answer.set("Neutral")  # Likelihood Q
 
-        question4label = Label(
-            self, text="How difficult / easy was it to find the event on this app? ", font=("Helvetica", 14), bg=LIGHTYELLOW)
+        question4label = Label(self, text="How difficult / easy was it to find the event on this app?",
+        font=("Helvetica", 14), width=1, height=1,
+        bg=LIGHTYELLOW)
         question4label.grid(row=10, column=10, columnspan=22,
                             rowspan=1, sticky=NSEW)
         question4answer = StringVar()
         question4answer.set("Neutral")  # Easiness Q
-
-        yesnoquestionlabel = Label(self, text="Were you able to find information you needed about the events?", font=(
-            "Helvetica", 14), bg=LIGHTYELLOW)
+        yesnoquestionlabel = Label(self, text="Were you able to find information you needed about the events?",
+        font=("Helvetica", 14), width=1, height=1,
+        bg=LIGHTYELLOW)
         yesnoquestionlabel.grid(
             row=12, column=10, columnspan=22, rowspan=1, sticky=NSEW)
         yesnoquestionanswer = StringVar()
@@ -1886,13 +1858,13 @@ class FeedbackForm(Frame):
         # Creating Satisfaction Scale(because using satisfaction options)
         for text, rating in scaleofsatisfaction:
             self.firstrow = Radiobutton(self,
-                                        text=text,  # text of the radiobutton becomes 1, 2, 3, 4, 5
-                                        # for a row(horizontal), each radiobutton needs to share same variable
-                                        variable=question1answer,
-                                        # value is going to be the rating in ("Number", "Rating") that will be stored as the value for the radiobutton
-                                        value=rating,
-                                        justify=CENTER,
-                                        bg=ORANGE, font=("Helvetica", 18))
+                text=text,  # text of the radiobutton becomes 1, 2, 3, 4, 5
+                # for a row(horizontal), each radiobutton needs to share same variable
+                variable=question1answer,
+                # value is going to be the rating in ("Number", "Rating") that will be stored as the value for the radiobutton
+                value=rating,
+                justify=CENTER,
+                bg=ORANGE, font=("Helvetica", 18), height=1, width=1)
             # count becomes the column number, 12, 16, 20, 24, 28
             self.firstrow.grid(row=5, column=count, rowspan=1,
                                columnspan=2, sticky=N+S+E+W)
@@ -1908,7 +1880,7 @@ class FeedbackForm(Frame):
                     # value is going to be the rating in ("Number", "Rating") that will be stored as the value for the radiobutton
                     value=rating,
                     justify=CENTER,
-                    bg=ORANGE, font=("Helvetica", 18))
+                    bg=ORANGE, font=("Helvetica", 18), width=1, height=1)
             # count becomes the column number, 12, 16, 20, 24, 28
             self.secondrow.grid(row=7, column=count2,
                                 rowspan=1, columnspan=2, sticky=N+S+E+W)
@@ -1918,7 +1890,7 @@ class FeedbackForm(Frame):
         # Creating Likelihood Scale
         for text, rating in scaleoflikelihood:
             self.thirdrow = Radiobutton(self, text=text, variable=question3answer, value=rating, bg=ORANGE, font=("Helvetica", 18),
-                                        justify=CENTER)
+                                        justify=CENTER, width=1, height=1)
             self.thirdrow.grid(row=9, column=count3, rowspan=1,
                                columnspan=2, sticky=N+S+E+W)
             self.thirdrow.grid_propagate(0)
@@ -1930,7 +1902,7 @@ class FeedbackForm(Frame):
         # Creating Easiness Scale(because using easiness question)
         for text, rating in scaleofeasiness:
             self.fourthrow = Radiobutton(self, text=text, variable=question4answer, value=rating, bg=ORANGE, font=("Helvetica", 18),
-                                         justify=CENTER)
+                                         justify=CENTER, width=1, height=1)
             self.fourthrow.grid(row=11, column=count4,
                                 rowspan=1, columnspan=2, sticky=N+S+E+W)
             self.fourthrow.grid_propagate(0)
@@ -1939,7 +1911,7 @@ class FeedbackForm(Frame):
         # Creating Yes No
         for text in yesnooptions:
             self.fifthrow = Radiobutton(self, text=text, variable=yesnoquestionanswer, value=text, bg=ORANGE, font=("Helvetica", 18),
-                                        justify=CENTER)
+                                        justify=CENTER, width=1, height=1)
             self.fifthrow.grid(row=13, column=count5,
                                rowspan=2, columnspan=3, sticky=N+S+E+W)
             self.fifthrow.grid_propagate(0)
@@ -1947,7 +1919,7 @@ class FeedbackForm(Frame):
 
         # Open Question
         openendquestionlabel = Label(self, text="Please leave any comments or suggestions below:", font=(
-            "Helvetica", 14), bg=LIGHTYELLOW)
+            "Helvetica", 14), width=1, height=1, bg=LIGHTYELLOW)
         openendquestionlabel.grid(
             row=15, column=10, columnspan=22, rowspan=1, sticky=NSEW)
         openendedentry = Entry(self, width=1, bg="white",
@@ -1957,46 +1929,47 @@ class FeedbackForm(Frame):
 
         # labels for scale
         satisfactionlabel = Label(self, text="More Unsatisfied", font=(
-            "Helvetica", 11), bg=NICEPURPLE, justify="left")
+            "Helvetica", 11), bg=NICEPURPLE, justify="left", width=1, height=1)
         satisfactionlabel.grid(
             row=4, column=10, columnspan=2, rowspan=1, sticky=NSEW)
         dissatisfactionlabel = Label(self, text="More satisfied", font=(
-            "Helvetica", 12), bg=NICEPURPLE, justify="right")
+            "Helvetica", 12), bg=NICEPURPLE, justify="right", width=1, height=1)
         dissatisfactionlabel.grid(
             row=4, column=30, columnspan=2, rowspan=1, sticky=NSEW)
         unhelpfullabel = Label(self, text="Very Unhelpful", font=(
-            "Helvetica", 11), bg=NICEPURPLE, justify="left")
+            "Helvetica", 11), bg=NICEPURPLE, justify="left", width=1, height=1)
         unhelpfullabel.grid(row=6, column=10, columnspan=2,
                             rowspan=1, sticky=NSEW)
         helpfullabel = Label(self, text="Very Helpful", font=(
-            "Helvetica", 12), bg=NICEPURPLE, justify="right")
+            "Helvetica", 12), bg=NICEPURPLE, justify="right", width=1, height=1)
         helpfullabel.grid(row=6, column=30, columnspan=2,
                           rowspan=1, sticky=NSEW)
         unlikelihoodlabel = Label(self, text="Less likelihood", font=(
-            "Helvetica", 12), bg=NICEPURPLE, justify="left")
+            "Helvetica", 12), bg=NICEPURPLE, justify="left", width=1, height=1)
         unlikelihoodlabel.grid(
             row=8, column=10, columnspan=2, rowspan=1, sticky=NSEW)
         likelihoodlabel = Label(self, text="More likelihood", font=(
-            "Helvetica", 12), bg=NICEPURPLE, justify="right")
+            "Helvetica", 12), bg=NICEPURPLE, justify="right", width=1, height=1)
         likelihoodlabel.grid(row=8, column=30, columnspan=2,
                              rowspan=1, sticky=NSEW)
         difficultlabel = Label(self, text="More difficult", font=(
-            "Helvetica", 12), bg=NICEPURPLE, justify="left")
+            "Helvetica", 12), bg=NICEPURPLE, justify="left", width=1, height=1)
         difficultlabel.grid(row=10, column=10, columnspan=2,
                             rowspan=1, sticky=NSEW)
         easierlabel = Label(self, text="Easier", font=(
-            "Helvetica", 12), bg=NICEPURPLE, justify="right")
+            "Helvetica", 12), bg=NICEPURPLE, justify="right", width=1, height=1)
         easierlabel.grid(row=10, column=30, columnspan=2,
                          rowspan=1, sticky=NSEW)
 
         # Button
-        self.getanswers = Button(self, text="Cancel", command=lambda: [controller.show_frame(MainPage)], bg=ORANGE, font=("Helvetica", 18))
+        self.getanswers = Button(self, text="Cancel", command=lambda: [controller.show_frame(MainPage)], bg=ORANGE,
+        font=("Helvetica", 18), width=1, height=1)
         self.getanswers.grid(row=18, column=10, rowspan=2,
                              columnspan=6, sticky=N+S+E+W)
         self.getanswers.grid_propagate(0)
 
         self.getanswers = Button(self, text="Confirm", command=lambda: [
-                                 ShowChoice(), dosomedatabasemagic()], bg=ORANGE, font=("Helvetica", 18))
+                                 ShowChoice(), dosomedatabasemagic()], bg=ORANGE, font=("Helvetica", 18), width=1, height=1)
         self.getanswers.grid(row=18, column=26, rowspan=2,
                              columnspan=6, sticky=N+S+E+W)
         self.getanswers.grid_propagate(0)
@@ -2024,7 +1997,7 @@ class CalendarPage(Frame):
         Frame.__init__(self, parent, bg=PINK)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        for x in range(43):
+        for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=NICEPURPLE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
@@ -2032,15 +2005,12 @@ class CalendarPage(Frame):
             self.rowconfigure(y, weight=1, uniform='x')
             Label(self, width=5, bg=NICEPURPLE).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
-
-        # b = Frame(self, bg=LAVENDER, width=1, height=)
-        # b.grid(row=15, column=9, rowspan=6, columnspan=12, sticky=N+S+E+W)
         def hidetheentireframe():
             self.grid_remove()
-        xbuttonlabel = Button(self, text="X", font=("Avenir Next Medium", 18),height=1,width=1,
+        xbuttonlabel = Button(self, text="X", font=("Avenir Next Medium", 18), height=1,width=1,
          bg=DARKBLUE, fg="white",
          command= lambda:hidetheentireframe())
-        xbuttonlabel.grid(row=0, column=41, rowspan=2, columnspan=2, sticky=N+S+E+W)
+        xbuttonlabel.grid(row=0, column=40, rowspan=2, columnspan=2, sticky=N+S+E+W)
         # Widgets
         label = Label(self, text="This is the Calendar", font=(
             'Segoe Ui Semibold', 14), width=1, height=1, fg='#000000', bg='#FFF5E4', justify="left")
@@ -2059,18 +2029,22 @@ class CalendarPage(Frame):
         self.cal.bind("<<CalendarSelected>>", self.generate_buttons)
 
         #Go back to current date button
-        self.gobackbutton = Button(self, text="Change view to current date", command=lambda: [self.go_to_today()], bg=ORANGE, font=("Atkinson Hyperlegible", 18))
+        self.gobackbutton = Button(self, text="Change view to current date", width=1, height=1,
+        bg=ORANGE, font=("Atkinson Hyperlegible", 18), command=lambda: [self.go_to_today()])
         self.gobackbutton.grid(row=19, column=3, rowspan=2,
                              columnspan=6, sticky=N+S+E+W)
         self.gobackbutton.grid_propagate(0)
-        self.refreshbutton = Button(self, text="Refresh", command=lambda: [self.add_events()], bg=ORANGE, font=("Atkinson Hyperlegible", 18))
+        self.refreshbutton = Button(self, text="Refresh",
+        bg=ORANGE, font=("Atkinson Hyperlegible", 18), width=1, height=1,
+        command=lambda: [self.add_events()] )
         self.refreshbutton.grid(row=19, column=10, rowspan=2,
                                 columnspan=6, sticky=N+S+E+W)
         self.refreshbutton.grid_propagate(0)
-        self.buttonframe=Frame(self, bg = ORANGE, relief=RAISED)
+        self.buttonframe=Frame(self, bg = ORANGE, relief=RAISED, width=1, height=1,)
         self.buttonframe.grid(row=4, column=24, rowspan=15, columnspan=17, sticky=N+S+E+W)
         self.buttonframe.grid_propagate(0)
-        self.detailslabel = Label(self, text="Click on an event to view the details.", font = ("Avenir Next Medium", 18), background=LIGHTYELLOW)
+        self.detailslabel = Label(self, text="Click on an event to view the details.", width=1, height=1,
+        font = ("Avenir Next Medium", 18), background=LIGHTYELLOW)
         self.detailslabel.grid(row=2, column=24, rowspan=2, columnspan=17, sticky=N+S+E+W)
         self.add_events()
     def generate_buttons(self, event):
@@ -2079,7 +2053,7 @@ class CalendarPage(Frame):
             widgets.destroy()
         for x in range(15):
             self.buttonframe.columnconfigure(x, weight=1, uniform='x')
-            Label(self.buttonframe, height=1, bg=ORANGE).grid(
+            Label(self.buttonframe, width=1, bg=ORANGE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(15):
             self.buttonframe.rowconfigure(y, weight=1, uniform='x')
@@ -2110,11 +2084,11 @@ class CalendarPage(Frame):
 
     def createdetails(self, name):
         #A frame to display the details of the event
-        self.subframe = Frame(self.buttonframe, bg = NICEBLUE, relief=RAISED, height=1,width=1)
+        self.subframe = Frame(self.buttonframe, bg = NICEBLUE, relief=RAISED, height=1, width=1)
         self.subframe.grid(row=0, column=0, rowspan=15, columnspan=15, sticky=N+S+E+W)
         for x in range(15):
             self.subframe.columnconfigure(x, weight=1, uniform='x')
-            Label(self.subframe, height=1, bg=LIGHTYELLOW).grid(
+            Label(self.subframe, width=1, bg=LIGHTYELLOW).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(15):
             self.subframe.rowconfigure(y, weight=1, uniform='x')
