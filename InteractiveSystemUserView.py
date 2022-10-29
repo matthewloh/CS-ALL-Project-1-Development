@@ -367,7 +367,7 @@ class Window(Tk):
                                     bg="#33c748", fg="WHITE", width=1, height=1,
                                     command=lambda:[
             self.deletethewindowbar(),
-            self.state('zoomed')
+            # self.state('zoomed')
         ])
         self.maximizebutton.grid(row=1, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.maximizebutton.grid_propagate(0)
@@ -1686,7 +1686,7 @@ class EventCreation(Frame):
         self.conn = sqlite3.connect('interactivesystem.db')
         self.c = self.conn.cursor()
         with self.conn:
-            self.c.execute("SELECT image FROM eventcreation WHERE eventkey_number = ?", (eventkey_number,))
+            self.c.execute("SELECT event_image FROM eventcreation WHERE eventkey_number = ?", (eventkey_number,))
             self.blobData = io.BytesIO(self.c.fetchone()[0])
             self.img = Image.open(self.blobData)
             self.img = ImageTk.PhotoImage(self.img.resize(
@@ -2043,8 +2043,8 @@ class CalendarPage(Frame):
         def hidetheentireframe():
             self.grid_remove()
         xbuttonlabel = Button(self, text="X", font=("Avenir Next Medium", 18), height=1,width=1,
-         bg=DARKBLUE, fg="white",
-         command= lambda:hidetheentireframe())
+        bg=DARKBLUE, fg="white",
+        command= lambda:hidetheentireframe())
         xbuttonlabel.grid(row=0, column=40, rowspan=2, columnspan=2, sticky=N+S+E+W)
         # Widgets
         label = Label(self, text="This is the Calendar", font=(
