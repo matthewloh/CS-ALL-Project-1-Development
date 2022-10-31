@@ -42,7 +42,7 @@ import math
 import sqlite3
 import datetime
 from ctypes import windll
-windll.shcore.SetProcessDpiAwareness(1)
+# windll.shcore.SetProcessDpiAwareness(1)
 
 GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
 SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
@@ -72,14 +72,23 @@ LOGINSTATE = False
 LOGINID = "Viewer"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN WINDOW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
+
 class Window(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+        global dpi 
         global dpiError
-        global dpi
         dpiError = False
-        dpi = self.winfo_fpixels('1i')
-
+        try:
+            from ctypes import windll
+            windll.shcore.SetProcessDpiAwareness(1)
+        except:
+            print('ERROR. Could not set DPI awareness.')
+            dpiError = True
+        if dpiError:
+            dpi = 96
+        else:
+            dpi = self.winfo_fpixels('1i')
         self.geometry(
             f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1049 * dpi / 96)}')
         self.title("INTI Interactive System")
@@ -335,6 +344,9 @@ class Window(Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
+    def get_page(self, page_class):
+        return self.frames[page_class]
+
     def make_a_container(self):
         self.randomframe.grid_remove()
         self.randomframe.grid(row=7, column=2, rowspan=6, columnspan=6,
@@ -367,7 +379,7 @@ class Window(Tk):
                                     bg="#33c748", fg="WHITE", width=1, height=1,
                                     command=lambda:[
             self.deletethewindowbar(),
-            # self.state('zoomed')
+            self.state('zoomed')
         ])
         self.maximizebutton.grid(row=1, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.maximizebutton.grid_propagate(0)
@@ -448,6 +460,7 @@ class RegistrationPage(Frame):
         Frame.__init__(self, parent, bg=LIGHTPURPLE)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        #list comprehension to create lay out for the grid
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, width=2, bg=LIGHTPURPLE, relief="flat").grid(
@@ -769,6 +782,7 @@ class LoginPage(Frame):
         # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
         # If email is not found in database, it will return an error message.
         # If email is found in database, it will return a success message.
+        global dpi 
         conn = sqlite3.connect('interactivesystem.db')
         c = conn.cursor()
 
