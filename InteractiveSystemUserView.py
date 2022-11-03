@@ -8,7 +8,6 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.filedialog import askopenfilename
 import io 
-
 try:
     import pyglet
 except:
@@ -42,7 +41,9 @@ import math
 import sqlite3
 import datetime
 from ctypes import windll
-# windll.shcore.SetProcessDpiAwareness(1)
+user32 = windll.user32
+
+
 
 GetWindowLongPtrW = ctypes.windll.user32.GetWindowLongPtrW
 SetWindowLongPtrW = ctypes.windll.user32.SetWindowLongPtrW
@@ -91,6 +92,8 @@ class Window(Tk):
             dpi = self.winfo_fpixels('1i')
         self.geometry(
             f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1049 * dpi / 96)}')
+        self.screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+        print(self.screensize)
         self.title("INTI Interactive System")
         self.resizable(0, 0)
         for x in range(32):
@@ -379,7 +382,7 @@ class Window(Tk):
                                     bg="#33c748", fg="WHITE", width=1, height=1,
                                     command=lambda:[
             self.deletethewindowbar(),
-            self.state('zoomed')
+            print(self.get_display_size())
         ])
         self.maximizebutton.grid(row=1, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.maximizebutton.grid_propagate(0)
@@ -453,7 +456,9 @@ class Window(Tk):
         self.signoutbutton.grid_propagate(0)
         self.studentbutton.grid_propagate(0)
         self.adminbutton.grid_propagate(0)
-        
+    def get_display_size(self):
+        if self.screensize <= (1920, 1080):
+            self.state('zoomed')
 
 class RegistrationPage(Frame):
     def __init__(self, parent, controller):
