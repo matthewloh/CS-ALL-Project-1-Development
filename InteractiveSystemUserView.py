@@ -145,7 +145,7 @@ class Window(Tk):
 
         self.container3.grid_propagate(0)
         self.signupbutton = Button(self.container3, text="Sign Up\n Page", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20, "bold"),
-                                   borderwidth=2, relief="raised", height=1,width=1, highlightthickness=2,
+                                   borderwidth=2, relief="raised", height=1, width=1, highlightthickness=2,
                                    command=lambda: [
             self.show_frame(RegistrationPage),
             self.togglebuttonrelief(self.signupbutton)
@@ -221,6 +221,7 @@ class Window(Tk):
                                     borderwidth=2, relief="solid", height=1,width=1,
                                     command=lambda: [
             self.show_frame(LoginPage),
+            self.togglebuttonrelief(self.loginbutton),
             self.signout()])
         self.signoutbutton.grid(row=0, column=0, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.studentbutton = Button(self.bottomleftbuttons, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
@@ -332,7 +333,7 @@ class Window(Tk):
             Grid.rowconfigure(welcomeframe, y, weight=1, uniform='row')
             Label(welcomeframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W,)
-        namelabel = Button(welcomeframe, text="", font=("Atkinson Hyperlegible", 18), fg="white",bg=DARKBLUE)
+        namelabel = Button(welcomeframe, text="", width=1, height=1, font=("Atkinson Hyperlegible", 30), fg="white",bg=DARKBLUE)
         namelabel.grid(row=0, column=0, rowspan=2, columnspan=8, sticky=N+S+E+W)
         namelabel.configure(text=f"Welcome {name.capitalize()} as {role.capitalize()}!\nWe are glad to have you here!")
         namelabel.grid_propagate(0)
