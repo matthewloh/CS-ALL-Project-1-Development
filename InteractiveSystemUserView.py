@@ -90,10 +90,14 @@ class Window(Tk):
             dpi = 96
         else:
             dpi = self.winfo_fpixels('1i')
-        self.geometry(
-            f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1049 * dpi / 96)}')
         self.screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
         print(self.screensize)
+        if self.screensize == (1920, 1080):
+            self.geometry(
+                f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1049 * dpi / 96)}')
+        elif self.screensize > (1920, 1080):
+            self.geometry(
+                f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
         self.title("INTI Interactive System")
         self.resizable(0, 0)
         for x in range(32):
@@ -132,11 +136,11 @@ class Window(Tk):
                              columnspan=30, sticky=N+S+E+W)
         for x in range(30):
             Grid.columnconfigure(self.container3, x, weight=1, uniform='row')
-            Label(self.container3, height=1, bg=DARKBLUE).grid(
+            Label(self.container3, height=1, bg=DARKBLUE,relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(2):
             Grid.rowconfigure(self.container3, y, weight=1, uniform='row')
-            Label(self.container3, height=1, width=1, bg=DARKBLUE).grid(
+            Label(self.container3, height=1, width=1, bg=DARKBLUE, relief="solid").grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
         self.container3.grid_propagate(0)
@@ -148,51 +152,51 @@ class Window(Tk):
             ])
         self.signupbutton.grid(row=0, column=0, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.loginbutton = Button(self.container3, text="Login\nPage", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                  borderwidth=2, relief="raised", height=1, width=1, padx=15, pady=0, highlightthickness=0,
+                                  borderwidth=2, relief="raised", height=1, width=1, highlightthickness=0,
                                   command=lambda: [
             self.show_frame(LoginPage),
             self.togglebuttonrelief(self.loginbutton)
             ])
         self.loginbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.mainpagebutton = Button(self.container3, text="Main\nPage", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                     borderwidth=2, relief="raised", height=1, width=1, padx=15, pady=0, highlightthickness=0,
+                                     borderwidth=2, relief="raised", height=1, width=1, highlightthickness=0,
                                      command=lambda: [
             self.show_frame(MainPage),
             self.togglebuttonrelief(self.mainpagebutton)
             ])
         self.eventlistbutton = Button(self.container3, text="Event\nList", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                      borderwidth=2, relief="raised", height=1, width=1, padx=15, pady=0, highlightthickness=0,
+                                      borderwidth=2, relief="raised", height=1, width=1, highlightthickness=0,
                                       command=lambda: [
             self.show_frame(EventView),
             self.togglebuttonrelief(self.eventlistbutton)
             ])
         self.eventregistrationbutton = Button(self.container3, text="Event\nRegistration", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
                                               borderwidth=2, relief="raised",
-                                              height=1, width=1, padx=15, pady=0, highlightthickness=0,
+                                              height=1, width=1, highlightthickness=0,
                                               command=lambda: [
             self.show_frame(EventRegistration),
             self.togglebuttonrelief(self.eventregistrationbutton)
             ])
         self.eventcreationbutton = Button(self.container3, text="Event\nCreation\n(ADMIN)", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                          borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                                          borderwidth=2, relief="raised", height=1,width=1, highlightthickness=0,
                                           command=lambda: [
             self.show_frame(EventCreation),
             self.togglebuttonrelief(self.eventcreationbutton)
             ])
         self.viewparticipantsbutton = Button(self.container3, text="View\nParticipants\n(ADMIN)", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                             borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                                             borderwidth=2, relief="raised", height=1,width=1, highlightthickness=0,
                                              command=lambda: [
             self.show_frame(ViewParticipants),
             self.togglebuttonrelief(self.viewparticipantsbutton)
             ])
         self.feedbackbutton = Button(self.container3, text="Feedback\nForm", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                            borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                            borderwidth=2, relief="raised", height=1,width=1, highlightthickness=0,
                             command=lambda: [
             self.show_frame(FeedbackForm),
             self.togglebuttonrelief(self.feedbackbutton)
             ])
         self.calendarbutton = Button(self.container3, text="Calendar", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                     borderwidth=2, relief="raised", height=1,width=1, padx=15, pady=0, highlightthickness=0,
+                                     borderwidth=2, relief="raised", height=1,width=1, highlightthickness=0,
                                      command=lambda: [
             self.show_frame(CalendarPage),
             self.togglebuttonrelief(self.calendarbutton)
@@ -306,7 +310,9 @@ class Window(Tk):
         self.eventlistbutton.grid(row=0, column=9, rowspan=2, columnspan=3, sticky=N+S+E+W)
         self.eventregistrationbutton.grid(row=0, column=12, rowspan=2,columnspan=3,  sticky=N+S+E+W)
         self.eventcreationbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.eventcreationbutton.grid_propagate(0)
         self.viewparticipantsbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=N+S+E+W)
+        self.viewparticipantsbutton.grid_propagate(0)
         self.calendarbutton.grid(row=0, column=21, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.feedbackbutton.grid(row=0, column=24, rowspan=2,columnspan=3, sticky=N+S+E+W)
         self.sidecalendar.grid(row=7, column=0, rowspan=2, columnspan=2, sticky=NSEW)
@@ -370,24 +376,24 @@ class Window(Tk):
             Label(self.windowmanagementframe, width=1, bg=NAVYBLUE).grid(
                 row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
 
-        self.minimizebutton = Button(self.windowmanagementframe, text="Show", font=("Atkinson Hyperlegible", 14),
-                                    bg="#fdbc40", fg="WHITE", width=1, height=1,
+        self.minimizebutton = Button(self.windowmanagementframe, text="Show", font=("Atkinson Hyperlegible", 12),
+                                    bg="#fdbc40", fg="WHITE", width=1, height=1, relief="flat",
                                     command=lambda:[
             self.state('normal'),
             self.showthewindowbar()
         ])
         self.minimizebutton.grid(row=0, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.minimizebutton.grid_propagate(0)
-        self.maximizebutton = Button(self.windowmanagementframe, text="Hide", font=("Atkinson Hyperlegible", 14),
-                                    bg="#33c748", fg="WHITE", width=1, height=1,
+        self.maximizebutton = Button(self.windowmanagementframe, text="Hide", font=("Atkinson Hyperlegible", 12),
+                                    bg="#33c748", fg="WHITE", width=1, height=1, relief="flat",
                                     command=lambda:[
             self.deletethewindowbar(),
             print(self.get_display_size())
         ])
         self.maximizebutton.grid(row=1, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
         self.maximizebutton.grid_propagate(0)
-        self.closewindowbutton = Button(self.windowmanagementframe, text="Close", font=("Atkinson Hyperlegible", 14),
-                                    bg="#fc5753", fg="WHITE", width=1, height=1,
+        self.closewindowbutton = Button(self.windowmanagementframe, text="Close", font=("Atkinson Hyperlegible", 12),
+                                    bg="#fc5753", fg="WHITE", width=1, height=1, relief="flat",
                                     command=lambda:[
             self.destroy()
         ])
