@@ -457,8 +457,6 @@ class Window(Tk):
             ])
         self.closebutton.grid(row=8, column=1, rowspan=2, columnspan=10, sticky=N+S+E+W,padx=2)
         self.closebutton.grid_propagate(0)
-
-
         self.signoutbutton.grid_propagate(0)
         self.studentbutton.grid_propagate(0)
         self.adminbutton.grid_propagate(0)
@@ -781,6 +779,7 @@ class LoginPage(Frame):
         Frame.__init__(self, parent, bg=LIGHTPURPLE)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.controller = controller
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, height=2, bg=LIGHTPURPLE).grid(
@@ -928,8 +927,13 @@ class LoginPage(Frame):
         # logolabel.grid(row=1, column=24, columnspan=18,
         #                rowspan=5, sticky=N+S+E+W)
         self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
-        self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-            (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
+        if controller.screensize == (1920, 1080):
+            self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+                (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
+        elif controller.screensize > (1920, 1080):
+            self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+                (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        
         self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
         self.backgroundimagelabel.grid_propagate(0)
