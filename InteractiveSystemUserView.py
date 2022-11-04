@@ -95,6 +95,7 @@ class Window(Tk):
         if self.screensize == (1920, 1080):
             self.geometry(
                 f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1049 * dpi / 96)}')
+            
         elif self.screensize > (1920, 1080):
             self.geometry(
                 f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
@@ -928,12 +929,8 @@ class LoginPage(Frame):
         # logolabel.grid(row=1, column=24, columnspan=18,
         #                rowspan=5, sticky=N+S+E+W)
         self.backgroundimageoriginal = Image.open(r"Assets\backgroundimage.png")
-        if controller.screensize == (1920, 1080):
-            self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-                (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
-        elif controller.screensize > (1920, 1080):
-            self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-                (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
         
         self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
@@ -957,7 +954,7 @@ class LoginPage(Frame):
             'Arial', 10), width=1, height=1, fg='#000000', bg='#FFF5E4')
         emailfield = Entry(self, width=1, bg='#FFFFFF', highlightthickness=1,
                            font=(FONTNAME, 14), justify='center')
-        emailfield.grid(row=7, column=25, columnspan=13,
+        emailfield.grid(row=7, column=25, columnspan=13,    
                         rowspan=2, sticky=N+S+E+W)
         emailfield.insert(0, EMAILTEXT)
         emailfield.grid_propagate(0)
@@ -1068,77 +1065,84 @@ class MainPage(Frame):
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
         # Picture
-        self.originalimage = Image.open(r"assets\Home-Banner-INTI.png")
-        self.resultingimage = ImageTk.PhotoImage(self.originalimage.resize(
-            (math.ceil(600 * dpi / 96), math.ceil(200 * dpi / 96)), Image.Resampling.LANCZOS))
-        imagelabel = Label(self, image=self.resultingimage,
-                           anchor=CENTER, width=1, height=1)
-        imagelabel.grid(row=1, column=2, columnspan=16,
-                        rowspan=4, sticky=N+S+E+W)
+        self.backgroundimageoriginal = Image.open(r"Assets\Main Page.png")
+        self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        
+        self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
+        self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
+        self.backgroundimagelabel.grid_propagate(0)
+        # self.originalimage = Image.open(r"assets\Home-Banner-INTI.png")
+        # self.resultingimage = ImageTk.PhotoImage(self.originalimage.resize(
+        #     (math.ceil(600 * dpi / 96), math.ceil(200 * dpi / 96)), Image.Resampling.LANCZOS))
+        # imagelabel = Label(self, image=self.resultingimage,
+        #                    anchor=CENTER, width=1, height=1)
+        # imagelabel.grid(row=1, column=2, columnspan=16,
+        #                 rowspan=4, sticky=N+S+E+W)
 
-        self.notificationimage = Image.open(r"assets\Notification.png")
-        self.resultimage = ImageTk.PhotoImage(self.notificationimage.resize(
-            (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
-        imagelabel = Label(self, image=self.resultimage,
-                           anchor=CENTER, width=1, height=1)
-        imagelabel.grid(row=11, column=20, columnspan=5,
-                        rowspan=4, sticky=N+S+E+W)
+        # self.notificationimage = Image.open(r"assets\Notification.png")
+        # self.resultimage = ImageTk.PhotoImage(self.notificationimage.resize(
+        #     (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        # imagelabel = Label(self, image=self.resultimage,
+        #                    anchor=CENTER, width=1, height=1)
+        # imagelabel.grid(row=11, column=20, columnspan=5,
+        #                 rowspan=4, sticky=N+S+E+W)
 
-        self.registrationimage = Image.open(r"assets\registration form.png")
-        self.outcomeimage = ImageTk.PhotoImage(self.registrationimage.resize(
-            (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
-        imagelabel = Label(self, image=self.outcomeimage,
-                           anchor=CENTER, width=1, height=1)
-        imagelabel.grid(row=11, column=28, columnspan=5,
-                        rowspan=4, sticky=N+S+E+W)
+        # self.registrationimage = Image.open(r"assets\registration form.png")
+        # self.outcomeimage = ImageTk.PhotoImage(self.registrationimage.resize(
+        #     (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        # imagelabel = Label(self, image=self.outcomeimage,
+        #                    anchor=CENTER, width=1, height=1)
+        # imagelabel.grid(row=11, column=28, columnspan=5,
+        #                 rowspan=4, sticky=N+S+E+W)
 
-        self.calendarimage = Image.open(r"assets\Calendar.png")
-        self.outcomingimage = ImageTk.PhotoImage(self.calendarimage.resize(
-            (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
-        imagelabel = Label(self, image=self.outcomingimage,
-                           anchor=CENTER, width=1, height=1)
-        imagelabel.grid(row=11, column=36, columnspan=5,
-                        rowspan=4, sticky=N+S+E+W)
+        # self.calendarimage = Image.open(r"assets\Calendar.png")
+        # self.outcomingimage = ImageTk.PhotoImage(self.calendarimage.resize(
+        #     (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        # imagelabel = Label(self, image=self.outcomingimage,
+        #                    anchor=CENTER, width=1, height=1)
+        # imagelabel.grid(row=11, column=36, columnspan=5,
+        #                 rowspan=4, sticky=N+S+E+W)
 
-        # Label
-        todotext = """Feedback"""
-        todolabel = Label(self, text=todotext, font=(
-            'Lucida Calligraphy', 20), justify=('left'), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        todolabel.grid(row=6, column=2, columnspan=16,
-                       rowspan=1, sticky=N+S+E+W)
+        # # Label
+        # todotext = """Feedback"""
+        # todolabel = Label(self, text=todotext, font=(
+        #     'Lucida Calligraphy', 20), justify=('left'), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # todolabel.grid(row=6, column=2, columnspan=16,
+        #                rowspan=1, sticky=N+S+E+W)
 
-        todotext = """Upcoming Events"""
-        todolabel = Label(self, text=todotext, font=(
-            'Lucida Calligraphy', 20), justify=('left'), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        todolabel.grid(row=13, column=2, columnspan=16,
-                       rowspan=1, sticky=N+S+E+W)
+        # todotext = """Upcoming Events"""
+        # todolabel = Label(self, text=todotext, font=(
+        #     'Lucida Calligraphy', 20), justify=('left'), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # todolabel.grid(row=13, column=2, columnspan=16,
+        #                rowspan=1, sticky=N+S+E+W)
 
-        # TODO label
-        todotext = """If you want to get more enquiries,you can ask INTI IT management through\nphone number: + 04-6355793 or email: iicpitmanagement@newinti.edu.my"""
-        todolabel = Label(self, text=todotext, font=(
-            'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        todolabel.grid(row=1, column=20, columnspan=21,
-                       rowspan=2, sticky=N+S+E+W)
+        # # TODO label
+        # todotext = """If you want to get more enquiries,you can ask INTI IT management through\nphone number: + 04-6355793 or email: iicpitmanagement@newinti.edu.my"""
+        # todolabel = Label(self, text=todotext, font=(
+        #     'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # todolabel.grid(row=1, column=20, columnspan=21,
+        #                rowspan=2, sticky=N+S+E+W)
 
         # Widgets
-        placeholderlabel = Label(self, text="Welcome To INTI Announcement website.\nAs a member of IT staffs, we hear a lot of complaints\nand dissatisfaction from our students that the announcements\nmiss out or overlooked the date and duration of event.\nTo prevent this situation happen again\nINTI decided to create\na special announcement website for students.\n This will be a golden opportunity\n for you all to enjoy this welfare.", font=(
-            'Arial', 16), justify=('center'), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        placeholderlabel.grid(row=4, column=20, columnspan=21,
-                              rowspan=6, sticky=N+S+E+W)
+        # placeholderlabel = Label(self, text="Welcome To INTI Announcement website.\nAs a member of IT staffs, we hear a lot of complaints\nand dissatisfaction from our students that the announcements\nmiss out or overlooked the date and duration of event.\nTo prevent this situation happen again\nINTI decided to create\na special announcement website for students.\n This will be a golden opportunity\n for you all to enjoy this welfare.", font=(
+        #     'Arial', 16), justify=('center'), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # placeholderlabel.grid(row=4, column=20, columnspan=21,
+        #                       rowspan=6, sticky=N+S+E+W)
 
         # Buttons
-        self.feedbackimage = Image.open(r"assets\feedbackimage.png")
-        self.feedbackimage = ImageTk.PhotoImage(self.feedbackimage.resize(
-            (math.ceil(258 * dpi / 96), math.ceil(172 * dpi / 96)), Image.Resampling.LANCZOS)),
-        feedbackbutton = Button(self, image=self.feedbackimage, width=1, height=1, fg='#000000', bg='#FFF5E4',
-        command=lambda: [
-        controller.show_frame(FeedbackForm),
-        controller.togglebuttonrelief(controller.feedbackbutton)
-        ])
-        feedbackbutton.grid(row=8, column=2, columnspan=16,
-                            rowspan=4, sticky=N+S+E+W)
-        imagelabel = Label(self, image=self.feedbackimage,
-                           anchor=CENTER, width=1, height=1)
+        # self.feedbackimage = Image.open(r"assets\feedbackimage.png")
+        # self.feedbackimage = ImageTk.PhotoImage(self.feedbackimage.resize(
+        #     (math.ceil(258 * dpi / 96), math.ceil(172 * dpi / 96)), Image.Resampling.LANCZOS)),
+        # feedbackbutton = Button(self, image=self.feedbackimage, width=1, height=1, fg='#000000', bg='#FFF5E4',
+        # command=lambda: [
+        # controller.show_frame(FeedbackForm),
+        # controller.togglebuttonrelief(controller.feedbackbutton)
+        # ])
+        # feedbackbutton.grid(row=8, column=2, columnspan=16,
+        #                     rowspan=4, sticky=N+S+E+W)
+        # imagelabel = Label(self, image=self.feedbackimage,
+        #                    anchor=CENTER, width=1, height=1)
 
         eventnamebutton = Button(self, text="Event 1", font=(
         'Arial', 12), width=1, height=1, fg='#000000', bg='#FFF5E4',
@@ -1171,9 +1175,10 @@ class MainPage(Frame):
         controller.togglebuttonrelief(controller.eventlistbutton)])
         theeventnamebutton.grid(row=18, column=2, columnspan=16,
                                 rowspan=1, sticky=N+S+E+W)
-
-        eventlistbutton = Button(self, text="Event List", font=(
-        'Lucida Calligraphy', 16), width=1, height=1, fg='#000000', bg='#FFF5E4',
+        self.eventlistbuttonimage = Image.open(r"Assets\Event List Button.png")
+        self.eventlistbuttonimage = ImageTk.PhotoImage(self.eventlistbuttonimage.resize(
+            (math.ceil(200 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        eventlistbutton = Button(self, image=self.eventlistbuttonimage, width=1, height=1, 
         command=lambda: [
         controller.show_frame(EventView),
         controller.togglebuttonrelief(controller.eventlistbutton)])
@@ -1234,7 +1239,17 @@ class EventView(Frame):
         # unsizebutton = Button(
         #     self, text="Small", command=lambda: _.revertcontainersize(self, parent))
         # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
-
+        self.backgroundimageoriginal = Image.open(r"Assets\Event View Page.png")
+        if controller.screensize == (1920, 1080):
+            self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+                (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
+        elif controller.screensize > (1920, 1080):
+            self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
+                (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        
+        self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
+        self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
+        self.backgroundimagelabel.grid_propagate(0)
         # Widgets
         label = Label(self, text="This is the event view page", font=(
             'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
@@ -1324,18 +1339,10 @@ class EventRegistration(Frame):
                 event_list.append(row[0])
             self.eventdropdown['values'] = event_list
         
-        try:
-            with conn:
-                c.execute("""SELECT event_name FROM eventcreation""")
-                for eventname in c.fetchall():
-                    event_list.append(eventname)
-        except sqlite3.OperationalError:
-            c.execute("""CREATE TABLE IF NOT EXISTS eventcreation (
-            event_name text NOT NULL,
-            eventkey_number text PRIMARY KEY NOT NULL, 
-            venue_name text,
-            hostname text NOT NULL
-            )""")
+        with conn:
+            c.execute("""SELECT event_name FROM eventcreation""")
+            for eventname in c.fetchall():
+                event_list.append(eventname[0])
 
         self.eventdropdown = ttk.Combobox(
             self, values=event_list, width=1, state='readonly')
