@@ -136,7 +136,7 @@ class Window(Tk):
                              columnspan=30, sticky=N+S+E+W)
         for x in range(30):
             Grid.columnconfigure(self.container3, x, weight=1, uniform='row')
-            Label(self.container3, height=1, bg=DARKBLUE,relief="solid").grid(
+            Label(self.container3, height=1, bg=DARKBLUE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(2):
             Grid.rowconfigure(self.container3, y, weight=1, uniform='row')
