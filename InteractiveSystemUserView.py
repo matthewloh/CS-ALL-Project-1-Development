@@ -997,15 +997,6 @@ class LoginPage(Frame):
                               rowspan=2, sticky=N+S+E+W)
         checkstatebutton.grid_propagate(0)
 
-        self.imagewithtext= Image.open(r"Assets\decoration.jpg")
-        self.imagewithtext = ImageTk.PhotoImage(self.imagewithtext.resize(
-            (math.ceil(240 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
-        self.imagewithtextlabel = Label(self, text="Yeah", font=(FONTNAME,18),image=self.imagewithtext, width=1, height=1,
-        compound=CENTER, bg=LIGHTPURPLE)
-        self.imagewithtextlabel.grid(row=0, column=0, rowspan=2, columnspan=6, sticky=N+S+E+W)
-        self.imagewithtextlabel.grid_propagate(0)
-
-
         # self.titleart = Image.open(r"assets\DR7j7r0.png")
         # self.titleart = ImageTk.PhotoImage(self.titleart.resize(
         #     (math.ceil(780 * dpi / 96), math.ceil(320 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -1387,7 +1378,7 @@ class EventView(Frame):
         self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
         self.update_location(self.eventsname[self.imageindex][1])
         self.update_date(self.eventsname[self.imageindex][1])
-        
+
     
 
 
