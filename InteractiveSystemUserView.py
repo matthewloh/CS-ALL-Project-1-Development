@@ -277,8 +277,8 @@ class Window(Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky="nsew")
         #Shows the loading frame
-        self.show_frame(LoginPage)
-        self.togglebuttonrelief(self.loginbutton)
+        self.show_frame(EventView)
+        self.togglebuttonrelief(self.eventlistbutton)
 
     def signout(self):
         self.mainpagebutton.grid_forget()
