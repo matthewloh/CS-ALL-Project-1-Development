@@ -277,7 +277,7 @@ class Window(Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky="nsew")
         #Shows the loading frame
-        self.show_frame(EventView)
+        self.show_frame(LoginPage)
         self.togglebuttonrelief(self.loginbutton)
 
     def signout(self):
@@ -1243,7 +1243,7 @@ class EventView(Frame):
         self.backgroundimageoriginal = Image.open(r"Assets\eventviewpage\backgroundimage.png")
         if controller.screensize == (1920, 1080):
             self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
-                (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
+                (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
         elif controller.screensize > (1920, 1080):
             self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
                 (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
