@@ -277,7 +277,7 @@ class Window(Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky="nsew")
         #Shows the loading frame
-        self.show_frame(LoginPage)
+        self.show_frame(EventView)
         self.togglebuttonrelief(self.loginbutton)
 
     def signout(self):
@@ -997,6 +997,15 @@ class LoginPage(Frame):
                               rowspan=2, sticky=N+S+E+W)
         checkstatebutton.grid_propagate(0)
 
+        self.imagewithtext= Image.open(r"Assets\decoration.jpg")
+        self.imagewithtext = ImageTk.PhotoImage(self.imagewithtext.resize(
+            (math.ceil(240 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.imagewithtextlabel = Label(self, text="Yeah", font=(FONTNAME,18),image=self.imagewithtext, width=1, height=1,
+        compound=CENTER, bg=LIGHTPURPLE)
+        self.imagewithtextlabel.grid(row=0, column=0, rowspan=2, columnspan=6, sticky=N+S+E+W)
+        self.imagewithtextlabel.grid_propagate(0)
+
+
         # self.titleart = Image.open(r"assets\DR7j7r0.png")
         # self.titleart = ImageTk.PhotoImage(self.titleart.resize(
         #     (math.ceil(780 * dpi / 96), math.ceil(320 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -1044,6 +1053,7 @@ class LoginPage(Frame):
             randombutton = Button(randomframe, text="click me to close ", font=("Comic Sans Ms", 18), bg=DARKBLUE, fg="WHITE", command=lambda:[
             randomframe.grid_forget()])
             randombutton.grid(row=6, column=0, rowspan=1, columnspan=14, sticky=N+S+E+W,pady=5)
+        
 
     def hidealabel(self):
         self.label.grid_remove()
@@ -1239,7 +1249,7 @@ class EventView(Frame):
         # unsizebutton = Button(
         #     self, text="Small", command=lambda: _.revertcontainersize(self, parent))
         # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
-        self.backgroundimageoriginal = Image.open(r"Assets\Event View Page.png")
+        self.backgroundimageoriginal = Image.open(r"Assets\eventviewpage\backgroundimage.png")
         if controller.screensize == (1920, 1080):
             self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
                 (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -1250,11 +1260,143 @@ class EventView(Frame):
         self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
         self.backgroundimagelabel.grid_propagate(0)
+
         # Widgets
-        label = Label(self, text="This is the event view page", font=(
-            'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        label.grid(row=1, column=2, columnspan=17,
-                   rowspan=2, sticky=N+S+E+W)
+        # label = Label(self, text="This is the event view page", font=(
+        #     'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # label.grid(row=1, column=2, columnspan=17,
+        #            rowspan=2, sticky=N+S+E+W)
+        self.showcaseimage = Label(self, image="", width=1, height=1, bg=LIGHTPURPLE)
+        self.showcaseimage.grid(row=1, column=23, columnspan=17,
+                     rowspan=17, sticky=N+S+E+W)
+        self.happeninglabelimage = Image.open(r"Assets\eventviewpage\whatshappening.png")
+        self.happeninglabelimage = ImageTk.PhotoImage(self.happeninglabelimage.resize(
+            (math.ceil(360 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.happeninglabel = Label(self, image=self.happeninglabelimage, width=1, height=1, bg=LIGHTPURPLE)
+        self.happeninglabel.grid(row=0, column=21, columnspan=9,
+                        rowspan=3, sticky=N+S+E+W)
+
+        self.eventdetailsimage = Image.open(r"Assets\eventviewpage\eventdetails.png")
+        self.eventdetailsimage = ImageTk.PhotoImage(self.eventdetailsimage.resize(
+            (math.ceil(480 * dpi / 96), math.ceil(360 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.eventdetails = Label(self, image=self.eventdetailsimage, width=1, height=1, relief="flat")
+        self.eventdetails.grid(row=10, column=29, columnspan=12,
+                        rowspan=9, sticky=N+S+E+W)
+        self.titleart = Image.open(r"Assets\eventviewpage\titleart.png")
+        self.titleart = ImageTk.PhotoImage(self.titleart.resize(
+            (math.ceil(320 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.titleartlabel = Label(self,
+        text="", font=("Avenir Next Medium", 18), fg = "black",
+        image=self.titleart, compound=CENTER, width=1, height=1, bg=LIGHTPURPLE)
+        self.titleartlabel.grid(row=11, column=31, columnspan=8, rowspan=2, sticky=N+S+E+W)
+        self.dateart = Image.open(r"Assets\eventviewpage\datepicture.png")
+        self.dateart = ImageTk.PhotoImage(self.dateart.resize(
+            (math.ceil(240 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.dateartlabel = Label(self,
+        text="", font=("Avenir Next Medium", 18), fg = "black", relief="solid",
+        image=self.dateart, compound=CENTER, width=1, height=1)
+        self.dateartlabel.grid(row=14, column=33, columnspan=6, rowspan=2, sticky=N+S+E+W)
+        self.locationart = Image.open(r"Assets\eventviewpage\locationpicture.png")
+        self.locationart = ImageTk.PhotoImage(self.locationart.resize(
+            (math.ceil(240 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.locationartlabel = Label(self,
+        text="", font=("Avenir Next Medium", 18), fg = "black", relief="solid",
+        image=self.dateart, compound=CENTER, width=1, height=1)
+        self.locationartlabel.grid(row=16, column=31, columnspan=6, rowspan=2, sticky=N+S+E+W)
+
+
+
+
+        self.leftarrowimage = Image.open(r"Assets\eventviewpage\Left Arrow.png")
+        self.leftarrowimage = ImageTk.PhotoImage(self.leftarrowimage.resize(
+            (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.leftarrowbutton = Button(self, image=self.leftarrowimage, width=1, height=1, relief="flat",
+        command=lambda: self.previous_image())
+        self.leftarrowbutton.grid(row=16, column=21, columnspan=3,
+                                    rowspan=3, sticky= NSEW)
+        self.rightarrowimage = Image.open(r"Assets\eventviewpage\Right Arrow.png")
+        self.rightarrowimage = ImageTk.PhotoImage(self.rightarrowimage.resize(
+            (math.ceil(120 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.rightarrowbutton = Button(self, image=self.rightarrowimage, width=1, height=1, relief="flat",
+        command=lambda: self.next_image())
+        self.rightarrowbutton.grid(row=16, column=25, columnspan=3,
+                                rowspan=3, sticky=N+S+E+W)
+        self.eventsname = []
+
+        self.after(100, self.updateevents)
+        self.imageindex = 0
+
+    def updateevents(self):
+        # read all the events already created and store them in a list
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT event_name FROM eventcreation")
+            self.events = self.c.fetchall()
+            for index, name in list(enumerate(self.events)):
+                actualname = name[0]
+                self.eventsname.append((index, actualname))
+        self.read_blob(self.eventsname[0][1])
+        self.titleartlabel.config(text=self.eventsname[0][1])
+        self.update_location(self.eventsname[0][1])
+        self.update_date(self.eventsname[0][1])
+    def update_location(self, event):
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT venue_name FROM eventcreation WHERE event_name = ?", (event,))
+            self.location = self.c.fetchone()
+            self.locationartlabel.config(text=self.location[0])
+    def update_date(self, event):
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT event_startdate FROM eventcreation WHERE event_name = ?", (event,))
+            self.date = self.c.fetchone()
+            self.dateartlabel.config(text=self.date[0])
+    def read_blob(self, eventname):
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT event_image FROM eventcreation WHERE event_name = ?", (eventname,))
+            self.blobData = io.BytesIO(self.c.fetchone()[0])
+            self.img = Image.open(self.blobData)
+            self.img = ImageTk.PhotoImage(self.img.resize(
+                (math.ceil(680 * dpi / 96), math.ceil(680 * dpi / 96)), Image.Resampling.LANCZOS))
+            self.showcaseimage.configure(image=self.img)
+
+    def previous_image(self):
+        # clicking the left arrow button will show the last image at final index
+        if self.imageindex > 0:
+            self.imageindex -= 1
+        elif self.imageindex == 0:
+            self.imageindex += len(self.eventsname) - 1
+        self.read_blob(self.eventsname[self.imageindex][1])
+        self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
+        self.update_location(self.eventsname[self.imageindex][1])
+        self.update_date(self.eventsname[self.imageindex][1])
+
+
+
+    def next_image(self):
+        #this function is to change the image to the next image in the list
+        self.imageindex += 1
+        if self.imageindex == len(self.eventsname):
+            self.imageindex = 0
+        self.read_blob(self.eventsname[self.imageindex][1])
+        self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
+        self.update_location(self.eventsname[self.imageindex][1])
+        self.update_date(self.eventsname[self.imageindex][1])
+        
+    
+
+
+            
+
+
+
+
+
 
 class EventRegistration(Frame):
     def __init__(self, parent, controller):
