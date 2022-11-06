@@ -205,37 +205,38 @@ class Window(Tk):
 
         # Sign out button
         self.bottomleftbuttons = Frame(
-            self, bg=NAVYBLUE, width=1, height=1, borderwidth=2, relief="flat", padx=0, pady=0)
-        self.bottomleftbuttons.grid(row=16, column=0, rowspan=2, columnspan=16,
+            self, bg=NAVYBLUE, width=1, height=1, relief="flat")
+        self.bottomleftbuttons.grid(row=16, column=0, rowspan=2, columnspan=20,
                              sticky=N+S+E+W)
         self.bottomleftbuttons.grid_propagate(0)
-        for x in range(16):
+        for x in range(20):
                 Grid.columnconfigure(self.bottomleftbuttons, x, weight=1, uniform='row')
-                Label(self.bottomleftbuttons, height=2, bg=NAVYBLUE).grid(
+                Label(self.bottomleftbuttons, width=1, bg=NAVYBLUE).grid(
                   row=0, column=x,rowspan=1, columnspan=2, sticky=N+S+E+W)
         for y in range(2):
                 Grid.rowconfigure(self.bottomleftbuttons, y, weight=1, uniform='row')
-                Label(self.bottomleftbuttons, width=5, bg=NAVYBLUE).grid(
+                Label(self.bottomleftbuttons, width=1, bg=NAVYBLUE).grid(
                     row=y, column=0, rowspan=2, columnspan=1, sticky=N+S+E+W)
 
         self.signoutbutton = Button(self.bottomleftbuttons, text="Sign Out", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                    borderwidth=2, relief="solid", height=1,width=1,
+                                    relief="solid", height=1, width=1,
                                     command=lambda: [
             self.show_frame(LoginPage),
             self.togglebuttonrelief(self.loginbutton),
             self.signout()])
         self.signoutbutton.grid(row=0, column=0, rowspan=2,columnspan=3, sticky=N+S+E+W)
-        self.studentbutton = Button(self.bottomleftbuttons, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                    borderwidth=2, relief="solid", height=3, width=10,
-                                    command=lambda: [self.show_loggedin()])
+        self.studentbutton = Button(self.bottomleftbuttons, text="Student\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20), relief="solid", height=1, width=1,
+        command=lambda: [self.show_loggedin()])
         self.studentbutton.grid(row=0, column=3, rowspan=2,columnspan=3, sticky=N+S+E+W)
 
         self.adminbutton = Button(self.bottomleftbuttons, text="Admin\nButton", bg=NICEBLUE, fg="white", font=(FONTFORBUTTONS, 20),
-                                  borderwidth=2, relief="solid", height=3, width=10,
+                                  relief="solid", height=1, width=1,
                                   command=lambda: [self.show_admin()])
         self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=N+S+E+W)
-        self.container5 = Frame(self, bg=NAVYBLUE, width=1, height=1,
-                                borderwidth=0, relief="flat")
+        self.remindercontainer = Frame(self.bottomleftbuttons, bg=NAVYBLUE, width=1, height=1,
+        borderwidth=2, relief="flat")
+        self.remindercontainer.grid(row=0, column=14, rowspan=2, columnspan=6, sticky=NSEW)
+        self.container5 = Frame(self, bg=NAVYBLUE, width=1, height=1)
         self.container5.grid(row=2, column=0, rowspan=14, columnspan=2,
                              sticky=N+S+E+W)
         self.container5.grid_propagate(0)
@@ -279,6 +280,13 @@ class Window(Tk):
         #Shows the loading frame
         self.show_frame(EventView)
         self.togglebuttonrelief(self.eventlistbutton)
+
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+
+    def get_page(self, page_class):
+        return self.frames[page_class]
 
     def signout(self):
         self.mainpagebutton.grid_forget()
@@ -351,16 +359,9 @@ class Window(Tk):
         style |= (WS_CAPTION | WS_THICKFRAME)
         SetWindowLongPtrW(hwnd, GWL_STYLE, style)
 
-    def show_frame(self, cont):
-        frame = self.frames[cont]
-        frame.tkraise()
-
-    def get_page(self, page_class):
-        return self.frames[page_class]
-
     def make_a_container(self):
         self.randomframe.grid_remove()
-        self.randomframe.grid(row=7, column=2, rowspan=6, columnspan=6,
+        self.randomframe.grid(row=10, column=9, rowspan=6, columnspan=11,
                             sticky=N+S+E+W)
     #Window management button frame
     def createwindowmanagementframe(self):
@@ -1225,21 +1226,6 @@ class EventView(Frame):
             Label(self, width=5, bg=LAVENDER).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
 
-        class _(Window):
-            def changecontainersize(self, container):
-                container.grid(row=2, column=16, rowspan=14,
-                               columnspan=14, sticky=N+S+E+W)
-
-            def revertcontainersize(self, container):
-                container.grid(row=3, column=17, columnspan=13,
-                               rowspan=12, sticky=N+S+E+W)
-
-        # sizebutton = Button(
-        #     self, text="Big", command=lambda: _.changecontainersize(self, parent))
-        # sizebutton.grid(row=1, column=1, sticky=N+S+E+W)
-        # unsizebutton = Button(
-        #     self, text="Small", command=lambda: _.revertcontainersize(self, parent))
-        # unsizebutton.grid(row=2, column=1, sticky=N+S+E+W)
         self.backgroundimageoriginal = Image.open(r"Assets\eventviewpage\backgroundimage.png")
         if controller.screensize == (1920, 1080):
             self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
@@ -1252,14 +1238,10 @@ class EventView(Frame):
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
         self.backgroundimagelabel.grid_propagate(0)
 
-        # Widgets
-        # label = Label(self, text="This is the event view page", font=(
-        #     'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        # label.grid(row=1, column=2, columnspan=17,
-        #            rowspan=2, sticky=N+S+E+W)
         self.showcaseimage = Label(self, image="", width=1, height=1, bg=LIGHTPURPLE)
         self.showcaseimage.grid(row=1, column=23, columnspan=17,
                      rowspan=17, sticky=N+S+E+W)
+        
         self.happeninglabelimage = Image.open(r"Assets\eventviewpage\whatshappening.png")
         self.happeninglabelimage = ImageTk.PhotoImage(self.happeninglabelimage.resize(
             (math.ceil(360 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -1294,9 +1276,6 @@ class EventView(Frame):
         text="", font=("Avenir Next Medium", 18), fg = "black", relief="solid",
         image=self.dateart, compound=CENTER, width=1, height=1)
         self.locationartlabel.grid(row=16, column=31, columnspan=6, rowspan=2, sticky=N+S+E+W)
-
-
-
 
         self.leftarrowimage = Image.open(r"Assets\eventviewpage\Left Arrow.png")
         self.leftarrowimage = ImageTk.PhotoImage(self.leftarrowimage.resize(
