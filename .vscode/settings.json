@@ -27,5 +27,8 @@
             "database": "vaccinerolloutsystem"
         }
     ],
-    "python.analysis.typeCheckingMode": "off"
+    "python.analysis.typeCheckingMode": "off",
+    "cSpell.words": [
+        "NICEPURPLE"
+    ]
 }
