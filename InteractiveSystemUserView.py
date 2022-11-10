@@ -2136,32 +2136,92 @@ class ViewParticipants(Frame):
         Button(self.tempframe, text="X", width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda:self.tempframe.grid_remove()).grid(row=0, column=17, rowspan=1, columnspan=1, sticky=NSEW)
         event_keybutton = Button(self.tempframe, text=f"Event Key: {event_key}", anchor=CENTER, image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER)
         event_keybutton.grid(row=0, column=1, rowspan=1, columnspan=8, sticky=NSEW)
-        event_namebutton = Button(self.tempframe, text=f"Event name: {event_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=self.changing_details("normal", event_name))
+        event_namebutton = Button(self.tempframe, text=f"Event name: {event_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_name))
         event_namebutton.grid(row=1, column=1, rowspan=1, columnspan=11, sticky=NSEW)
         event_descriptionbutton = Button(self.tempframe, text=f"Description:\n{event_description}", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
         event_descriptionbutton.grid(row=2, column=1, rowspan=3, columnspan=11, sticky=NSEW)
-        event_datebutton = Button(self.tempframe, text=f"Date: {event_startdate} - {event_enddate}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_datebutton = Button(self.tempframe, text=f"Date: {event_startdate} - {event_enddate}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE,command=lambda:self.changing_details("date", event_key, (event_startdate, event_enddate),(event_startdate, event_enddate)))
         event_datebutton.grid(row=5, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        event_timebutton = Button(self.tempframe, text=f"Time: {event_starttime} - {event_endtime}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_timebutton = Button(self.tempframe, text=f"Time: {event_starttime} - {event_endtime}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command= lambda:self.changing_details("time", event_key,(event_starttime, event_endtime)))
         event_timebutton.grid(row=6, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        event_organizerbutton = Button(self.tempframe, text=f"Organizer: {event_organizer}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_organizerbutton = Button(self.tempframe, text=f"Organizer: {event_organizer}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_organizer))
         event_organizerbutton.grid(row=7, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        venue_namebutton = Button(self.tempframe, text=f"Venue: {venue_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        venue_namebutton = Button(self.tempframe, text=f"Venue: {venue_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", venue_name, event_key=event_key))
         venue_namebutton.grid(row=8, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        host_namebutton = Button(self.tempframe, text=f"Host: {host_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        host_namebutton = Button(self.tempframe, text=f"Host: {host_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", host_name))
         host_namebutton.grid(row=9, column=1, rowspan=1, columnspan=11, sticky=NSEW)
         event_imagelabel = Label(self.tempframe, image=self.event_image, width=1, height=1, bg=LIGHTPURPLE)
         event_imagelabel.grid(row=1, column=13, rowspan=4, columnspan=4, sticky=NSEW) 
-    def changing_details(self, entrytype, text):
-        #entry type are normal, date and time and image
-        if entrytype == "normal":
-            entry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
-            entry.grid(row=11, column=1, rowspan=12, columnspan=10, sticky=NSEW)
-            entry.insert(0, text)
-        #If changing time provides two entries for start and end time
-        # If changing date provides two entries for start and end date
-        # If changing anything else just provide one entry for the new value
-        pass 
+        def changing_details(self, entrytype, event_key, detail_changed, *args, **kwargs):
+            #get all widgets that are entry type and then destroy them
+            self.conn = sqlite3.connect("interactivesystem.db")
+            self.c = self.conn.cursor()
+            def confirm_action(entrytype, value_changed, entry, *args, **kwargs):
+                #get the new value
+                new_value = entry.get()
+                #update the database
+                if entrytype == "normal":
+                    self.c.execute(f"UPDATE event_creation SET {value_changed} = ? WHERE event_key = ?", (new_value, event_key))
+                elif entrytype == "date":
+                    self.c.execute(f"UPDATE event_creation SET {event_key[0]} = ?, {event_key[1]} = ? WHERE event_key = ?", (new_value, new_value, self.event_key))
+                elif entrytype == "time":
+                    self.c.execute(f"UPDATE event_creation SET {event_key[0]} = ?, {event_key[1]} = ? WHERE event_key = ?", (new_value, new_value, self.event_key))
+                self.connection.commit()
+                #destroy the frame
+                self.tempframe.grid_remove()
+                #refresh the page
+                self.refresh_page()
+            for widget in self.tempframe.winfo_children():
+                if widget.winfo_class() == "Entry":
+                    widget.destroy()
+            if entrytype == "normal":
+                normalentry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
+                normalentry.grid(row=11, column=3, rowspan=2, columnspan=12, sticky=NSEW)
+                normalentry.delete(0, END)
+                normalentry.insert(0, args[0])
+                normalentry.focus_set()
+            elif entrytype == "date":
+                start_dateentry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
+                start_dateentry.grid(row=11, column=2, rowspan=2, columnspan=6, sticky=NSEW)
+                start_dateentry.delete(0, END)
+                start_dateentry.insert(0, args[0][0])
+                start_dateentry.focus_set()
+                enddateentry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
+                enddateentry.grid(row=11, column=10, rowspan=2, columnspan=6, sticky=NSEW)
+                enddateentry.delete(0, END)
+                enddateentry.insert(0, args[0][1])
+            elif entrytype == "time":
+                starttimeentry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
+                starttimeentry.grid(row=11, column=2, rowspan=2, columnspan=6, sticky=NSEW)
+                starttimeentry.delete(0, END)
+                starttimeentry.insert(0, args[0][0])
+                starttimeentry.focus_set()
+                endtimeentry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
+                endtimeentry.grid(row=11, column=10, rowspan=2, columnspan=6, sticky=NSEW)
+                endtimeentry.delete(0, END)
+                endtimeentry.insert(0, args[0][1])
+                confirmbutton = Button(self.tempframe, text="Confirm", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:confirm_action())
+
+                try:
+                    with self.conn:
+                        self.c.execute("UPDATE event_creation SET event_starttime = ?, event_endtime = ? WHERE event_id = ?", (starttimeentry.get(), endtimeentry.get(), event_key))
+                        messagebox.showinfo("Success", "Event time has been updated")
+                except Exception as e:
+                    messagebox.showerror("Error", "An error has occured" + e)
+
+    def confirm_changes(self, information:tuple):
+        # this function will be called when the user clicks on the confirm changes button 
+        # then, it will update the database with the new values
+        # information is a tuple that contains the following information:
+        # (event_name, event_description, event_startdate, event_enddate, event_starttime, event_endtime, event_organizer, venue_name, host_name)
+        # the information will be passed to the database and then the database will update the information
+        # then, the user will be redirected to the event page
+        self.conn = sqlite3.connect("interactivesystem.db")
+        self.c = self.conn.cursor()
+        self.c.execute("UPDATE event_creation SET event_name = ?, event_description = ?, event_startdate = ?, event_enddate = ?, event_starttime = ?, event_endtime = ?, event_organizer = ?, venue_name = ?, host_name = ? WHERE event_id = ?", (self.event_name.get(), self.event_description.get(), self.event_startdate.get(), self.event_enddate.get(), self.event_starttime.get(), self.event_endtime.get(), self.event_organizer.get(), self.venue_name.get(), self.host_name.get(), self.event_id))
+
+
+
 
 
     def delete_event(self):
