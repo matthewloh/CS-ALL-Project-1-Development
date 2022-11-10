@@ -2136,7 +2136,7 @@ class ViewParticipants(Frame):
         Button(self.tempframe, text="X", width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda:self.tempframe.grid_remove()).grid(row=0, column=17, rowspan=1, columnspan=1, sticky=NSEW)
         event_keybutton = Button(self.tempframe, text=f"Event Key: {event_key}", anchor=CENTER, image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER)
         event_keybutton.grid(row=0, column=1, rowspan=1, columnspan=8, sticky=NSEW)
-        event_namebutton = Button(self.tempframe, text=f"Event name: {event_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_namebutton = Button(self.tempframe, text=f"Event name: {event_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=self.changing_details("normal", event_name))
         event_namebutton.grid(row=1, column=1, rowspan=1, columnspan=11, sticky=NSEW)
         event_descriptionbutton = Button(self.tempframe, text=f"Description:\n{event_description}", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
         event_descriptionbutton.grid(row=2, column=1, rowspan=3, columnspan=11, sticky=NSEW)
@@ -2152,7 +2152,16 @@ class ViewParticipants(Frame):
         host_namebutton.grid(row=9, column=1, rowspan=1, columnspan=11, sticky=NSEW)
         event_imagelabel = Label(self.tempframe, image=self.event_image, width=1, height=1, bg=LIGHTPURPLE)
         event_imagelabel.grid(row=1, column=13, rowspan=4, columnspan=4, sticky=NSEW) 
-
+    def changing_details(self, entrytype, text):
+        #entry type are normal, date and time and image
+        if entrytype == "normal":
+            entry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
+            entry.grid(row=11, column=1, rowspan=12, columnspan=10, sticky=NSEW)
+            entry.insert(0, text)
+        #If changing time provides two entries for start and end time
+        # If changing date provides two entries for start and end date
+        # If changing anything else just provide one entry for the new value
+        pass 
 
 
     def delete_event(self):
