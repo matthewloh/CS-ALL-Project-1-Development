@@ -1935,7 +1935,7 @@ class ViewParticipants(Frame):
         self.createeventsimage = ImageTk.PhotoImage(self.createeventsimage.resize(
             (math.ceil(560 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
         self.createeventsbutton = Button(self.interfaceframe, image=self.createeventsimage, width=1, height=1, relief=RAISED,
-        command=lambda: print("hello"))
+        command=lambda: self.controller.show_frame(EventCreation))
         self.createeventsbutton.grid(row=5, column=2, rowspan=3, columnspan=14, sticky=NSEW) 
         self.manageeventsimage = Image.open(r"Assets\managementsuite\manageevents.png")
         self.manageeventsimage = ImageTk.PhotoImage(self.manageeventsimage.resize(
@@ -1980,13 +1980,19 @@ class ViewParticipants(Frame):
         self.criteriasearchimage = ImageTk.PhotoImage(self.criteriasearchimage.resize(
             (math.ceil(200 * dpi / 96), math.ceil(40 * dpi / 96)), Image.Resampling.LANCZOS))
         self.criteriasearchbutton = Button(self.interfaceframe, image=self.criteriasearchimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda: print("hello"))
-        self.criteriasearchbutton.grid(row=13, column=1, rowspan=1, columnspan=5, sticky=NSEW)
+        self.criteriasearchbutton.grid(row=11, column=1, rowspan=1, columnspan=5, sticky=NSEW)
         self.criteriasearchbutton.grid_propagate(False)
         self.searchallimage = Image.open(r"Assets\managementsuite\manageeventswidgets\allsearchbutton.png")
         self.searchallimage = ImageTk.PhotoImage(self.searchallimage.resize(
             (math.ceil(200 * dpi / 96), math.ceil(40 * dpi / 96)), Image.Resampling.LANCZOS))
         self.searchallbutton = Button(self.interfaceframe, image=self.searchallimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda:self.database_queries())
-        self.searchallbutton.grid(row=15, column=1, rowspan=1, columnspan=5, sticky=NSEW)
+        self.searchallbutton.grid(row=13, column=1, rowspan=1, columnspan=5, sticky=NSEW)
+        self.returnhomeimage = Image.open(r"Assets\managementsuite\manageeventswidgets\mainmenubutton.png")
+        self.returnhomeimage = ImageTk.PhotoImage(self.returnhomeimage.resize(
+            (math.ceil(200 * dpi / 96), math.ceil(40 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.returnhomebutton = Button(self.interfaceframe, image=self.returnhomeimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda: self.createlandingwidgets())
+        self.returnhomebutton.grid(row=15, column=1, rowspan=1, columnspan=5, sticky=NSEW)
+
 
         self.centerframe = Frame(self.interfaceframe, bg=LIGHTPURPLE)
         self.centerframe.grid(row=1, column=7, rowspan=15, columnspan=18, sticky=NSEW)
@@ -2045,17 +2051,19 @@ class ViewParticipants(Frame):
         self.framesneeded = math.ceil(self.eventcount / 4)
         #configure a label to display the page number
         self.page = 1
-        self.pagecount = Label(self.centerframe, width=1,height=1, text="Page " + str(self.page) + " of " + str(self.framesneeded), bg=LIGHTPURPLE, fg="black", font=("Arial", 14))
+        self.pagecount = Label(self.centerframe, width=1,height=1, text="Page\n" + str(self.page) + " of " + str(self.framesneeded), bg=LIGHTPURPLE, fg="black", font=("Arial", 14))
         self.pagecount.grid(row=0, column=15, rowspan=2, columnspan=3, sticky=NSEW) 
-        
+        self.backgroundforframes = Image.open(r"Assets\managementsuite\manageeventswidgets\backgroundforpages.png")
+        self.backgroundforframes = ImageTk.PhotoImage(self.backgroundforframes.resize(
+                (math.ceil(640 * dpi / 96), math.ceil(440 * dpi / 96)), Image.Resampling.LANCZOS))
         #configure the next and previous buttons
         button = Button(self.centerframe, text="<", height=1,width=1, command=lambda:self.previous_page())
-        button.grid(row=0, column=9, rowspan=1, columnspan=1, sticky=NSEW)
+        button.grid(row=2, column=15, rowspan=1, columnspan=1, sticky=NSEW)
         button2 = Button(self.centerframe, text=">", height=1,width=1, command=lambda:self.next_page())
-        button2.grid(row=0, column=11, rowspan=1, columnspan=1, sticky=NSEW)
+        button2.grid(row=2, column=17, rowspan=1, columnspan=1, sticky=NSEW)
         #configure the frames
         for x in range(self.framesneeded):
-            self.overallframes[x] = Frame(self.centerframe, bg=LIGHTPURPLE)
+            self.overallframes[x] = Frame(self.centerframe, bg=LIGHTPURPLE, relief=FLAT)
             self.overallframes[x].grid(row=3, column=1, rowspan=11, columnspan=16, sticky=NSEW)
             self.overallframes[x].grid_propagate(False)
             for y in range(11):
@@ -2066,6 +2074,9 @@ class ViewParticipants(Frame):
                 self.overallframes[x].columnconfigure(z, weight=1, uniform='x')
                 Label(self.overallframes[x], width=1, bg=NAVYBLUE).grid(
                     row=0, column=z, sticky=NSEW)
+            Label(self.overallframes[x], image=self.backgroundforframes, width=1, height=1, bg=LIGHTPURPLE).grid(
+                row=0, column=0, rowspan=11, columnspan=16, sticky=NSEW)
+            self.overallframes[x].grid_remove()
 
         initialrow = 0
         rowcount = 0
@@ -2073,34 +2084,92 @@ class ViewParticipants(Frame):
             event_name = event[0]
             if initialrow<=9:
                 Label(self.overallframes[0], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=initialrow, column=0, rowspan=2, columnspan=12, sticky=NSEW)
-                Button(self.overallframes[0], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda: print("hello")).grid(
+                Button(self.overallframes[0], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name:self.edit_event(event_name)).grid(
                     row=initialrow, column=12, rowspan=2, columnspan=2, sticky=NSEW)
                 Button(self.overallframes[0], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda: print("hello")).grid(
                     row=initialrow, column=14, rowspan=2, columnspan=2, sticky=NSEW)
             elif initialrow<=18:
                 Label(self.overallframes[1], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=rowcount, column=0, rowspan=2, columnspan=12, sticky=NSEW)
-                Button(self.overallframes[1], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda: print("hello")).grid(
+                Button(self.overallframes[1], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT,command=lambda event_name=event_name:self.edit_event(event_name)).grid(
                     row=rowcount, column=12, rowspan=2, columnspan=2, sticky=NSEW)
                 Button(self.overallframes[1], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda: print("hello")).grid(
                     row=rowcount, column=14, rowspan=2, columnspan=2, sticky=NSEW)
                 rowcount += 3
-            print(initialrow)
-            print(rowcount)
             initialrow += 3
 
+        self.overallframes[0].grid()
+    def edit_event(self, eventname):
+        # TODO: add code to edit the event
+        self.conn = sqlite3.connect("interactivesystem.db")
+        self.c = self.conn.cursor()
+        self.c.execute("SELECT * FROM eventcreation WHERE event_name=?", (eventname,))
+        # works on a temporary frame to display the event information
+        event_details = self.c.fetchone()
+        event_key = event_details[0]
+        event_name = event_details[1]
+        event_description = event_details[2]
+        event_startdate = event_details[3]
+        event_enddate = event_details[4]
+        event_starttime = event_details[5]
+        event_endtime = event_details[6]
+        event_organizer = event_details[7]
+        venue_name = event_details[8]
+        host_name = event_details[9]
+        event_image = io.BytesIO(event_details[10])
+        event_image = Image.open(event_image)
+        self.event_image = ImageTk.PhotoImage(event_image.resize(
+            (math.ceil(200 * dpi / 96), math.ceil(200 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.tempframe = Frame(self.interfaceframe, bg=LIGHTPURPLE, relief=FLAT)
+        self.tempframe.grid(row=1, column=7, rowspan=15, columnspan=18, sticky=NSEW)
+        self.tempframe.grid_propagate(False)
+        for y in range(15):
+            self.tempframe.rowconfigure(y, weight=1, uniform='y')
+            Label(self.tempframe, width=1, bg=NAVYBLUE).grid(
+                row=y, column=0, sticky=NSEW)
+        for z in range(18):
+            self.tempframe.columnconfigure(z, weight=1, uniform='x')
+            Label(self.tempframe, width=1, bg=NAVYBLUE).grid(
+                row=0, column=z, sticky=NSEW)
+        Label(self.tempframe, image=self.centerframebackgroundimage, width=1, height=1, bg=LIGHTPURPLE).grid(
+            row=0, column=0, rowspan=15, columnspan=18, sticky=NSEW)
+        #button to remove the frame
+        Button(self.tempframe, text="X", width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda:self.tempframe.grid_remove()).grid(row=0, column=17, rowspan=1, columnspan=1, sticky=NSEW)
+        event_keybutton = Button(self.tempframe, text=f"Event Key: {event_key}", anchor=CENTER, image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER)
+        event_keybutton.grid(row=0, column=1, rowspan=1, columnspan=8, sticky=NSEW)
+        event_namebutton = Button(self.tempframe, text=f"Event name: {event_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_namebutton.grid(row=1, column=1, rowspan=1, columnspan=11, sticky=NSEW)
+        event_descriptionbutton = Button(self.tempframe, text=f"Description:\n{event_description}", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_descriptionbutton.grid(row=2, column=1, rowspan=3, columnspan=11, sticky=NSEW)
+        event_datebutton = Button(self.tempframe, text=f"Date: {event_startdate} - {event_enddate}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_datebutton.grid(row=5, column=1, rowspan=1, columnspan=11, sticky=NSEW)
+        event_timebutton = Button(self.tempframe, text=f"Time: {event_starttime} - {event_endtime}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_timebutton.grid(row=6, column=1, rowspan=1, columnspan=11, sticky=NSEW)
+        event_organizerbutton = Button(self.tempframe, text=f"Organizer: {event_organizer}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_organizerbutton.grid(row=7, column=1, rowspan=1, columnspan=11, sticky=NSEW)
+        venue_namebutton = Button(self.tempframe, text=f"Venue: {venue_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        venue_namebutton.grid(row=8, column=1, rowspan=1, columnspan=11, sticky=NSEW)
+        host_namebutton = Button(self.tempframe, text=f"Host: {host_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        host_namebutton.grid(row=9, column=1, rowspan=1, columnspan=11, sticky=NSEW)
+        event_imagelabel = Label(self.tempframe, image=self.event_image, width=1, height=1, bg=LIGHTPURPLE)
+        event_imagelabel.grid(row=1, column=13, rowspan=4, columnspan=4, sticky=NSEW) 
 
-        self.overallframes[0].tkraise()
+
+
+    def delete_event(self):
+        # TODO: add code to delete the event
+        pass
     def next_page(self):
-        if self.page != self.framesneeded:
+        if self.page < self.framesneeded:
             self.page += 1
-            self.pagecount.config(text="Page " + str(self.page) + " of " + str(self.framesneeded))
-            self.overallframes[self.page].tkraise()
-        self.overallframes[self.page-1].tkraise()
+            self.pagecount.config(text="Page\n" + str(self.page) + " of " + str(self.framesneeded))
+            self.overallframes[self.page-2].grid_remove()
+            self.overallframes[self.page-1].grid()
     def previous_page(self):
-        if self.page == self.framesneeded:
+        if self.page > 1:
             self.page -= 1
-            self.pagecount.config(text="Page " + str(self.page) + " of " + str(self.framesneeded))
-            self.overallframes[self.page-1].tkraise()
+            self.pagecount.config(text="Page\n" + str(self.page) + " of " + str(self.framesneeded))
+            self.overallframes[self.page].grid_remove()
+            self.overallframes[self.page-1].grid()
 
 
 
