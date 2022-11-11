@@ -1288,6 +1288,14 @@ class EventRegistration(Frame):
         def focusout(event):
             self.read_blob(self.eventdropdown.get())
 
+        #Event Registration page background image)
+        self.bgwallpaper = Image.open(r"Assets\EventRegistration\EventRegistration.jpg")
+        self.bgwall = ImageTk.PhotoImage(self.bgwallpaper.resize(
+             (math.ceil(1680 * dpi / 96), math.ceil(817 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.bgwalllabel = Label(self, image=self.bgwall, width=1, height=1, bg=LIGHTPURPLE)
+        self.bgwalllabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
+        self.bgwalllabel.grid_propagate(0)
+
         # Widgets
         label = Label(self, text="This is the event registration page", font=(
             'Arial', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
