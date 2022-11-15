@@ -135,7 +135,7 @@ class Window(Tk):
         
         for x in range(28):
             Grid.columnconfigure(self.centercontainer, x, weight=1, uniform='row')
-            Label(self.centercontainer, height=1, bg=LAVENDER).grid(
+            Label(self.centercontainer, width=1, bg=LAVENDER).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(16):
             Grid.rowconfigure(self.centercontainer, y, weight=1, uniform='row')
@@ -149,11 +149,11 @@ class Window(Tk):
 
         for x in range(30):
             Grid.columnconfigure(self.buttoncontainer, x, weight=1, uniform='row')
-            Label(self.buttoncontainer, height=1, bg=DARKBLUE).grid(
+            Label(self.buttoncontainer, width=1, bg=DARKBLUE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(2):
             Grid.rowconfigure(self.buttoncontainer, y, weight=1, uniform='row')
-            Label(self.buttoncontainer, height=1, width=1, bg=DARKBLUE).grid(
+            Label(self.buttoncontainer, width=1, bg=DARKBLUE).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
 
         self.signupbutton = Button(self.buttoncontainer, text="Sign Up\n Page", bg=NICEBLUE,
@@ -267,11 +267,11 @@ class Window(Tk):
 
         for x in range(2):
                 Grid.columnconfigure(self.sidebarframe, x, weight=1, uniform='row')
-                Label(self.sidebarframe, height=1, bg=NAVYBLUE).grid(
+                Label(self.sidebarframe, width=1, bg=NAVYBLUE).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(14):
                 Grid.rowconfigure(self.sidebarframe, y, weight=1, uniform='row')
-                Label(self.sidebarframe, width=2, bg=NAVYBLUE).grid(
+                Label(self.sidebarframe, width=1, bg=NAVYBLUE).grid(
                 row=y, column=0, sticky=NSEW)
         
         self.bellimage = Image.open(r"assets\bell.png")
@@ -305,8 +305,8 @@ class Window(Tk):
             frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky=NSEW)
 
         #Shows the loading frame
-        self.show_frame(LoginPage)
-        self.togglebuttonrelief(self.loginbutton)
+        self.show_frame(ViewParticipants)
+        self.togglebuttonrelief(self.viewparticipantsbutton)
 
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -363,7 +363,7 @@ class Window(Tk):
 
         for x in range(8):
             Grid.columnconfigure(self.welcomeframe, x, weight=1, uniform='row')
-            Label(self.welcomeframe, height=1, bg=NICEBLUE).grid(
+            Label(self.welcomeframe, width=1, bg=NICEBLUE).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(2):
             Grid.rowconfigure(self.welcomeframe, y, weight=1, uniform='row')
@@ -402,7 +402,7 @@ class Window(Tk):
 
         for x in range(2):
             Grid.columnconfigure(self.windowmanagementframe, x, weight=1, uniform='row')
-            Label(self.windowmanagementframe, height=1, bg=NAVYBLUE).grid(
+            Label(self.windowmanagementframe, width=1, bg=NAVYBLUE).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(2):
             Grid.rowconfigure(self.windowmanagementframe, y, weight=1, uniform='row')
@@ -453,12 +453,12 @@ class Window(Tk):
         self.randomframe.grid_propagate(False)
         for x in range(12):
             Grid.columnconfigure(self.randomframe, x, weight=1, uniform='row')
-            Label(self.randomframe, height=1, bg=LIGHTPURPLE).grid(
+            Label(self.randomframe, width=1, bg=LIGHTPURPLE).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(12):
             Grid.rowconfigure(self.randomframe, y, weight=1, uniform='row')
             Label(self.randomframe, width=1, bg=LIGHTPURPLE).grid(
-                row=y, column=0, rowspan=2, columnspan=1, sticky=NSEW,)
+                row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW,)
         self.introlabel = Label(self.randomframe, text="What would you\nlike to do?",
                             font=("Atkinson Hyperlegible", 14), width=1, height=1,
                             bg=LAVENDER, fg="black")
@@ -508,11 +508,11 @@ class RegistrationPage(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, width=2, bg=LIGHTPURPLE, relief="flat").grid(
+            Label(self, width=1, bg=LIGHTPURPLE, relief="flat").grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LIGHTPURPLE, relief="flat").grid(
+            Label(self, width=1, bg=LIGHTPURPLE, relief="flat").grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
         # constants
         FONTNAME = "Avenir Next Medium"
@@ -796,12 +796,12 @@ class RegistrationPage(Frame):
             # self.randomframe = randomframe
             for x in range(10):
                 Grid.columnconfigure(randomframe, x, weight=1, uniform='row')
-                Label(randomframe, height=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
+                Label(randomframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
                   row=0, column=x, sticky=NSEW)
             for y in range(10):
                 Grid.rowconfigure(randomframe, y, weight=1, uniform='row')
                 Label(randomframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
-                    row=y, column=0, rowspan=2, columnspan=1, sticky=NSEW,)
+                    row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW,)
             randomlabel = Label(randomframe, text="INTI COLLEGE LOL", font=("Comic Sans Ms", 18), width=1,height=1, fg="white",bg=DARKBLUE)
             randomlabel.grid(row=0, column=0, rowspan=1, columnspan=14, sticky=NSEW)
             randomlabel.grid_propagate(False)
@@ -818,11 +818,11 @@ class LoginPage(Frame):
         self.controller = controller
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LIGHTPURPLE).grid(
+            Label(self, width=1, bg=LIGHTPURPLE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LIGHTPURPLE).grid(
+            Label(self, width=1, bg=LIGHTPURPLE).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
         # Database Functions for Logging in and setting loginstate to student or teacher
         # Sqlite3 commands to fetch registered emails from database and assigning roles based on email ending.
@@ -1051,11 +1051,11 @@ class MainPage(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LAVENDER).grid(
+            Label(self, width=1, bg=LAVENDER).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LAVENDER).grid(
+            Label(self, width=1, bg=LAVENDER).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
 
         # Picture
@@ -1211,11 +1211,11 @@ class EventView(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=LAVENDER).grid(
+            Label(self, width=1, bg=LAVENDER).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=LAVENDER).grid(
+            Label(self, width=1, bg=LAVENDER).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
 
         self.backgroundimageoriginal = Image.open(r"Assets\eventviewpage\backgroundimage.png")
@@ -1368,11 +1368,11 @@ class EventRegistration(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK).grid(
+            Label(self, width=1, bg=PINK).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK).grid(
+            Label(self, width=1, bg=PINK).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
 
         # Connect to database
@@ -1544,11 +1544,11 @@ class EventCreation(Frame):
         FONTNAME = "Arial"
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=1, bg=PINK).grid(
+            Label(self, width=1, bg=PINK).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK).grid(
+            Label(self, width=1, bg=PINK).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
         # Connect to database
         self.conn = sqlite3.connect('interactivesystem.db')
@@ -1872,39 +1872,34 @@ class ViewParticipants(Frame):
         self.controller = controller
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK).grid(
+            Label(self, width=1, bg=PINK).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK).grid(
+            Label(self, width=1, bg=PINK).grid(
                 row=y, column=0, sticky=NSEW)
-        self.gobacktolandingwidgetsbutton = Button(self, text="Go Back", font=("Arial", 12), bg=LIGHTPURPLE, fg="white", command=lambda: self.createlandingwidgets())
-        self.gobacktolandingwidgetsbutton.grid(row=1, column=1, sticky=NSEW)
-        self.gobacktolandingwidgetsbutton.grid_propagate(False)
-        self.gotomanageeventsbutton = Button(self, text="Manage Events", font=("Arial", 12), bg=LIGHTPURPLE, fg="white", command=lambda: self.manageeventsframe())
-        self.gotomanageeventsbutton.grid(row=1, column=2, sticky=NSEW)
-        self.gotomanageeventsbutton.grid_propagate(False)
+
         self.backgroundimageoriginal = Image.open(r"Assets\managementsuite\backgroundimage.png")
         self.backgroundimage = ImageTk.PhotoImage(self.backgroundimageoriginal.resize(
             (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
         self.backgroundimagelabel = Label(self, image=self.backgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.backgroundimagelabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=NSEW)
         self.backgroundimagelabel.grid_propagate(False)
-        self.interfaceframe = Frame(self, bg=LIGHTPURPLE)
+        self.interfaceframe = Frame(self, bg=LIGHTPURPLE, width=1,height=1)
         self.createinterface()
         self.createlandingwidgets()
 
     def createinterface(self):
         for x in range(38): # 38
             self.interfaceframe.columnconfigure(x, weight=1, uniform='x')
-            Label(self.interfaceframe, height=2, bg=LIGHTPURPLE).grid(
+            Label(self.interfaceframe, width=1, bg=LIGHTPURPLE).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(17): # 17
             self.interfaceframe.rowconfigure(y, weight=1, uniform='x')
-            Label(self.interfaceframe, width=5, bg=LIGHTPURPLE).grid(
+            Label(self.interfaceframe, width=1, bg=LIGHTPURPLE).grid(
                 row=y, column=0, sticky=NSEW)
-
         self.interfaceframe.grid(row=3, column=2, rowspan=17, columnspan=38, sticky=NSEW)
+        self.interfaceframe.grid_propagate(False)
         self.intframebackgroundoriginal = Image.open(r"Assets\managementsuite\blankinterface.png")
         self.intframebackground = ImageTk.PhotoImage(self.intframebackgroundoriginal.resize(
             (math.ceil(1520 * dpi / 96), math.ceil(680 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -1936,21 +1931,20 @@ class ViewParticipants(Frame):
         command=lambda: print("hello"))
         self.viewparticipantsbutton.grid(row=13, column=2, rowspan=3, columnspan=14, sticky=NSEW)
     def manageeventsframe(self):
-        for widgets in self.interfaceframe.winfo_children():
-            widgets.destroy()
+        # for widgets in self.interfaceframe.winfo_children():
+        #     widgets.destroy()
         self.createinterface()
-        self.gobacktolandingwidgetsbutton = Button(self.interfaceframe, text="Go Back", font=("Arial", 12), bg=LIGHTPURPLE, fg="white", command=lambda: self.createlandingwidgets())
-        self.gobacktolandingwidgetsbutton.grid(row=1, column=1, sticky=NSEW)
-        self.gobacktolandingwidgetsbutton.grid_propagate(False)
         self.manageexistingeventsimage = Image.open(r"Assets\managementsuite\manageeventswidgets\manageexistingeventslabel.png")
         self.manageexistingeventsimage = ImageTk.PhotoImage(self.manageexistingeventsimage.resize(
             (math.ceil(200 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
         self.manageexistingeventslabel = Label(self.interfaceframe, image=self.manageexistingeventsimage, width=1, height=1, bg=LIGHTPURPLE)
         self.manageexistingeventslabel.grid(row=1, column=1, rowspan=3, columnspan=5, sticky=NSEW)
+        self.manageexistingeventslabel.grid_propagate(False)
         self.filterlabelimage = Image.open(r"Assets\managementsuite\manageeventswidgets\filterlabel.png")
         self.filterlabelimage = ImageTk.PhotoImage(self.filterlabelimage.resize(
             (math.ceil(200 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
         self.filterlabel = Label(self.interfaceframe, image=self.filterlabelimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT)
+        
 
         self.filterchoice = StringVar()
         self.filterby = ttk.Combobox(self.interfaceframe, textvariable=self.filterchoice, width=1, font=("Arial", 12), state="readonly")
@@ -1959,7 +1953,7 @@ class ViewParticipants(Frame):
         self.filterby.grid(row=7, column=1, rowspan=2, columnspan=5, sticky=NSEW)
         self.filterby.grid_propagate(False)
         self.filterlabel.grid(row=5, column=1, rowspan=2, columnspan=5, sticky=NSEW)
-        self.filterentry = Entry(self.interfaceframe, font=("Atkinson Hyperlegible", 12), bg=LIGHTYELLOW, fg="black",justify=CENTER)
+        self.filterentry = Entry(self.interfaceframe, width=1, font=("Atkinson Hyperlegible", 12), bg=LIGHTYELLOW, fg="black",justify=CENTER)
         self.filterentry.grid(row=9, column=1, rowspan=1, columnspan=5, sticky=NSEW)
 
         self.criteriasearchimage = Image.open(r"Assets\managementsuite\manageeventswidgets\criteriasearchbutton.png")
@@ -1980,23 +1974,23 @@ class ViewParticipants(Frame):
         self.returnhomebutton.grid(row=15, column=1, rowspan=1, columnspan=5, sticky=NSEW)
 
 
-        self.centerframe = Frame(self.interfaceframe, bg=LIGHTPURPLE)
+        self.centerframe = Frame(self.interfaceframe, bg=LIGHTPURPLE, width=1, height=1)
         self.centerframe.grid(row=1, column=7, rowspan=15, columnspan=18, sticky=NSEW)
         self.centerframe.grid_propagate(False)
         for x in range(18):
             self.centerframe.columnconfigure(x, weight=1, uniform='x')
-            Label(self.centerframe, width=5, bg=LIGHTPURPLE).grid(
+            Label(self.centerframe, width=1, bg=LIGHTPURPLE).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(15):
             self.centerframe.rowconfigure(y, weight=1, uniform='y')
-            Label(self.centerframe, height=5, bg=LIGHTPURPLE).grid(
+            Label(self.centerframe, width=1, bg=LIGHTPURPLE).grid(
                 row=y, column=0, sticky=NSEW)
         self.centerframebackgroundimage = Image.open(r"Assets\managementsuite\manageeventswidgets\centerframebackground.png")
         self.centerframebackgroundimage = ImageTk.PhotoImage(self.centerframebackgroundimage.resize(
             (math.ceil(720 * dpi / 96), math.ceil(600 * dpi / 96)), Image.Resampling.LANCZOS))
         self.centerframebackgroundlabel = Label(self.centerframe, image=self.centerframebackgroundimage, width=1, height=1, bg=LIGHTPURPLE)
         self.centerframebackgroundlabel.grid(row=0, column=0, rowspan=15, columnspan=18, sticky=NSEW)
-        self.rightframe = Frame(self.interfaceframe, bg=LIGHTPURPLE)
+        self.rightframe = Frame(self.interfaceframe, bg=LIGHTPURPLE, width=1, height=1)
         self.rightframe.grid(row=1, column=26, rowspan=15, columnspan=11, sticky=NSEW)
         for x in range(11):
             self.rightframe.columnconfigure(x, weight=1, uniform='x')
@@ -2004,7 +1998,7 @@ class ViewParticipants(Frame):
                 row=0, column=x, sticky=NSEW)
         for y in range(15):
             self.rightframe.rowconfigure(y, weight=1, uniform='y')
-            Label(self.rightframe, height=1, bg=LIGHTPURPLE).grid(
+            Label(self.rightframe, width=1, bg=LIGHTPURPLE).grid(
                 row=y, column=0, sticky=NSEW)
         self.rightframe.grid_propagate(False)
         self.rightframebackgroundimage = Image.open(r"Assets\managementsuite\manageeventswidgets\rightframe.png")
@@ -2049,7 +2043,7 @@ class ViewParticipants(Frame):
         button2.grid(row=2, column=17, rowspan=1, columnspan=1, sticky=NSEW)
         #configure the frames
         for x in range(self.framesneeded):
-            self.overallframes[x] = Frame(self.centerframe, bg=LIGHTPURPLE, relief=FLAT)
+            self.overallframes[x] = Frame(self.centerframe, bg=LIGHTPURPLE, relief=FLAT, width=1, height=1)
             self.overallframes[x].grid(row=3, column=1, rowspan=11, columnspan=16, sticky=NSEW)
             self.overallframes[x].grid_propagate(False)
             for y in range(11):
@@ -2085,7 +2079,21 @@ class ViewParticipants(Frame):
 
         self.overallframes[0].grid()
     def edit_event(self, eventname):
-        # TODO: add code to edit the event
+        self.tempframe = Frame(self.interfaceframe, bg=LIGHTPURPLE, relief=FLAT, width=1,height=1)
+        self.tempframe.grid(row=1, column=7, rowspan=15, columnspan=18, sticky=NSEW)
+        self.tempframe.grid_propagate(False)
+        for y in range(15):
+            self.tempframe.rowconfigure(y, weight=1, uniform='y')
+            Label(self.tempframe, width=1, bg=NAVYBLUE).grid(
+                row=y, column=0, sticky=NSEW)
+        for z in range(18):
+            self.tempframe.columnconfigure(z, weight=1, uniform='x')
+            Label(self.tempframe, width=1, bg=NAVYBLUE).grid(
+                row=0, column=z, sticky=NSEW)
+        Label(self.tempframe, image=self.centerframebackgroundimage, width=1, height=1, bg=LIGHTPURPLE).grid(
+            row=0, column=0, rowspan=15, columnspan=18, sticky=NSEW)
+        #button to remove the frame
+        Button(self.tempframe, text="X", width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda:self.tempframe.grid_remove()).grid(row=0, column=17, rowspan=1, columnspan=1, sticky=NSEW)
         self.conn = sqlite3.connect("interactivesystem.db")
         self.c = self.conn.cursor()
         self.c.execute("SELECT * FROM eventcreation WHERE event_name=?", (eventname,))
@@ -2105,54 +2113,42 @@ class ViewParticipants(Frame):
         event_image = Image.open(event_image)
         self.event_image = ImageTk.PhotoImage(event_image.resize(
             (math.ceil(200 * dpi / 96), math.ceil(200 * dpi / 96)), Image.Resampling.LANCZOS))
-        self.tempframe = Frame(self.interfaceframe, bg=LIGHTPURPLE, relief=FLAT)
-        self.tempframe.grid(row=1, column=7, rowspan=15, columnspan=18, sticky=NSEW)
-        self.tempframe.grid_propagate(False)
-        for y in range(15):
-            self.tempframe.rowconfigure(y, weight=1, uniform='y')
-            Label(self.tempframe, width=1, bg=NAVYBLUE).grid(
-                row=y, column=0, sticky=NSEW)
-        for z in range(18):
-            self.tempframe.columnconfigure(z, weight=1, uniform='x')
-            Label(self.tempframe, width=1, bg=NAVYBLUE).grid(
-                row=0, column=z, sticky=NSEW)
-        Label(self.tempframe, image=self.centerframebackgroundimage, width=1, height=1, bg=LIGHTPURPLE).grid(
-            row=0, column=0, rowspan=15, columnspan=18, sticky=NSEW)
-        #button to remove the frame
-        Button(self.tempframe, text="X", width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda:self.tempframe.grid_remove()).grid(row=0, column=17, rowspan=1, columnspan=1, sticky=NSEW)
         event_keybutton = Button(self.tempframe, text=f"Event Key: {event_key}", anchor=CENTER, image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER)
         event_keybutton.grid(row=0, column=1, rowspan=1, columnspan=8, sticky=NSEW)
-        event_namebutton = Button(self.tempframe, text=f"Event name: {event_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_key, event_name))
+        event_namebutton = Button(self.tempframe, text=f"Event name: {event_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal",event_key, event_name, fieldchanged="event_name"))
         event_namebutton.grid(row=1, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        event_descriptionbutton = Button(self.tempframe, text=f"Description:\n{event_description}", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE)
+        event_descriptionbutton = Button(self.tempframe, text=f"Description:\n{event_description}", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal",event_key, event_description, fieldchanged="event_description"))
         event_descriptionbutton.grid(row=2, column=1, rowspan=3, columnspan=11, sticky=NSEW)
         event_datebutton = Button(self.tempframe, text=f"Date: {event_startdate} - {event_enddate}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE,command=lambda:self.changing_details("date", event_key, (event_startdate, event_enddate)))
         event_datebutton.grid(row=5, column=1, rowspan=1, columnspan=11, sticky=NSEW)
         event_timebutton = Button(self.tempframe, text=f"Time: {event_starttime} - {event_endtime}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command= lambda:self.changing_details("time", event_key,(event_starttime, event_endtime)))
         event_timebutton.grid(row=6, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        event_organizerbutton = Button(self.tempframe, text=f"Organizer: {event_organizer}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_key,  event_organizer))
+        event_organizerbutton = Button(self.tempframe, text=f"Organizer: {event_organizer}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_key,  event_organizer, fieldchanged="event_organizer"))
         event_organizerbutton.grid(row=7, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        venue_namebutton = Button(self.tempframe, text=f"Venue: {venue_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_key, venue_name))
+        venue_namebutton = Button(self.tempframe, text=f"Venue: {venue_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_key, venue_name, fieldchanged="venue_name"))
         venue_namebutton.grid(row=8, column=1, rowspan=1, columnspan=11, sticky=NSEW)
-        host_namebutton = Button(self.tempframe, text=f"Host: {host_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", host_name, event_key))
+        host_namebutton = Button(self.tempframe, text=f"Host: {host_name}", anchor=W, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=NAVYBLUE, command=lambda:self.changing_details("normal", event_key, host_name, fieldchanged="host_name"))
         host_namebutton.grid(row=9, column=1, rowspan=1, columnspan=11, sticky=NSEW)
         event_imagelabel = Label(self.tempframe, image=self.event_image, width=1, height=1, bg=LIGHTPURPLE)
         event_imagelabel.grid(row=1, column=13, rowspan=4, columnspan=4, sticky=NSEW) 
     def changing_details(self, entrytype, event_key, *args, **kwargs):
-        #get all widgets that are entry type and then destroy them
-        # def confirm_details(entrytype, event_key, detail_changed, *args, **kwargs):
-        # self.conn = sqlite3.connect("interactivesystem.db")
-        # self.c = self.conn.cursor()
-        def confirm_action(entrytype, value_changed, *args, **kwargs):
-            #get the new value
-            # new_value = entry.get()
-            #update the database
+        self.conn = sqlite3.connect("interactivesystem.db")
+        self.c = self.conn.cursor()
+        field_changed = kwargs.get("fieldchanged")
+        #refactor this function 
+        def confirm_action(entrytype, *args, **kwargs):
             if entrytype == "normal":
-                self.c.execute(f"UPDATE event_creation SET {value_changed} = ? WHERE event_key = ?", (normalentry.get(), event_key))
+                with self.conn:
+                    self.c.execute(f"UPDATE eventcreation SET {field_changed} = ? WHERE eventkey_number = ?", (normalentry.get(), event_key))
+                    messagebox.showinfo("Success", f"{field_changed} updated successfully where event key is {event_key}")
             elif entrytype == "date":
-                self.c.execute(f"UPDATE event_creation SET event_startdate = ?, event_enddate = ? WHERE event_key = ?", (start_dateentry.get(), enddateentry.get(), event_key))
+                with self.conn:
+                    self.c.execute(f"UPDATE eventcreation SET event_startdate = ?, event_enddate = ? WHERE eventkey_number = ?", (start_dateentry.get(), enddateentry.get(), event_key))
+                    messagebox.showinfo("Success",  f"event_startdate changed to {start_dateentry.get()} and\nevent_enddate changed to {enddateentry.get()}.\nUpdated successfully where event key is {event_key}.")
             elif entrytype == "time":
-                self.c.execute("UPDATE event_creation SET event_starttime = ?, event_endtime = ? WHERE event_id = ?", (starttimeentry.get(), endtimeentry.get(), event_key))
+                with self.conn:
+                    self.c.execute("UPDATE eventcreation SET event_starttime = ?, event_endtime = ? WHERE eventkey_number = ?", (starttimeentry.get(), endtimeentry.get(), event_key))
+                    messagebox.showinfo("Success",  f"event_starttime changed to {starttimeentry.get()} and\nevent_endtime changed to {endtimeentry.get()}.\nUpdated successfully where event key is {event_key}.")
         for widget in self.tempframe.winfo_children():
             if widget.winfo_class() == "Entry":
                 widget.destroy()
@@ -2162,9 +2158,8 @@ class ViewParticipants(Frame):
             normalentry.delete(0, END)
             normalentry.insert(0, args[0])
             normalentry.focus_set()
-            confirmbutton = Button(self.tempframe, text="Confirm", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, command=lambda:confirm_action(entrytype, args[0]))
+            confirmbutton = Button(self.tempframe, text=f"Confirm changes for {field_changed}", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTPURPLE, command=lambda:confirm_action(entrytype, args[0]))
             confirmbutton.grid(row=13, column=3, rowspan=2, columnspan=12, sticky=NSEW)
-            
         elif entrytype == "date":
             start_dateentry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
             start_dateentry.grid(row=11, column=2, rowspan=2, columnspan=6, sticky=NSEW)
@@ -2175,6 +2170,8 @@ class ViewParticipants(Frame):
             enddateentry.grid(row=11, column=10, rowspan=2, columnspan=6, sticky=NSEW)
             enddateentry.delete(0, END)
             enddateentry.insert(0, args[0][1])
+            confirmbutton = Button(self.tempframe, text="Confirm changes for date", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="black", bg=ORANGE, command=lambda:confirm_action(entrytype))
+            confirmbutton.grid(row=13, column=3, rowspan=2, columnspan=12, sticky=NSEW)
         elif entrytype == "time":
             starttimeentry = Entry(self.tempframe, width=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, justify=CENTER)
             starttimeentry.grid(row=11, column=2, rowspan=2, columnspan=6, sticky=NSEW)
@@ -2185,31 +2182,19 @@ class ViewParticipants(Frame):
             endtimeentry.grid(row=11, column=10, rowspan=2, columnspan=6, sticky=NSEW)
             endtimeentry.delete(0, END)
             endtimeentry.insert(0, args[0][1])
+            confirmbutton = Button(self.tempframe, text="Confirm changes for time", anchor=CENTER, width=1, height=1, font=("Avenir Next Bold", 18),fg="black", bg=LIGHTYELLOW, command=lambda:confirm_action(entrytype))
+            confirmbutton.grid(row=13, column=3, rowspan=2, columnspan=12, sticky=NSEW)
 
-            # try:
-            #     with self.conn:
-            #         self.c.execute("UPDATE event_creation SET event_starttime = ?, event_endtime = ? WHERE event_id = ?", (starttimeentry.get(), endtimeentry.get(), event_key))
-            #         messagebox.showinfo("Success", "Event time has been updated")
-            # except Exception as e:
-            #     messagebox.showerror("Error", "An error has occured" + e)
 
-    def confirm_changes(self, information:tuple):
-        # this function will be called when the user clicks on the confirm changes button 
-        # then, it will update the database with the new values
-        # information is a tuple that contains the following information:
-        # (event_name, event_description, event_startdate, event_enddate, event_starttime, event_endtime, event_organizer, venue_name, host_name)
-        # the information will be passed to the database and then the database will update the information
-        # then, the user will be redirected to the event page
+
+
+
+    def delete_event(self, event_key):
         self.conn = sqlite3.connect("interactivesystem.db")
         self.c = self.conn.cursor()
-        self.c.execute("UPDATE event_creation SET event_name = ?, event_description = ?, event_startdate = ?, event_enddate = ?, event_starttime = ?, event_endtime = ?, event_organizer = ?, venue_name = ?, host_name = ? WHERE event_id = ?", (self.event_name.get(), self.event_description.get(), self.event_startdate.get(), self.event_enddate.get(), self.event_starttime.get(), self.event_endtime.get(), self.event_organizer.get(), self.venue_name.get(), self.host_name.get(), self.event_id))
-
-
-
-
-
-    def delete_event(self):
-        # TODO: add code to delete the event
+        with self.conn:
+            self.c.execute("DELETE FROM eventcreation WHERE eventkey_number = ?", (event_key,))
+            messagebox.showinfo("Success", f"Event with event key {event_key} deleted successfully")
         pass
     def next_page(self):
         if self.page < self.framesneeded:
@@ -2237,11 +2222,11 @@ class FeedbackForm(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK, relief="flat").grid(
+            Label(self, width=1, bg=PINK, relief="flat").grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK, relief="flat").grid(
+            Label(self, width=1, bg=PINK, relief="flat").grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
 
         # Widgets
@@ -2480,11 +2465,11 @@ class CalendarPage(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=NICEPURPLE).grid(
+            Label(self, width=1, bg=NICEPURPLE).grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=NSEW)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=NICEPURPLE).grid(
+            Label(self, width=1, bg=NICEPURPLE).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
         def hidetheentireframe():
             self.grid_remove()
