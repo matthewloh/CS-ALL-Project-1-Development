@@ -2290,10 +2290,10 @@ class ViewParticipants(Frame):
         #~~~~~~~~~~~~~~ Search by events frame ~~~~~~~~~~~~~~~
         for x in range(38):
             self.searchbyeventsframe.columnconfigure(x, weight=1, uniform="x")
-            Label(self.searchbyeventsframe, width=1,bg=WHITE).grid(row=0, column=x, sticky=NSEW)
+            Label(self.searchbyeventsframe, bg=WHITE).grid(row=0, column=x, sticky=NSEW)
         for y in range(17):
-            self.searchbyeventsframe.rowconfigure(y, weight=1, uniform="x")
-            Label(self.searchbyeventsframe, width=1,bg=WHITE).grid(row=y, column=0, sticky=NSEW)
+            self.searchbyeventsframe.rowconfigure(y, weight=1, uniform="y")
+            Label(self.searchbyeventsframe, bg=WHITE).grid(row=y, column=0, sticky=NSEW)
         self.searchbyeventsframe.grid_remove()
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         #~~~~~~~~~~~~~~ IMAGES ~~~~~~~~~~~~~~
@@ -2571,7 +2571,7 @@ class ViewParticipants(Frame):
 
     def show_searchevents(self):
         self.searchbyeventsframe.tkraise()
-
+        
         # ~~~~~ IMAGES ~~~~~
         self.searcheventsorg = Image.open(r"Assets\managementsuite\viewparticipantswidgets\vpsearcheventsbg.png")
         self.searcheventsbg = ImageTk.PhotoImage(self.searcheventsorg.resize(
