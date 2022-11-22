@@ -305,8 +305,8 @@ class Window(Tk):
             frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky=NSEW)
 
         #Shows the loading frame
-        self.show_frame(ViewParticipants)
-        self.togglebuttonrelief(self.viewparticipantsbutton)
+        self.show_frame(LoginPage)
+        self.togglebuttonrelief(self.loginbutton)
 
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -1800,14 +1800,46 @@ class EventCreation(Frame):
                           rowspan=2, sticky=NSEW)
 
         confirmbutton = Button(self, text="Continue\nto Insert Image", width=1,height=1,
-        font=(FONTNAME, 18), bg='White', command=lambda: self.insert_blob())
+        font=(FONTNAME, 18), bg='White', command=lambda: self.initializeuploadframe())
         confirmbutton.grid(row=18, column=36, columnspan=5,
                            rowspan=2, sticky=NSEW)
 
         self.date_entrywidget.set_date(datetime.date.today())
         self.date_entrywidget2.set_date(datetime.date.today())
+        #~~~~~ Frame for Uploading Images~~~~~~
+        self.uploadframe = Frame(self, width=1, height=1, bg=ORANGE)
+        self.uploadframe.grid(row=0, column=0, columnspan=42, rowspan=21, sticky=NSEW)
+        for i in range(42):
+            self.uploadframe.grid_columnconfigure(i, weight=1)
+            Label(self.uploadframe, width=1, bg=ORANGE).grid(row=0, column=i, sticky=NSEW)
+        for j in range(21):
+            self.uploadframe.grid_rowconfigure(j, weight=1)
+            Label(self.uploadframe, width=1, bg=ORANGE).grid(row=j, column=0, sticky=NSEW)
+        self.uploadframe.grid_propagate(False)
+        self.uploadframe.grid_remove()
+    def initializeuploadframe(self):
+        self.uploadframe.grid()
+        self.uploadframebg = Image.open(r"Assets\EventCreation\uploadimagebg.png")
+        self.uploadbgimg = ImageTk.PhotoImage(self.uploadframebg.resize(
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.uploadbgimglabel = Label(self.uploadframe, image=self.uploadbgimg, width=1, height=1, bg=ORANGE)
+        self.uploadbgimglabel.grid(row=0, column=0, columnspan=42, rowspan=21, sticky=NSEW)
+        self.uploadframe.tkraise()
+        self.uploadimgbtnimg = Image.open(r"Assets\EventCreation\uploadimgbtn280x80.png")
+        self.uploadimgbtnimg = ImageTk.PhotoImage(self.uploadimgbtnimg.resize(
+            (math.ceil(280 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.uploadimgbtn = Button(self.uploadframe, image=self.uploadimgbtnimg, width=1, height=1,
+        bg=ORANGE, command=lambda: self.upload_image())
+        self.uploadimgbtn.grid(row=6, column=18, columnspan=7, rowspan=2, sticky=NSEW)
+        self.clearimgbtnimg = Image.open(r"Assets\EventCreation\clearimgbtn280x80.png")
+        self.clearimgbtnimg = ImageTk.PhotoImage(self.clearimgbtnimg.resize(
+            (math.ceil(280 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))   
+        self.clearimgbtn = Button(self.uploadframe, image=self.clearimgbtnimg, width=1, height=1,
+        bg=ORANGE, command=lambda: self.clearimage())
+        self.clearimgbtn.grid(row=9, column=18, columnspan=7, rowspan=2, sticky=NSEW)
+        
 
-        # Widgets
+
     def upload_image(self):
         global dpi
         self.filename = filedialog.askopenfilename(initialdir="/",
