@@ -1284,6 +1284,7 @@ class EventView(Frame):
         self.rightarrowbutton.grid(row=16, column=25, columnspan=3,
                                 rowspan=3, sticky=NSEW)
         self.eventsname = []
+        
 
         self.after(100, self.updateevents)
         self.imageindex = 0
@@ -1298,6 +1299,7 @@ class EventView(Frame):
             for index, name in list(enumerate(self.events)):
                 actualname = name[0]
                 self.eventsname.append((index, actualname))
+                print((index, actualname))
         self.read_blob(self.eventsname[0][1])
         self.titleartlabel.config(text=self.eventsname[0][1])
         self.update_location(self.eventsname[0][1])
@@ -1328,6 +1330,8 @@ class EventView(Frame):
             self.showcaseimage.configure(image=self.img)
 
     def previous_image(self):
+        # simultaneously add event if events are created not already in the list
+        self.updateevents()
         # clicking the left arrow button will show the last image at final index
         if self.imageindex > 0:
             self.imageindex -= 1
@@ -1341,10 +1345,13 @@ class EventView(Frame):
 
 
     def next_image(self):
+        self.updateevents()
+        print(self.eventsname)
         #this function is to change the image to the next image in the list
         self.imageindex += 1
         if self.imageindex == len(self.eventsname):
             self.imageindex = 0
+        print(self.imageindex)
         self.read_blob(self.eventsname[self.imageindex][1])
         self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
         self.update_location(self.eventsname[self.imageindex][1])
@@ -1589,6 +1596,7 @@ class EventCreation(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=PINK)
         FONTNAME = "Avenir Next Medium"
+        self.controller = controller
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, width=1, bg=PINK, relief=SOLID).grid(
@@ -1817,6 +1825,7 @@ class EventCreation(Frame):
             Label(self.uploadframe, width=1, bg=ORANGE).grid(row=j, column=0, sticky=NSEW)
         self.uploadframe.grid_propagate(False)
         self.uploadframe.grid_remove()
+
     def initializeuploadframe(self):
         self.uploadframe.grid()
         self.uploadframebg = Image.open(r"Assets\EventCreation\uploadimagebg.png")
@@ -1830,33 +1839,63 @@ class EventCreation(Frame):
             (math.ceil(280 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
         self.uploadimgbtn = Button(self.uploadframe, image=self.uploadimgbtnimg, width=1, height=1,
         bg=ORANGE, command=lambda: self.upload_image())
+        #~~~ Placeholder image~~~
+        self.placeholderimg = Image.open(r"Assets\EventCreation\placeholderimage.png")
+
         self.uploadimgbtn.grid(row=6, column=18, columnspan=7, rowspan=2, sticky=NSEW)
         self.clearimgbtnimg = Image.open(r"Assets\EventCreation\clearimgbtn280x80.png")
         self.clearimgbtnimg = ImageTk.PhotoImage(self.clearimgbtnimg.resize(
             (math.ceil(280 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))   
         self.clearimgbtn = Button(self.uploadframe, image=self.clearimgbtnimg, width=1, height=1,
-        bg=ORANGE, command=lambda: self.clearimage())
+        bg=ORANGE, command=lambda: self.clear_image())
         self.clearimgbtn.grid(row=9, column=18, columnspan=7, rowspan=2, sticky=NSEW)
-        
+        self.panelimgnoimg = Image.open(r"Assets\EventCreation\panelnoimage520x520.png")
+        self.panelimgnoimg = ImageTk.PhotoImage(self.panelimgnoimg.resize(
+            (math.ceil(520 * dpi / 96), math.ceil(520 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.panel = Label(self.uploadframe, image=self.panelimgnoimg, width=1, height=1, bg=ORANGE)
+        self.panel.grid(row=5, column=4, columnspan=13, rowspan=13, sticky=NSEW)
+        self.canceluploadbtnimg = Image.open(r"Assets\EventCreation\returntoeventdetailsbtn280x80.png")
+        self.canceluploadbtnimg = ImageTk.PhotoImage(self.canceluploadbtnimg.resize(
+            (math.ceil(280 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.canceluploadbtn = Button(self.uploadframe, image=self.canceluploadbtnimg, width=1, height=1,
+        bg=ORANGE, command=lambda: self.cancelupload())
+        self.canceluploadbtn.grid(row=17, column=25, columnspan=7, rowspan=2, sticky=NSEW)
+        self.confirmandsubmitbtnimg = Image.open(r"Assets\EventCreation\confdetailsandpostevent280x80.png")
+        self.confirmandsubmitbtnimg = ImageTk.PhotoImage(self.confirmandsubmitbtnimg.resize(
+            (math.ceil(280 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.confirmandsubmitbtn = Button(self.uploadframe, image=self.confirmandsubmitbtnimg, width=1, height=1,
+        bg=ORANGE, command=lambda: self.insert_blob())
+        self.confirmandsubmitbtn.grid(row=17, column=33, columnspan=7, rowspan=2, sticky=NSEW)
 
-
+    def cancelupload(self):
+        self.uploadframe.grid_remove()
+        self.uploadframe.grid_propagate(False)
+        self.controller.show_frame(EventCreation)
+    
     def upload_image(self):
-        global dpi
-        self.filename = filedialog.askopenfilename(initialdir="/",
-                                                title="Select A File",
-                                                filetypes=(("png files", "*.png"),("jpeg files", "*.jpg"), ("all files", "*.*")))
-        #This is the file we need to make as a blob
-        self.img = Image.open(self.filename)
-        self.img = ImageTk.PhotoImage(self.img.resize(
-            (math.ceil(706 * dpi / 96), math.ceil(468 * dpi / 96)), Image.Resampling.LANCZOS))
-        # Presents the images for future editing purposes or to just submit right away
-        #store self.filename in the global name space
-        self.panel.configure(image=self.img)
+        try:
+            self.filename = filedialog.askopenfilename(initialdir="/",
+                                                    title="Select A File",
+                                                    filetypes=(("png files", "*.png"),("jpeg files", "*.jpg"), ("all files", "*.*")))
+            #This is the file we need to make as a blob
+            self.img = Image.open(self.filename)
+            self.img = ImageTk.PhotoImage(self.img.resize
+            ((math.ceil(520 * dpi / 96), math.ceil(520 * dpi / 96)), Image.Resampling.LANCZOS))
+            # Presents the images for future editing purposes or to just submit right away
+            #store self.filename in the global name space
+            self.panel.configure(image=self.img)
+        except AttributeError:
+            messagebox.showinfo("Error", "No image selected")
+            self.panel.configure(image=self.panelimgnoimg)
 
-    def convert_to_binary_data(self, filename):
+    def convert_to_binary_data(self, image):
         # Convert digital data to binary format
-        with open(filename, 'rb') as file:
-            blobData = file.read()
+        try:
+            with open(image, 'rb') as file:
+                blobData = file.read()
+        except FileNotFoundError:
+            with open(r"Assets\EventCreation\placeholderimage.png", 'rb') as file:
+                blobData = file.read()
         return blobData
     def insert_blob(self):
             eventkey_number = self.eventkeyfield.get()
@@ -1869,8 +1908,11 @@ class EventCreation(Frame):
             event_organizer = self.organizerfield.get()
             venue_name = self.venuenameentry.get()
             hostname = self.hostnameentry.get()
-            self.filename = self.filename
-            self.blobData = self.convert_to_binary_data(self.filename)
+            #checking if filename is empty
+            if self.filename != self.panelimgnoimg:
+                self.blobData = self.convert_to_binary_data(self.filename)
+            elif self.filename == self.placeholderimg:
+                self.blobData = self.convert_to_binary_data(self.placeholderimg)
             information = (eventkey_number, event_nametext, event_descriptiontext, event_startdate, event_enddate, event_starttime, event_endtime, event_organizer, venue_name, hostname, self.blobData)
             # Insert BLOB into table
             self.conn = sqlite3.connect('interactivesystem.db')
@@ -1909,8 +1951,8 @@ class EventCreation(Frame):
             self.eventkeyfield.get()))
             self.c.execute("SELECT * FROM eventcreation")
             print(self.c.fetchall())
-    def delete_image(self):
-        self.panel.configure(image="")
+    def clear_image(self):
+        self.panel.configure(image=self.panelimgnoimg)
 
 
             
@@ -2122,26 +2164,83 @@ class ViewParticipants(Frame):
             Label(self.overallframes[x], image=self.backgroundforframes, width=1, height=1, bg=LIGHTPURPLE).grid(
                 row=0, column=0, rowspan=11, columnspan=16, sticky=NSEW)
             self.overallframes[x].grid_remove()
+        #print how many frames are needed
+        # print(self.events)
+        # print(self.eventcount)
+        # print(self.framesneeded)
         #self.events = c.fetchall()
-        initialrow = 0 
-        rowcount = 0
-        for event in self.events:
-            event_name = event[0]
-            if initialrow<=9:
-                Label(self.overallframes[0], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=initialrow, column=0, rowspan=2, columnspan=12, sticky=NSEW)
+        #here's what we know, 
+        # we have the index of the event details inside the tuple
+        # we know the number of events
+        #in order to know the number of frames needed, we need to know how many events there are
+        # we can get this by doing len(self.events)
+        # in generating frames that act like pages we can alternate between frames
+        # we can do this by using a for loop
+        # we can use the index of the event to determine which frame to put it in
+        # we can use the index of the event to determine which row and column to put it in
+        # so the rowcount just needs to be index of event * 3
+        # columns are always 0, 12, 14
+        # to generate the number of frames we need, we can use math.ceil(self.eventcount / 4)
+        for indexofeventdetails in range(self.eventcount):
+            event_name = self.events[indexofeventdetails][0]
+            #an important pattern to note is that row increments in multiples of 3
+            #the page changes in multiples of 4
+            # we can delegate the number of pages outside of the loop
+            #first page
+            if indexofeventdetails < 4:
+                Label(self.overallframes[0], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=indexofeventdetails*3, column=0, rowspan=2, columnspan=12, sticky=NSEW)
                 Button(self.overallframes[0], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name:self.edit_event(event_name)).grid(
-                    row=initialrow, column=12, rowspan=2, columnspan=2, sticky=NSEW)
+                    row=indexofeventdetails*3, column=12, rowspan=2, columnspan=2, sticky=NSEW)
                 Button(self.overallframes[0], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name: self.confirm_delete(event_name)).grid(
-                    row=initialrow, column=14, rowspan=2, columnspan=2, sticky=NSEW)
-            elif initialrow<=18:
-                Label(self.overallframes[1], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=rowcount, column=0, rowspan=2, columnspan=12, sticky=NSEW)
-                Button(self.overallframes[1], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT,command=lambda event_name=event_name:self.edit_event(event_name)).grid(
-                    row=rowcount, column=12, rowspan=2, columnspan=2, sticky=NSEW)
+                    row=indexofeventdetails*3, column=14, rowspan=2, columnspan=2, sticky=NSEW)
+                print(indexofeventdetails*3)
+            #second page
+            elif indexofeventdetails < 8:
+                Label(self.overallframes[1], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=(indexofeventdetails-4)*3, column=0, rowspan=2, columnspan=12, sticky=NSEW)
+                Button(self.overallframes[1], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name:self.edit_event(event_name)).grid(
+                    row=(indexofeventdetails-4)*3, column=12, rowspan=2, columnspan=2, sticky=NSEW)
                 Button(self.overallframes[1], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name: self.confirm_delete(event_name)).grid(
-                    row=rowcount, column=14, rowspan=2, columnspan=2, sticky=NSEW) #Every button is configured to call the confirm_delete(this event name)
-                rowcount += 3
-            initialrow += 3
+                    row=(indexofeventdetails-4)*3, column=14, rowspan=2, columnspan=2, sticky=NSEW)
+                print((indexofeventdetails-4)*3)
+            #third page
+            elif indexofeventdetails < 12:
+                Label(self.overallframes[2], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=(indexofeventdetails-8)*3, column=0, rowspan=2, columnspan=12, sticky=NSEW)
+                Button(self.overallframes[2], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name:self.edit_event(event_name)).grid(
+                    row=(indexofeventdetails-8)*3, column=12, rowspan=2, columnspan=2, sticky=NSEW)
+                Button(self.overallframes[2], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name: self.confirm_delete(event_name)).grid(
+                    row=(indexofeventdetails-8)*3, column=14, rowspan=2, columnspan=2, sticky=NSEW)
 
+            
+                
+        # for event in self.events:
+        #     event_name = event[0]
+        #     if initialrow<=9:
+        #         Label(self.overallframes[0], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=initialrow, column=0, rowspan=2, columnspan=12, sticky=NSEW)
+        #         Button(self.overallframes[0], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name:self.edit_event(event_name)).grid(
+        #             row=initialrow, column=12, rowspan=2, columnspan=2, sticky=NSEW)
+        #         Button(self.overallframes[0], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name: self.confirm_delete(event_name)).grid(
+        #             row=initialrow, column=14, rowspan=2, columnspan=2, sticky=NSEW)
+        #     elif initialrow<=18:
+        #         Label(self.overallframes[1], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=rowcount, column=0, rowspan=2, columnspan=12, sticky=NSEW)
+        #         Button(self.overallframes[1], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT,command=lambda event_name=event_name:self.edit_event(event_name)).grid(
+        #             row=rowcount, column=12, rowspan=2, columnspan=2, sticky=NSEW)
+        #         Button(self.overallframes[1], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name: self.confirm_delete(event_name)).grid(
+        #             row=rowcount, column=14, rowspan=2, columnspan=2, sticky=NSEW)#Every button is configured to call the confirm_delete(this event name)
+        #     elif initialrow<=27:
+        #         Label(self.overallframes[2], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=rowcount, column=0, rowspan=2, columnspan=12, sticky=NSEW)
+        #         Button(self.overallframes[2], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name:self.edit_event(event_name)).grid(
+        #             row=rowcount, column=12, rowspan=2, columnspan=2, sticky=NSEW)
+        #         Button(self.overallframes[2], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name: self.confirm_delete(event_name)).grid(
+        #             row=rowcount, column=14, rowspan=2, columnspan=2, sticky=NSEW)
+        #     elif initialrow<=36:
+        #         Label(self.overallframes[3], text=f"{event_name}", image=self.labelbackground, width=1, height=1, font=("Avenir Next Bold", 18),fg="white", bg=LIGHTPURPLE, compound=CENTER).grid(row=rowcount, column=0, rowspan=2, columnspan=12, sticky=NSEW)
+        #         Button(self.overallframes[3], image=self.editbuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name:self.edit_event(event_name)).grid(
+        #             row=rowcount, column=12, rowspan=2, columnspan=2, sticky=NSEW)
+        #         Button(self.overallframes[3], image=self.deletebuttonimage, width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda event_name=event_name: self.confirm_delete(event_name)).grid(
+        #             row=rowcount, column=14, rowspan=2, columnspan=2, sticky=NSEW)
+        #         rowcount += 3
+        #     initialrow += 3
+        #Always show the first frame
         self.overallframes[0].grid()
     def edit_event(self, eventname):
         self.tempframe = Frame(self.interfaceframe, bg=LIGHTPURPLE, relief=FLAT, width=1,height=1)
