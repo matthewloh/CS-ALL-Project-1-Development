@@ -323,8 +323,8 @@ class Window(Tk):
             frame.grid(row=0, column=0, rowspan=16, columnspan=28, sticky=NSEW)
 
         #Shows the loading frame
-        self.show_frame(ManagementSuite)
-        self.togglebuttonrelief(self.viewparticipantsbutton)
+        self.show_frame(LoginPage)
+        self.togglebuttonrelief(self.loginbutton)
 
     def show_frame(self, cont):
         frame = self.frames[cont]
