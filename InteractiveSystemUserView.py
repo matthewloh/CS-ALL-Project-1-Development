@@ -1830,17 +1830,19 @@ class EventCreation(Frame):
                            font=(FONTNAME, 18), justify='center')
         self.hostnameentry.grid(row=17, column=7, columnspan=6,
                         rowspan=1, sticky=NSEW)
-
+        self.hostnameentry.insert(0, "Host Name")
         self.venuenameentry = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
         self.venuenameentry.grid(row=5, column=28, columnspan=8,
                            rowspan=2, sticky=NSEW)
         self.venuenameentry.grid_propagate(False)
-        self.eventkeyfield = Entry(self, width=1, bg='#FFFFFF',
+        self.venuenameentry.insert(0, "Venue Name")
+        self.eventkeyfield = Entry(self, width=1, bg='#FFFFFF', fg= "red",
                               font=(FONTNAME, 18), justify='center')
         self.eventkeyfield.grid(row=19, column=20, columnspan=7,
                            rowspan=1, sticky=NSEW)
         self.eventkeyfield.grid_propagate(False)
+        self.eventkeyfield.insert(0, "Event Key")
         # Upload image functionality
         # self.readblobentry = Entry(self, width=1, bg='#FFFFFF',
         #                         font=(FONTNAME, 12), justify='center')
@@ -1961,6 +1963,9 @@ class EventCreation(Frame):
             Label(self.uploadframe, width=1, bg=ORANGE).grid(row=j, column=0, sticky=NSEW)
         self.uploadframe.grid_propagate(False)
         self.uploadframe.grid_remove()
+
+        #binding to clear entry on click
+        self
 
     def initializeuploadframe(self):
         self.uploadframe.grid()
