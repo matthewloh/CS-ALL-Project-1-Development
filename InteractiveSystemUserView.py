@@ -533,6 +533,11 @@ class RegistrationPage(Frame):
             Label(self, width=1, bg=LIGHTPURPLE, relief="flat").grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
         # constants
+        self.bgimageregpageimg = Image.open(r"Assets\RegistrationPage\registrationpgbg.png")
+        self.bgimageregpageimg = ImageTk.PhotoImage(self.bgimageregpageimg.resize(
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.bgimageregpage = Label(self, image=self.bgimageregpageimg, width=1,height=1, bg=LIGHTPURPLE)
+        self.bgimageregpage.grid(row=0, column=0, rowspan=21, columnspan=42, sticky=NSEW)
         FONTNAME = "Avenir Next Medium"
         FIRSTNAME = "First Name"
         LASTNAME = "Last Name"
@@ -562,8 +567,10 @@ class RegistrationPage(Frame):
             #Raise an error if more than two @'s in the email
             if emailtext.count("@") > 1:
                 messagebox.showerror("Invalid Email", "Please enter a valid email.")
+                return
             if emailtext.count("@") == 0:
                 messagebox.showerror("Invalid Email", "Please enter a valid email.")
+                return
             try:
                 emailending = emailfield.get().split("@")[1]
                 namefield = emailfield.get().split("@")[0]
@@ -597,7 +604,6 @@ class RegistrationPage(Frame):
                         controller.show_frame(LoginPage)
                         controller.togglebuttonrelief(controller.loginbutton)
                         cleareveryentry()
-                        
             except sqlite3.IntegrityError:
                 messagebox.showerror("Error", "Email already in use.")
             except IndexError:
@@ -634,7 +640,7 @@ class RegistrationPage(Frame):
 
         def showwarninglabelaboveentry():
             # configure emailwarning to show and become red when invalid email
-            emailwarning.grid(row=5, column=34, columnspan=8, sticky=NSEW)
+            emailwarning.grid(row=5, column=33, columnspan=7, sticky=NSEW)
             emailwarning.configure(
                 text="Please enter a valid email.", fg="red")
 
@@ -705,43 +711,43 @@ class RegistrationPage(Frame):
             
 
         # Labels
-        enterdetailslabel = Label(self, text="Please enter your details as shown in the entries.", font=(
-            'Atkinson Hyperlegible', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        enterdetailslabel.grid(row=0, column=24,
-                               rowspan=2, columnspan=17, sticky=NSEW)
+        # enterdetailslabel = Label(self, text="Please enter your details as shown in the entries.", font=(
+        #     'Atkinson Hyperlegible', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
+        # enterdetailslabel.grid(row=0, column=24,
+        #                        rowspan=2, columnspan=17, sticky=NSEW)
 
         # Entries
         firstnamefield = Entry(self, width=1, bg='#FFFFFF',
                                font=(FONTNAME, 18), justify='center')
-        firstnamefield.grid(row=3, column=24,
+        firstnamefield.grid(row=3, column=23,
                             rowspan=2, columnspan=7, sticky=NSEW)
         firstnamefield.insert(0, FIRSTNAME)
         firstnamefield.grid_propagate(False)
 
         lastnamefield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        lastnamefield.grid(row=3, column=34,
+        lastnamefield.grid(row=3, column=33,
                            rowspan=2, columnspan=7, sticky=NSEW)
         lastnamefield.insert(0, LASTNAME)
         lastnamefield.grid_propagate(False)
 
         emailfield = Entry(self, width=1, bg='#FFFFFF',
                            font=(FONTNAME, 18), justify='center')
-        emailfield.grid(row=6, column=24,
+        emailfield.grid(row=6, column=23,
                         rowspan=2, columnspan=17, sticky=NSEW)
         emailfield.insert(0, EMAILTEXT)
         emailfield.grid_propagate(False)
 
         passwordfield = Entry(self, width=1, bg='#FFFFFF',
                               font=(FONTNAME, 18), justify='center')
-        passwordfield.grid(row=9, column=24,
+        passwordfield.grid(row=9, column=23,
                            rowspan=2, columnspan=17, sticky=NSEW)
         passwordfield.insert(0, PASSWORDTEXT)
         passwordfield.grid_propagate(False)
 
         confirmpasswordfield = Entry(
             self, width=1, bg='#FFFFFF', font=(FONTNAME, 18), justify='center')
-        confirmpasswordfield.grid(row=12, column=24,
+        confirmpasswordfield.grid(row=12, column=23,
                                   rowspan=2, columnspan=17, sticky=NSEW)
         confirmpasswordfield.insert(0, CONFPASSTEXT)
         confirmpasswordfield.grid_propagate(False)
@@ -763,29 +769,28 @@ class RegistrationPage(Frame):
 
         
 
-        self.intibanner = Image.open(r"assets\Home-Banner-INTI.png")
+        self.intibanner = Image.open(r"Assets\RegistrationPage\intibanner.png")
         self.intibanner = ImageTk.PhotoImage(self.intibanner.resize(
-            (math.ceil(420 * dpi / 96), math.ceil(160 * dpi / 96)), Image.Resampling.LANCZOS))
+            (math.ceil(600 * dpi / 96), math.ceil(160 * dpi / 96)), Image.Resampling.LANCZOS))
         self.logolabel = Button(self, image=self.intibanner,
                            anchor=CENTER, width=1, height=1,
                            background= NICEBLUE, 
                            command = lambda:aboutINTIcontainer())
-        self.logolabel.grid(row=4, column=5, columnspan=11,
-                       rowspan=5, sticky=NSEW)
-        self.logolabel.grid_propagate(False)
-        self.titleart = Image.open(r"assets\DR7j7r0.png")
-        self.titleart = ImageTk.PhotoImage(self.titleart.resize(
-            (math.ceil(680 * dpi / 96), math.ceil(320 * dpi / 96)), Image.Resampling.LANCZOS))
-        titleartlabel = Button(self, image=self.titleart,
-                               background= NICEBLUE, 
-                               anchor=CENTER, width=1, height=1)
-        titleartlabel.grid(row=10, column=2, columnspan=17,
-                           rowspan=8, sticky=NSEW)
-        titleartlabel.grid_propagate(False)
+        self.logolabel.grid(row=1, column=3, columnspan=15,
+                       rowspan=4, sticky=NSEW)
+        # self.titleart = Image.open(r"assets\DR7j7r0.png")
+        # self.titleart = ImageTk.PhotoImage(self.titleart.resize(
+        #     (math.ceil(680 * dpi / 96), math.ceil(320 * dpi / 96)), Image.Resampling.LANCZOS))
+        # titleartlabel = Button(self, image=self.titleart,
+        #                        background= NICEBLUE, 
+        #                        anchor=CENTER, width=1, height=1)
+        # titleartlabel.grid(row=10, column=2, columnspan=17,
+        #                    rowspan=8, sticky=NSEW)
+        # titleartlabel.grid_propagate(False)
         # Buttons
         signupbutton = Button(self, text="SIGN UP", width=1, height=1, font=(
             'Atkinson Hyperlegible', 14), fg='#000000', command=lambda: checkfields(), bg=LIGHTYELLOW)
-        signupbutton.grid(row=15, column=28, columnspan=9,
+        signupbutton.grid(row=15, column=27, columnspan=9,
                           rowspan=2, sticky=NSEW)
         signupbutton.grid_propagate(False)
 
@@ -796,19 +801,13 @@ class RegistrationPage(Frame):
         controller.togglebuttonrelief(controller.loginbutton),
         cleareveryentry()],
         bg=OTHERPINK)
-        loginbutton.grid(row=18, column=28, columnspan=9,
+        loginbutton.grid(row=18, column=27, columnspan=9,
                          rowspan=2, sticky=NSEW)
-        loginbutton.grid_propagate(False)
 
-        label = Label(self, text="This is the registration page on left frame\nCome back later, still under construction!", font=(
-            'Avenir Next', 16), width=1, height=1, fg='#000000', bg='#FFF5E4')
-        label.grid(row=1, column=2, columnspan=17,
-                   rowspan=2, sticky=NSEW)
-        label.grid_propagate(False)
         def aboutINTIcontainer():
             randomframe = Frame(controller, bg=NICEBLUE, width=1, height=1,
                                 borderwidth=1, relief="flat")
-            randomframe.grid(row=6, column=4, rowspan=10, columnspan=10,
+            randomframe.grid(row=6, column=4, rowspan=8, columnspan=10,
                              sticky=NSEW)
             randomframe.grid_propagate(False)
             # self.randomframe = randomframe
@@ -816,16 +815,16 @@ class RegistrationPage(Frame):
                 randomframe.columnconfigure(x, weight=1, uniform='row')
                 Label(randomframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
                   row=0, column=x, sticky=NSEW)
-            for y in range(10):
+            for y in range(8):
                 randomframe.rowconfigure(y, weight=1, uniform='row')
                 Label(randomframe, width=1, bg=NICEBLUE, borderwidth=0, relief="solid").grid(
                     row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW,)
-            randomlabel = Label(randomframe, text="INTI COLLEGE LOL", font=("Comic Sans Ms", 18), width=1,height=1, fg="white",bg=DARKBLUE)
+            randomlabel = Label(randomframe, text="INTI Is Awesome!", font=("Comic Sans Ms", 18), width=1,height=1, fg="white",bg=DARKBLUE)
             randomlabel.grid(row=0, column=0, rowspan=1, columnspan=14, sticky=NSEW)
             randomlabel.grid_propagate(False)
             randombutton = Button(randomframe, text="click me to close ", font=("Comic Sans Ms", 18), bg=DARKBLUE, fg="WHITE", command=lambda:[
             randomframe.grid_forget()])
-            randombutton.grid(row=6, column=0, rowspan=1, columnspan=14, sticky=NSEW)
+            randombutton.grid(row=9, column=0, rowspan=1, columnspan=14, sticky=NSEW)
 
 
 class LoginPage(Frame):
@@ -1428,8 +1427,6 @@ class EventRegistration(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=PINK)
         FONTNAME = "Avenir Next"
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
         self.controller = controller
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
@@ -1439,6 +1436,12 @@ class EventRegistration(Frame):
             self.rowconfigure(y, weight=1, uniform='x')
             Label(self, width=1, bg=PINK).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
+        self.bgwallpaper = Image.open(r"Assets\EventRegistration\wallpaperflare.jpg")
+        self.bgwall = ImageTk.PhotoImage(self.bgwallpaper.resize(
+             (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.bgwalllabel = Label(self, image=self.bgwall, width=1, height=1, bg=LIGHTPURPLE)
+        self.bgwalllabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
+        self.bgwalllabel.grid_propagate(0)
         #enabling foreign keys in sqlite3
         self.conn = sqlite3.connect('interactivesystem.db')
         self.c = self.conn.cursor()
@@ -1534,18 +1537,14 @@ class EventRegistration(Frame):
         def focusout(event):
             event.widget.master.focus_set()
             #disable the confirm button if option selected is not an event, basically the first option
-            if self.eventdropdown.get() == "Select Event":
+            if self.eventdropdown.get() == "Please select an event":
                 confirmbutton.config(state=DISABLED)
+                return
             else:
                 confirmbutton.config(state=NORMAL)
+                self.read_blob(self.eventdropdown.get())
+                self.gettheeventdetails(self.eventdropdown.get())
             refresh()
-            self.read_blob(self.eventdropdown.get())
-        self.bgwallpaper = Image.open(r"Assets\EventRegistration\wallpaperflare.jpg")
-        self.bgwall = ImageTk.PhotoImage(self.bgwallpaper.resize(
-             (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
-        self.bgwalllabel = Label(self, image=self.bgwall, width=1, height=1, bg=LIGHTPURPLE)
-        self.bgwalllabel.grid(row=0, column=0, rowspan=21, columnspan=43, sticky=N+S+E+W)
-        self.bgwalllabel.grid_propagate(0)
         # Widgets
 
         #dropdown for events
@@ -1591,21 +1590,21 @@ class EventRegistration(Frame):
         separator = ttk.Separator(self, orient=HORIZONTAL)
         separator.grid(row=3, column=3, columnspan=16, pady=5, sticky=EW)
         icpasslabel = Label(self, text="IC No.",
-                            font=(FONTNAME, 10), bg='#FFF5E4')
+                            font=(FONTNAME, 10), bg='#FFF5E4', width=1, height=1)
         icpasslabel.grid(row=7, column=3, columnspan=2,
                          rowspan=2, sticky=NSEW)
         icpasslabel.grid_propagate(False)
         phonenumberlabel = Label(
-            self, text="Phone\nNo", font=(FONTNAME, 10), bg='#FFF5E4')
+            self, text="Phone\nNo", font=(FONTNAME, 10), bg='#FFF5E4', width=1, height=1)
         phonenumberlabel.grid(
             row=10, column=3, columnspan=2, rowspan=2, sticky=NSEW)
         emaillabel = Label(self, text="Email", font=(
-            FONTNAME, 14), bg='#FFF5E4')
+            FONTNAME, 14), bg='#FFF5E4', width=1, height=1)
         emaillabel.grid(row=13, column=3, columnspan=2,
                         rowspan=2, sticky=NSEW)
         emaillabel.grid_propagate(False)
         addresslabel = Label(self, text="Address",
-                             font=(FONTNAME, 10), bg='#FFF5E4')
+                             font=(FONTNAME, 10), bg='#FFF5E4', width=1, height=1)
         addresslabel.grid(row=16, column=3, columnspan=2,
                           rowspan=2, sticky=NSEW)
         addresslabel.grid_propagate(False)
@@ -1655,17 +1654,54 @@ class EventRegistration(Frame):
         # Buttons
         cancelbutton = Button(self, text="Cancel", font=(FONTNAME, 14), bg='White', command=lambda: [
         controller.show_frame(EventView),
-        controller.togglebuttonrelief(controller.eventlistbutton)])
+        controller.togglebuttonrelief(controller.eventlistbutton)], width=1,height=1)
         cancelbutton.grid(row=18, column=3, columnspan=6,
                           rowspan=2, sticky=NSEW)
         confirmbutton = Button(self, text="Confirm", font=(
-            FONTNAME, 14), bg='White', command=lambda: submit())
+            FONTNAME, 14), bg='White', command=lambda: submit(), width=1,height=1)
         confirmbutton.grid(row=18, column=13, columnspan=6,
                            rowspan=2, sticky=NSEW)
         self.panel = Label(self, image="",width=1,height=1, bg=ORANGE)
-        self.panel.grid(row=1, column=24, columnspan=13,
+        self.panel.grid(row=1, column=28, columnspan=13,
                     rowspan=13, sticky=NSEW)
         self.panel.grid_propagate(False)
+
+        # event details labels
+        self.eventorganizerlabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.eventorganizerlabel.grid(row=5, column=22, columnspan=5, rowspan=1, sticky=NSEW)
+        self.datelabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.datelabel.grid(row=8, column=22, columnspan=5, rowspan=1, sticky=NSEW)
+        self.timelabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.timelabel.grid(row=11, column=22, columnspan=5, rowspan=1, sticky=NSEW)
+        self.venuelabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.venuelabel.grid(row=14, column=22, columnspan=5, rowspan=1, sticky=NSEW)
+        self.eventhostlabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.eventhostlabel.grid(row=17, column=22, columnspan=5, rowspan=1, sticky=NSEW)
+        self.eventdescriptionlabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.eventdescriptionlabel.grid(row=15, column=31, columnspan=9, rowspan=4, sticky=NSEW)
+
+    def gettheeventdetails(self, eventname): #eventname is eventdropdown.get()
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT * FROM eventcreation WHERE event_name = ?", (eventname,))
+            self.eventdetails = self.c.fetchall()
+            event_description = self.eventdetails[0][2]
+            event_date = self.eventdetails[0][3] + " - " + self.eventdetails[0][4]
+            event_time = self.eventdetails[0][5] + " - " + self.eventdetails[0][6]
+            event_organizer = self.eventdetails[0][7]
+            event_venue = self.eventdetails[0][8]
+            event_host = self.eventdetails[0][9]
+        #configuring the labels
+        self.eventorganizerlabel.config(text=event_organizer)
+        self.datelabel.config(text=event_date)
+        self.timelabel.config(text=event_time)
+        self.venuelabel.config(text=event_venue)
+        self.eventhostlabel.config(text=event_host)
+        self.eventdescriptionlabel.config(text=event_description)
+        self.conn.close()
+
+
     def read_blob(self, event_name):
         self.conn = sqlite3.connect('interactivesystem.db')
         self.c = self.conn.cursor()
@@ -2131,7 +2167,7 @@ class ManagementSuite(Frame):
         self.createeventsimage = ImageTk.PhotoImage(self.createeventsimage.resize(
             (math.ceil(560 * dpi / 96), math.ceil(120 * dpi / 96)), Image.Resampling.LANCZOS))
         self.createeventsbutton = Button(self.interfaceframe, image=self.createeventsimage, width=1, height=1, relief=RAISED,
-        command=lambda: self.controller.show_frame(EventCreation))
+        command=lambda: [self.controller.show_frame(EventCreation), self.controller.togglebuttonrelief(self.controller.eventcreationbutton)])
         self.createeventsbutton.grid(row=5, column=2, rowspan=3, columnspan=14, sticky=NSEW) 
         self.manageeventsimage = Image.open(r"Assets\managementsuite\manageevents.png")
         self.manageeventsimage = ImageTk.PhotoImage(self.manageeventsimage.resize(
@@ -3071,6 +3107,7 @@ class ManagementSuite(Frame):
             self.c.execute("""SELECT DISTINCT event_name, eventkey_number FROM eventcreation WHERE event_name LIKE ?  """, ("%"+eventname+"%",))
         self.eresults = self.c.fetchall()
         self.ecount = len(self.eresults)
+
         #in case somebody clicks an event while looking at edit page
         # later
         self.seventsframesneeded = math.ceil(self.ecount/5)
@@ -3087,6 +3124,8 @@ class ManagementSuite(Frame):
         self.eventprofileimg = Image.open(r"Assets\managementsuite\viewparticipantswidgets\eventprofile360x80.png")
         self.eventprofile = ImageTk.PhotoImage(self.eventprofileimg.resize(
             (math.ceil(360 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        if eventname == "":
+            self.searchqueryeventlabel.config(text="All Events")
         self.searcheventsresultsframe = {}
         for f in range(self.seventsframesneeded):
             self.searcheventsresultsframe[f] = Frame(self.searcheventsframe, height=1, width=1, bg=PINK)
@@ -3137,11 +3176,11 @@ class ManagementSuite(Frame):
             pass
         self.pagestudentcounter = 1
         try:
-            self.frametoshowdetailsevents.grid_remove()
+            self.frametoshowdetailsevent.grid_remove()
         except:
             pass
         try:
-            for widget in self.frametoshowdetailsevents.winfo_children():
+            for widget in self.frametoshowdetailsevent.winfo_children():
                 widget.destroy()
         except:
             pass
@@ -3664,8 +3703,6 @@ class FeedbackForm(Frame):
 class CalendarPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=PINK)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
             Label(self, width=1, bg=NICEPURPLE).grid(
@@ -3676,6 +3713,14 @@ class CalendarPage(Frame):
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
         def hidetheentireframe():
             self.grid_remove()
+
+        self.calendarpagebgimg = Image.open(r"Assets\CalendarPage\calendarpgbg.png")
+        self.calendarpagebgimg = ImageTk.PhotoImage(self.calendarpagebgimg.resize(
+            (math.ceil(1680 * dpi / 96), math.ceil(840 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.calendarpagebg = Label(self, image=self.calendarpagebgimg,
+                                    anchor=CENTER, width=1, height=1)
+        self.calendarpagebg.grid(row=0, column=0, columnspan=42,
+                                    rowspan=21, sticky=NSEW)
         xbuttonlabel = Button(self, text="X", font=("Avenir Next Medium", 18), height=1,width=1,
         bg=DARKBLUE, fg="white",
         command= lambda:hidetheentireframe())
@@ -3700,19 +3745,19 @@ class CalendarPage(Frame):
         #Go back to current date button
         self.gobackbutton = Button(self, text="Change view to current date", width=1, height=1,
         bg=ORANGE, font=("Atkinson Hyperlegible", 18), command=lambda: [self.go_to_today()])
-        self.gobackbutton.grid(row=19, column=3, rowspan=2,
+        self.gobackbutton.grid(row=19, column=2, rowspan=2,
                              columnspan=8, sticky=NSEW)
         self.gobackbutton.grid_propagate(False)
         self.refreshbutton = Button(self, text="Refresh",
         bg=ORANGE, font=("Atkinson Hyperlegible", 18), width=1, height=1,
         command=lambda: [self.add_events()])
-        self.refreshbutton.grid(row=19, column=14, rowspan=2,
-                                columnspan=6, sticky=NSEW)
+        self.refreshbutton.grid(row=19, column=15, rowspan=2,
+                                columnspan=8, sticky=NSEW)
         self.refreshbutton.grid_propagate(False)
         self.buttonframe=Frame(self, bg = ORANGE, relief=RAISED, width=1, height=1,)
         self.buttonframe.grid(row=4, column=24, rowspan=15, columnspan=17, sticky=NSEW)
         self.buttonframe.grid_propagate(False)
-        self.detailslabel = Label(self, text="Click on an event to view the details.", width=1, height=1,
+        self.detailslabel = Label(self, text="Click on a date to view the events and their details.", width=1, height=1,
         font = ("Avenir Next Medium", 18), background=LIGHTYELLOW)
         self.detailslabel.grid(row=2, column=24, rowspan=2, columnspan=17, sticky=NSEW)
         self.add_events()
