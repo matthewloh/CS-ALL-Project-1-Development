@@ -247,8 +247,8 @@ class Window(Tk):
                                 self.show_admin()])
 
         self.signoutbutton.grid(row=0, column=0, rowspan=2, columnspan=3, sticky=NSEW)
-        self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
-        self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
+        # self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
+        # self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
 
         self.remindercontainer = Frame(self.bottomleftbuttons, bg=LIGHTYELLOW, width=1, height=1)
         # self.remindercontainer.grid(row=0, column=9, rowspan=2, columnspan=11, sticky=NSEW)
