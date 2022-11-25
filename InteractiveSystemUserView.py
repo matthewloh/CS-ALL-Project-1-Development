@@ -247,8 +247,8 @@ class Window(Tk):
                                 self.show_admin()])
 
         self.signoutbutton.grid(row=0, column=0, rowspan=2, columnspan=3, sticky=NSEW)
-        # self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
-        # self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
+        self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
+        self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
 
         self.remindercontainer = Frame(self.bottomleftbuttons, bg=LIGHTYELLOW, width=1, height=1)
         # self.remindercontainer.grid(row=0, column=9, rowspan=2, columnspan=11, sticky=NSEW)
@@ -346,8 +346,8 @@ class Window(Tk):
         self.eventregistrationbutton.grid(row=0, column=12, rowspan=2,columnspan=3,sticky=NSEW)
         self.calendarbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=NSEW)
         self.feedbackbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=NSEW)
-        self.sidecalendar.grid(row=7, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-        self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        self.sidecalendar.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        # self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def show_admin(self):
         self.mainpagebutton.grid(row=0, column=6, rowspan=2, columnspan=3,sticky=NSEW)
@@ -359,8 +359,8 @@ class Window(Tk):
         self.viewparticipantsbutton.grid_propagate(False)
         self.calendarbutton.grid(row=0, column=21, rowspan=2,columnspan=3, sticky=NSEW)
         self.feedbackbutton.grid(row=0, column=24, rowspan=2,columnspan=3, sticky=NSEW)
-        self.sidecalendar.grid(row=7, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-        self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        self.sidecalendar.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
+        # self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def welcomelabel(self, name, role):
         self.welcomeframe = Frame(self, bg=NICEBLUE, width=1, height=1)
@@ -1083,7 +1083,7 @@ class MainPage(Frame):
         command=lambda: [
         controller.show_frame(FeedbackForm),
         controller.togglebuttonrelief(controller.feedbackbutton) ])
-        feedbackbutton.grid(row=8, column=2, columnspan=15,
+        feedbackbutton.grid(row=8, column=2, columnspan=16,
                              rowspan=4, sticky=N+S+E+W)
         imagelabel = Label(self, image=self.feedbackimage,
                            anchor=CENTER, width=1, height=1)
@@ -1094,22 +1094,22 @@ class MainPage(Frame):
         controller.show_frame(EventView),
         controller.togglebuttonrelief(controller.eventlistbutton)])
 
-        eventnamebutton.grid(row=15, column=2, columnspan=15,
-                             rowspan=1, sticky=N+S+E+W)
+        eventnamebutton.grid(row=15, column=2, columnspan=16,
+                             rowspan=2, sticky=N+S+E+W)
         eventsnamebutton = Button(self, text="Event 2", font=(
          'Lucida Calligraphy', 14), width=1, height=1, relief="flat",fg='#000000', bg='#FFF5E4',
         command=lambda: [
         controller.show_frame(EventView),
         controller.togglebuttonrelief(controller.eventlistbutton)])
-        eventsnamebutton.grid(row=17, column=2, columnspan=15,
-                              rowspan=1, sticky=N+S+E+W)
+        eventsnamebutton.grid(row=18, column=2, columnspan=16,
+                              rowspan=2, sticky=N+S+E+W)
 
         #Button
         eventlistbutton = Button(self, text="Event List", font=(
         'Lucida Calligraphy', 16), width=1, height=1, relief="flat", fg='#000000', bg='#FFF5E4',
         command=lambda: [
         controller.show_frame(EventView),controller.togglebuttonrelief(controller.eventlistbutton)]) 
-        eventlistbutton.grid(row=16, column=20, columnspan=5,
+        eventlistbutton.grid(row=16, column=21, columnspan=5,
                              rowspan=3, sticky=N+S+E+W)
 
         eventregistrationbutton = Button(self, text="Event\nRegistration", font=(
@@ -1124,7 +1124,7 @@ class MainPage(Frame):
             lambda: [
             controller.show_frame(CalendarPage),
             controller.togglebuttonrelief(controller.calendarbutton)])
-        calendarbutton.grid(row=16, column=36, columnspan=5,
+        calendarbutton.grid(row=16, column=35, columnspan=5,
                             rowspan=3, sticky=N+S+E+W)
 
         self.logoutimage = Image.open(r"assets\logoutbutton.png")
@@ -1599,17 +1599,17 @@ class EventRegistration(Frame):
         self.panel.grid_propagate(False)
 
         # event details labels
-        self.eventorganizerlabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.eventorganizerlabel = Label(self, text="", font=(FONTNAME, 14), bg=WHITE, fg=BLACK, width=1, height=1)
         self.eventorganizerlabel.grid(row=5, column=22, columnspan=5, rowspan=1, sticky=NSEW)
         self.datelabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
         self.datelabel.grid(row=8, column=22, columnspan=5, rowspan=1, sticky=NSEW)
-        self.timelabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.timelabel = Label(self, text="", font=(FONTNAME, 14), bg=WHITE, fg=BLACK, width=1, height=1)
         self.timelabel.grid(row=11, column=22, columnspan=5, rowspan=1, sticky=NSEW)
-        self.venuelabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.venuelabel = Label(self, text="", font=(FONTNAME, 14), bg=WHITE, fg=BLACK, width=1, height=1)
         self.venuelabel.grid(row=14, column=22, columnspan=5, rowspan=1, sticky=NSEW)
-        self.eventhostlabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.eventhostlabel = Label(self, text="", font=(FONTNAME, 14), bg=WHITE, fg=BLACK, width=1, height=1)
         self.eventhostlabel.grid(row=17, column=22, columnspan=5, rowspan=1, sticky=NSEW)
-        self.eventdescriptionlabel = Label(self, text="", font=(FONTNAME, 12), bg=WHITE, fg=BLACK, width=1, height=1)
+        self.eventdescriptionlabel = Label(self, text="", font=(FONTNAME, 14), bg=WHITE, fg=BLACK, width=1, height=1)
         self.eventdescriptionlabel.grid(row=15, column=31, columnspan=9, rowspan=4, sticky=NSEW)
 
     def gettheeventdetails(self, eventname): #eventname is eventdropdown.get()
@@ -3071,7 +3071,9 @@ class ManagementSuite(Frame):
             self.c.execute("""SELECT DISTINCT event_name, eventkey_number FROM eventcreation WHERE event_name LIKE ?  """, ("%"+eventname+"%",))
         self.eresults = self.c.fetchall()
         self.ecount = len(self.eresults)
-
+        if self.ecount == 0:
+            messagebox.showerror("Error", "No events found.")
+            return
         #in case somebody clicks an event while looking at edit page
         # later
         self.seventsframesneeded = math.ceil(self.ecount/5)
@@ -3196,7 +3198,7 @@ class ManagementSuite(Frame):
             self.frameforpgbuttonsstudents.rowconfigure(w, weight=1, uniform="x")
             Label(self.frameforpgbuttonsstudents, width=1, height=1, bg=WHITE).grid(row=w, column=0, sticky=NSEW)
         self.frameforpgbuttonsstudents.grid_propagate(False)
-        self.showingthedetailsofstudent_ = Label(self.frameforpgbuttonsstudents, text=f"Showing details of {self.nameofevent}", bg=PINK, fg=BLACK, font=("Avenir Next Medium", 12), width=1, height=1)
+        self.showingthedetailsofstudent_ = Label(self.frameforpgbuttonsstudents, text=f"Showing details of {self.nameofevent}", bg=PINK, fg=BLACK, font=("Avenir Next Medium", 14), width=1, height=1, wraplength= 300, justify=LEFT)
         self.showingthedetailsofstudent_.grid(row=0, column=0, columnspan=8, sticky=NSEW)
         self.pgnumlabelregisteredevents_ = Label(self.frameforpgbuttonsstudents, text=f"Page {self.pagestudentcounter}/{self.studentsregframesneeded}", bg=NICEBLUE, fg=BLACK, font=("Avenir Next Medium", 12), width=1, height=1)
         self.pgnumlabelregisteredevents_.grid(row=0, column=8, columnspan=3, sticky=NSEW)
@@ -3300,7 +3302,7 @@ class ManagementSuite(Frame):
         entrylist = [self.eventfullnameentry, self.eventicpassnoentry, self.eventphonenumberentry, self.eventemailentry, self.eventaddressentry]
         for entry in entrylist:
             entry.grid_remove()
-        self.currentlyeditinglabel_ = Button(self.frametoshowdetailsevent[index], state=DISABLED, text=f"You are currently editing the student, {self.fullname}", font=("Avenir Next", 12), fg=BLACK, bg=WHITE, width=1, height=1)
+        self.currentlyeditinglabel_ = Button(self.frametoshowdetailsevent[index], state=DISABLED, text=f"You are currently editing the student, {self.fullname}", font=("Avenir Next", 14), fg=BLACK, bg=WHITE, width=1, height=1)
         self.confirmbutton_ = Button(self.frametoshowdetailsevent[index], text="Confirm", font=("Avenir Next Bold", 16), fg=BLACK, bg=WHITE, command=lambda:[self.confirm_editing_details(nameofstudent, nameofevent, index)])
         self.currentlyeditinglabel_.grid_remove()
         self.confirmbutton_.grid_remove()
@@ -3317,7 +3319,7 @@ class ManagementSuite(Frame):
         self.frametoshowdetailsevent[index].grid()
         self.frametoshowdetailsevent[index].tkraise()
 
-        self.studentnamelabel = Label(self.frametoshowdetailsevent[index], text=f"The details for student {self.fullname} in event: {nameofevent}", font=("Avenir Next Medium", 16), fg=BLACK, bg=WHITE, width=1, height=1)
+        self.studentnamelabel = Label(self.frametoshowdetailsevent[index], text=f"The details for student {self.fullname} in event: {nameofevent}", font=("Avenir Next Medium", 14), fg=BLACK, bg=WHITE, width=1, height=1)
         self.studentnamelabel.grid(row=0, column=0, rowspan=1, columnspan=14, sticky=NSEW)
         fullnamebutton = Button(self.frametoshowdetailsevent[index], text=f"Full name: {self.fullname}", font=("Avenir Next Medium", 16), fg=BLACK, bg=PINK, command=lambda:self.evententryinitializer(self.eventfullnameentry,self.fullname,fieldchanged="full_name", originaltext=self.fullname, eventregistered=nameofevent, currentindex=index)).grid(row=1, column=1, columnspan=13, sticky=NSEW)
         icpassnobutton = Button(self.frametoshowdetailsevent[index], text=f"IC/Passport number: {self.icpassnumber}", font=("Avenir Next Medium", 16), fg=BLACK, bg=PINK, command=lambda:self.evententryinitializer(self.eventicpassnoentry,self.icpassnumber,fieldchanged="icpass_number", originaltext=self.icpassnumber,eventregistered=nameofevent, currentindex=index)).grid(row=2, column=1, columnspan=13, sticky=NSEW)
@@ -3732,7 +3734,7 @@ class CalendarPage(Frame):
             name = name[0]
             Label(self.buttonframe, text=f"Event name: {name}", width=1, height=1, 
             bg = LIGHTYELLOW, fg = "black", relief="groove",
-            font = ("Avenir Next Medium", 18)).grid(row=0+startingrowno, column=0, rowspan=2, columnspan=11, sticky=NSEW)
+            font = ("Avenir Next Medium", 18), wraplength=400, justify=CENTER).grid(row=0+startingrowno, column=0, rowspan=2, columnspan=11, sticky=NSEW)
             Button(self.buttonframe, text="View details", width=1, height=1,
             bg = PINK, fg = "black", relief="groove",
             font = ("Avenir Next Medium", 18),
@@ -3762,7 +3764,7 @@ class CalendarPage(Frame):
             Label(self.subframe, text="Event details", width=1,height=1,
             bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
                 row=0, column=0, rowspan=2, columnspan=15, sticky=NSEW)
-            Label(self.subframe, text=f"Event name: {row[0]}", width=1,height=1,
+            Label(self.subframe, text=f"Event: {row[0]}", width=1,height=1,
             bg = LAVENDER, fg = "black", font = ("Avenir Next Medium", 18)).grid(
                 row=2, column=0, rowspan=2, columnspan=15, sticky=NSEW)
             Label(self.subframe, text=f"Event Date: From {row[1]} to {row[2]}", width=1,height=1,
