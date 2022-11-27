@@ -383,8 +383,7 @@ class Window(Tk):
             Label(self.welcomeframe, width=1, bg=NICEBLUE).grid(
                 row=y, column=0, sticky=NSEW)
                 
-        self.namelabel = Button(self.welcomeframe, width=1, height=1,
-                text="",font=("Atkinson Hyperlegible", 30), fg="white",bg=DARKBLUE)
+        self.namelabel = Button(self.welcomeframe, width=1, height=1, text="",font=("Atkinson Hyperlegible", 30), fg="white",bg=DARKBLUE, command=lambda:self.make_a_container())
         self.namelabel.grid(row=0, column=0, rowspan=2, columnspan=8, sticky=NSEW)
         self.namelabel.configure(text=f"Welcome {name.capitalize()} as {role.capitalize()}!\nWe are glad to have you here!")
         self.namelabel.grid_propagate(False)
@@ -401,10 +400,6 @@ class Window(Tk):
         style |= (WS_CAPTION | WS_THICKFRAME)
         SetWindowLongPtrW(hwnd, GWL_STYLE, style)
 
-    def make_a_container(self):
-        self.randomframe.grid_remove()
-        self.randomframe.grid(row=10, column=9, rowspan=6, columnspan=11,
-                            sticky=NSEW)
 
     #Window management button frame
     def createwindowmanagementframe(self):
@@ -460,17 +455,21 @@ class Window(Tk):
         else:
             button['relief'] = 'raised'
             
+    def make_a_container(self):
+        self.randomframe.grid_remove()
+        self.randomframe.grid(row=10, column=20, rowspan=6, columnspan=12,
+                            sticky=NSEW)
     def createcalendarframe(self):
-        self.randomframe = Frame(self, bg=PINK, width=1, height=1,
+        self.randomframe = Frame(self, bg=OTHERPINK, width=1, height=1,
                                     borderwidth=1, relief="flat")
         self.randomframe.grid_propagate(False)
         for x in range(12):
             self.randomframe.columnconfigure(x, weight=1, uniform='row')
-            Label(self.randomframe, width=1, bg=LIGHTPURPLE).grid(
+            Label(self.randomframe, width=1, bg=OTHERPINK).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(12):
             self.randomframe.rowconfigure(y, weight=1, uniform='row')
-            Label(self.randomframe, width=1, bg=LIGHTPURPLE).grid(
+            Label(self.randomframe, width=1, bg=OTHERPINK).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW,)
         self.introlabel = Label(self.randomframe, text="What would you\nlike to do?",
                             font=("Atkinson Hyperlegible", 14), width=1, height=1,
@@ -495,7 +494,7 @@ class Window(Tk):
         self.editbutton = Button(self.randomframe,
             text="Check My Registered Events", font=("Atkinson Hyperlegible", 14),
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
-            command=lambda:[print('yes')])
+            command=lambda:[self.getevents()])
         self.editbutton.grid(row=5, column=6, rowspan=2, columnspan=5, sticky=NSEW,padx=2)
         self.editbutton.grid_propagate(False)
         self.closebutton = Button(self.randomframe, 
@@ -512,6 +511,27 @@ class Window(Tk):
     def get_display_size(self):
         if self.screensize <= (1920, 1080):
             self.state('zoomed')
+    def getevents(self):
+        self.conn = sqlite3.connect('interactivesystem.db')
+        self.c = self.conn.cursor()
+        # Join query to get event date from tables eventregistration and eventcreation
+        self.c.execute("SELECT eventregistration.event_registered, eventcreation.event_startdate FROM eventregistration INNER JOIN eventcreation ON eventregistration.eventkey_registered = eventcreation.eventkey_number WHERE email = ?", (LOGINID,))
+        self.rows = self.c.fetchall() 
+        if self.rows == []:
+            messagebox.showinfo("Error", "You have not registered for any events yet!")
+            return
+        # presenting the information in a messagebox 
+        # Given a return data ('Corgi Surfing', '2022-11-27')
+        # The messagebox will show the following:
+        # Corgi Surfing - 27/11/2022
+        messagestoshow = []
+        for row in self.rows:
+            self.eventname = row[0]
+            self.eventdate = row[1]
+            self.message = self.eventname + " - " + self.eventdate
+            messagestoshow.append(self.message)
+        formattedmessage = "\n".join(messagestoshow)
+        messagebox.showinfo("Registered Events", f"You have registered for:\n{formattedmessage}\nCheck out the calendar for more details!")
 
 class RegistrationPage(Frame):
     def __init__(self, parent, controller):
@@ -1146,6 +1166,12 @@ class MainPage(Frame):
         # logoutbutton.grid(row=0, column=41, columnspan=1, rowspan=1, sticky=N+S+E+W)
         imagelabel = Label(self, image=self.logoutimage, anchor=CENTER, width=1, height=1)
         self.update_eventnames()
+        self.refreshbutton = Button(self, text="Refresh", font=(
+            'Lucida Calligraphy', 16), width=1, height=1, relief=RAISED, fg=BLACK, bg='#bcffff', command=
+            lambda: [
+            self.update_eventnames()])
+        self.refreshbutton.grid(row=13, column=15, columnspan=3,
+                            rowspan=1, sticky=N+S+E+W)
         self.conn = sqlite3.connect('interactivesystem.db')
         self.c = self.conn.cursor()
         with self.conn:
@@ -1156,6 +1182,10 @@ class MainPage(Frame):
     def update_eventnames(self):
         self.conn = sqlite3.connect('interactivesystem.db')
         self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT COUNT(event_name) FROM eventcreation")
+        self.eventcount = self.c.fetchone()[0]
+        self.lasteventindex = self.eventcount - 1
         self.c.execute("SELECT event_name FROM eventcreation ORDER BY eventkey_number DESC LIMIT 2")
         self.eventnames = self.c.fetchall()
         self.twoeventnames = [i[0] for i in self.eventnames]
@@ -1266,7 +1296,7 @@ class EventView(Frame):
         self.after(100, self.updateevents)
         self.imageindex = 0
     def changetoeventregistration(self, index):
-        print(self.titleartlabel.cget("text"))
+        # print(self.titleartlabel.cget("text"))
         if  self.titleartlabel.cget("text") != "No Events":
             self.controller.show_frame(EventRegistration)
             self.controller.togglebuttonrelief(self.controller.eventregistrationbutton)
@@ -1347,7 +1377,7 @@ class EventView(Frame):
             self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
             self.update_location(self.eventsname[self.imageindex][1])
             self.update_date(self.eventsname[self.imageindex][1])
-        print(self.imageindex)
+        # print(self.imageindex)
 
 
 
@@ -1364,7 +1394,7 @@ class EventView(Frame):
             self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
             self.update_location(self.eventsname[self.imageindex][1])
             self.update_date(self.eventsname[self.imageindex][1])
-        print(self.imageindex)
+        # print(self.imageindex)
 
         # if self.imageindex == len(self.eventsname):
         #     self.imageindex = 0
@@ -2030,9 +2060,9 @@ class EventCreation(Frame):
     
     def upload_image(self):
         try:
-            self.filename = filedialog.askopenfilename(initialdir="/",
-                                                    title="Select A File",
-                                                    filetypes=(("png files", "*.png"),("jpeg files", "*.jpg"), ("all files", "*.*")))
+            self.filename = filedialog.askopenfilename(initialdir="Assets", 
+                                                    title="Select A File", 
+                                                    filetypes=(("all files", "*.*"), ("png files", "*.png"),("jpeg files", "*.jpg")))
             #This is the file we need to make as a blob
             self.img = Image.open(self.filename)
             self.img = ImageTk.PhotoImage(self.img.resize
