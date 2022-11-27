@@ -254,8 +254,8 @@ class Window(Tk):
                                 self.show_admin()])
 
         self.signoutbutton.grid(row=0, column=0, rowspan=2, columnspan=3, sticky=NSEW)
-        self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
-        self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
+        # self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
+        # self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
 
         self.remindercontainer = Frame(self.bottomleftbuttons, bg=LIGHTYELLOW, width=1, height=1)
         # self.remindercontainer.grid(row=0, column=9, rowspan=2, columnspan=11, sticky=NSEW)
@@ -335,11 +335,11 @@ class Window(Tk):
         self.eventregistrationbutton.grid_forget()
         self.eventcreationbutton.grid_forget()
         self.viewparticipantsbutton.grid_forget()
-        self.feedbackbutton.grid_forget()
         self.calendarbutton.grid_forget()
+        self.feedbackbutton.grid_forget()
         self.sidecalendar.grid_forget()
-        self.bellbutton.grid_forget()
         self.welcomelabel("Stranger", "Viewer")
+        self.loggedinaslabel.config(text="Logged in as: ")
         global LOGGEDINAS
         global LOGINSTATE
         global LOGINID
@@ -354,20 +354,16 @@ class Window(Tk):
         self.calendarbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=NSEW)
         self.feedbackbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=NSEW)
         self.sidecalendar.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-        # self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def show_admin(self):
         self.mainpagebutton.grid(row=0, column=6, rowspan=2, columnspan=3,sticky=NSEW)
         self.eventlistbutton.grid(row=0, column=9, rowspan=2, columnspan=3, sticky=NSEW)
         self.eventregistrationbutton.grid(row=0, column=12, rowspan=2,columnspan=3,  sticky=NSEW)
         self.eventcreationbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=NSEW)
-        self.eventcreationbutton.grid_propagate(False)
         self.viewparticipantsbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=NSEW)
-        self.viewparticipantsbutton.grid_propagate(False)
         self.calendarbutton.grid(row=0, column=21, rowspan=2,columnspan=3, sticky=NSEW)
         self.feedbackbutton.grid(row=0, column=24, rowspan=2,columnspan=3, sticky=NSEW)
         self.sidecalendar.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-        # self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def welcomelabel(self, name, role):
         self.welcomeframe = Frame(self, bg=NICEBLUE, width=1, height=1)
@@ -589,8 +585,8 @@ class RegistrationPage(Frame):
             try:
                 emailending = emailfield.get().split("@")[1]
                 namefield = emailfield.get().split("@")[0]
-                if namefield == "":
-                    messagebox.showerror("Invalid Email", "Please enter a valid email.")
+                if namefield == "" or " " in namefield:
+                    messagebox.showerror("Invalid Email", "Please enter a valid email.\nThere should also be no spaces in the first half of the email.")
                     return
                 if emailending == "student.newinti.edu.my":
                     role = "student"
@@ -1832,7 +1828,7 @@ class EventCreation(Frame):
                                font=(FONTNAME, 18), wrap=WORD)
         self.eventdescription.grid(row=8, column=3, columnspan=13,
                                 rowspan=3, sticky=NSEW)
-        self.eventdescription.insert(1.0, "Event Description")
+        self.eventdescription.insert("1.0", "Event Description", 'center')
 
         self.organizerfield = Entry(self, width=1, bg='#FFFFFF',
                                 font=(FONTNAME, 18), justify='center')
