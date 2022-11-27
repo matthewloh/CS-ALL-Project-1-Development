@@ -28,13 +28,13 @@ except:
     from tkcalendar import Calendar as tkCalendar
     from tkcalendar import DateEntry
 
-try:
-    import openai 
-except:
-    print('Installing openai.')
-    subprocess.check_call(['pip', 'install', 'openai'])
-    print('Done.')
-    import openai
+# try:
+#     import openai 
+# except:
+#     print('Installing openai.')
+#     subprocess.check_call(['pip', 'install', 'openai'])
+#     print('Done.')
+#     import openai
 import urllib.request
 import datetime
 import math
