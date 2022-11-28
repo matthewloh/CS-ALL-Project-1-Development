@@ -28,7 +28,14 @@ except:
     from tkcalendar import Calendar as tkCalendar
     from tkcalendar import DateEntry
 
-
+# try:
+#     import openai 
+# except:
+#     print('Installing openai.')
+#     subprocess.check_call(['pip', 'install', 'openai'])
+#     print('Done.')
+#     import openai
+import urllib.request
 import datetime
 import math
 import random
@@ -294,7 +301,7 @@ class Window(Tk):
         self.createcalendarframe()
         self.createwindowmanagementframe()
         self.frames = {}
-        # This class-based approach is used with heavy inspiration from Bryan Oakley's tutorial on StackOverflow
+        # This class-based approach is used with heavy reference from Bryan Oakley's tutorial on StackOverflow
         # https://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
         # https://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter/7557028#7557028
         # How this works is that the windows are assigned to a dictionary, and the show_frame function
@@ -328,11 +335,11 @@ class Window(Tk):
         self.eventregistrationbutton.grid_forget()
         self.eventcreationbutton.grid_forget()
         self.viewparticipantsbutton.grid_forget()
-        self.feedbackbutton.grid_forget()
         self.calendarbutton.grid_forget()
+        self.feedbackbutton.grid_forget()
         self.sidecalendar.grid_forget()
-        self.bellbutton.grid_forget()
         self.welcomelabel("Stranger", "Viewer")
+        self.loggedinaslabel.config(text="Logged in as: ")
         global LOGGEDINAS
         global LOGINSTATE
         global LOGINID
@@ -347,20 +354,16 @@ class Window(Tk):
         self.calendarbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=NSEW)
         self.feedbackbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=NSEW)
         self.sidecalendar.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-        # self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def show_admin(self):
         self.mainpagebutton.grid(row=0, column=6, rowspan=2, columnspan=3,sticky=NSEW)
         self.eventlistbutton.grid(row=0, column=9, rowspan=2, columnspan=3, sticky=NSEW)
         self.eventregistrationbutton.grid(row=0, column=12, rowspan=2,columnspan=3,  sticky=NSEW)
         self.eventcreationbutton.grid(row=0, column=15, rowspan=2,columnspan=3, sticky=NSEW)
-        self.eventcreationbutton.grid_propagate(False)
         self.viewparticipantsbutton.grid(row=0, column=18, rowspan=2,columnspan=3, sticky=NSEW)
-        self.viewparticipantsbutton.grid_propagate(False)
         self.calendarbutton.grid(row=0, column=21, rowspan=2,columnspan=3, sticky=NSEW)
         self.feedbackbutton.grid(row=0, column=24, rowspan=2,columnspan=3, sticky=NSEW)
         self.sidecalendar.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
-        # self.bellbutton.grid(row=10, column=0, rowspan=2, columnspan=2, sticky=NSEW)
 
     def welcomelabel(self, name, role):
         self.welcomeframe = Frame(self, bg=NICEBLUE, width=1, height=1)
@@ -376,8 +379,7 @@ class Window(Tk):
             Label(self.welcomeframe, width=1, bg=NICEBLUE).grid(
                 row=y, column=0, sticky=NSEW)
                 
-        self.namelabel = Button(self.welcomeframe, width=1, height=1,
-                text="",font=("Atkinson Hyperlegible", 30), fg="white",bg=DARKBLUE)
+        self.namelabel = Button(self.welcomeframe, width=1, height=1, text="",font=("Atkinson Hyperlegible", 30), fg="white",bg=DARKBLUE, command=lambda:self.make_a_container())
         self.namelabel.grid(row=0, column=0, rowspan=2, columnspan=8, sticky=NSEW)
         self.namelabel.configure(text=f"Welcome {name.capitalize()} as {role.capitalize()}!\nWe are glad to have you here!")
         self.namelabel.grid_propagate(False)
@@ -394,10 +396,6 @@ class Window(Tk):
         style |= (WS_CAPTION | WS_THICKFRAME)
         SetWindowLongPtrW(hwnd, GWL_STYLE, style)
 
-    def make_a_container(self):
-        self.randomframe.grid_remove()
-        self.randomframe.grid(row=10, column=9, rowspan=6, columnspan=11,
-                            sticky=NSEW)
 
     #Window management button frame
     def createwindowmanagementframe(self):
@@ -453,17 +451,21 @@ class Window(Tk):
         else:
             button['relief'] = 'raised'
             
+    def make_a_container(self):
+        self.randomframe.grid_remove()
+        self.randomframe.grid(row=10, column=20, rowspan=6, columnspan=12,
+                            sticky=NSEW)
     def createcalendarframe(self):
-        self.randomframe = Frame(self, bg=PINK, width=1, height=1,
+        self.randomframe = Frame(self, bg=OTHERPINK, width=1, height=1,
                                     borderwidth=1, relief="flat")
         self.randomframe.grid_propagate(False)
         for x in range(12):
             self.randomframe.columnconfigure(x, weight=1, uniform='row')
-            Label(self.randomframe, width=1, bg=LIGHTPURPLE).grid(
+            Label(self.randomframe, width=1, bg=OTHERPINK).grid(
                 row=0, column=x, sticky=NSEW)
         for y in range(12):
             self.randomframe.rowconfigure(y, weight=1, uniform='row')
-            Label(self.randomframe, width=1, bg=LIGHTPURPLE).grid(
+            Label(self.randomframe, width=1, bg=OTHERPINK).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW,)
         self.introlabel = Label(self.randomframe, text="What would you\nlike to do?",
                             font=("Atkinson Hyperlegible", 14), width=1, height=1,
@@ -488,7 +490,7 @@ class Window(Tk):
         self.editbutton = Button(self.randomframe,
             text="Check My Registered Events", font=("Atkinson Hyperlegible", 14),
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
-            command=lambda:[print('yes')])
+            command=lambda:[self.getevents()])
         self.editbutton.grid(row=5, column=6, rowspan=2, columnspan=5, sticky=NSEW,padx=2)
         self.editbutton.grid_propagate(False)
         self.closebutton = Button(self.randomframe, 
@@ -505,6 +507,27 @@ class Window(Tk):
     def get_display_size(self):
         if self.screensize <= (1920, 1080):
             self.state('zoomed')
+    def getevents(self):
+        self.conn = sqlite3.connect('dummy.db')
+        self.c = self.conn.cursor()
+        # Join query to get event date from tables eventregistration and eventcreation
+        self.c.execute("SELECT eventregistration.event_registered, eventcreation.event_startdate FROM eventregistration INNER JOIN eventcreation ON eventregistration.eventkey_registered = eventcreation.eventkey_number WHERE email = ?", (LOGINID,))
+        self.rows = self.c.fetchall() 
+        if self.rows == []:
+            messagebox.showinfo("Error", "You have not registered for any events yet!")
+            return
+        # presenting the information in a messagebox 
+        # Given a return data ('Corgi Surfing', '2022-11-27')
+        # The messagebox will show the following:
+        # Corgi Surfing - 27/11/2022
+        messagestoshow = []
+        for row in self.rows:
+            self.eventname = row[0]
+            self.eventdate = row[1]
+            self.message = self.eventname + " - " + self.eventdate
+            messagestoshow.append(self.message)
+        formattedmessage = "\n".join(messagestoshow)
+        messagebox.showinfo("Registered Events", f"You have registered for:\n{formattedmessage}\nCheck out the calendar for more details!")
 
 class RegistrationPage(Frame):
     def __init__(self, parent, controller):
@@ -562,8 +585,8 @@ class RegistrationPage(Frame):
             try:
                 emailending = emailfield.get().split("@")[1]
                 namefield = emailfield.get().split("@")[0]
-                if namefield == "":
-                    messagebox.showerror("Invalid Email", "Please enter a valid email.")
+                if namefield == "" or " " in namefield:
+                    messagebox.showerror("Invalid Email", "Please enter a valid email.\nThere should also be no spaces in the first half of the email.")
                     return
                 if emailending == "student.newinti.edu.my":
                     role = "student"
@@ -1056,6 +1079,7 @@ class LoginPage(Frame):
 class MainPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent, bg=LAVENDER)
+        self.controller = controller
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
@@ -1088,20 +1112,20 @@ class MainPage(Frame):
         imagelabel = Label(self, image=self.feedbackimage,
                            anchor=CENTER, width=1, height=1)
         
-        eventnamebutton = Button(self, text="Event 1", font=(
+        self.firsteventnamebutton = Button(self, text="Event 1:", font=(
          'Lucida Calligraphy', 14), width=1, height=1, relief="flat", fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.show_frame(EventView),
-        controller.togglebuttonrelief(controller.eventlistbutton)])
 
-        eventnamebutton.grid(row=15, column=2, columnspan=16,
+        self.loadtheeventinquestion(self.lasteventindex)])
+
+        self.firsteventnamebutton.grid(row=15, column=2, columnspan=16,
                              rowspan=2, sticky=N+S+E+W)
-        eventsnamebutton = Button(self, text="Event 2", font=(
+        self.secondeventsnamebutton = Button(self, text="Event 2:", font=(
          'Lucida Calligraphy', 14), width=1, height=1, relief="flat",fg='#000000', bg='#FFF5E4',
         command=lambda: [
-        controller.show_frame(EventView),
-        controller.togglebuttonrelief(controller.eventlistbutton)])
-        eventsnamebutton.grid(row=18, column=2, columnspan=16,
+
+        self.loadtheeventinquestion(self.lasteventindex-1)])
+        self.secondeventsnamebutton.grid(row=18, column=2, columnspan=16,
                               rowspan=2, sticky=N+S+E+W)
 
         #Button
@@ -1135,7 +1159,53 @@ class MainPage(Frame):
             controller.signout()])
         # logoutbutton.grid(row=0, column=41, columnspan=1, rowspan=1, sticky=N+S+E+W)
         imagelabel = Label(self, image=self.logoutimage, anchor=CENTER, width=1, height=1)
+        self.update_eventnames()
+        self.refreshbutton = Button(self, text="Refresh", font=(
+            'Lucida Calligraphy', 16), width=1, height=1, relief=RAISED, fg=BLACK, bg='#bcffff', command=
+            lambda: [
+            self.update_eventnames()])
+        self.refreshbutton.grid(row=13, column=15, columnspan=3,
+                            rowspan=1, sticky=N+S+E+W)
+        self.conn = sqlite3.connect('dummy.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT COUNT(event_name) FROM eventcreation")
+        self.eventcount = self.c.fetchone()[0]
+        self.lasteventindex = self.eventcount - 1
 
+    def update_eventnames(self):
+        self.conn = sqlite3.connect('dummy.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute("SELECT COUNT(event_name) FROM eventcreation")
+        self.eventcount = self.c.fetchone()[0]
+        if self.eventcount == 0: #if there are no events, just make it say because index is already -1 and -2
+            self.firsteventnamebutton.config(text="No Events, refresh to check again")
+            self.secondeventsnamebutton.config(text="No Events, refresh to check again")
+            return
+        elif self.eventcount == 1: #the top button will have have to pass index 0
+            self.c.execute("SELECT event_name FROM eventcreation ORDER BY eventkey_number DESC LIMIT 2")
+            self.eventnames = self.c.fetchall()
+            self.twoeventnames = [i[0] for i in self.eventnames]
+            self.lasteventindex = self.eventcount - 1
+            self.firsteventnamebutton.config(text=self.twoeventnames[0])
+            self.secondeventsnamebutton.config(text="No Events, refresh to check again")
+            return
+        self.lasteventindex = self.eventcount - 1
+        self.c.execute("SELECT event_name FROM eventcreation ORDER BY eventkey_number DESC LIMIT 2")
+        self.eventnames = self.c.fetchall()
+        self.twoeventnames = [i[0] for i in self.eventnames]
+        print(self.twoeventnames)
+        self.firsteventnamebutton.config(text=self.twoeventnames[0])
+        self.secondeventsnamebutton.config(text=self.twoeventnames[1])
+    def loadtheeventinquestion(self, index):
+        if index <= -1:
+            messagebox.showinfo("No Events", "There are no events to view, please refresh if you expect there to be events")
+            return
+        eventviewrfrnce = self.controller.get_page(EventView)
+        eventviewrfrnce.load_event(index)
+        self.controller.show_frame(EventView)
+        self.controller.togglebuttonrelief(self.controller.eventlistbutton)
 
 class EventView(Frame):
     def __init__(self, parent, controller):
@@ -1238,7 +1308,7 @@ class EventView(Frame):
         self.after(100, self.updateevents)
         self.imageindex = 0
     def changetoeventregistration(self, index):
-        print(self.titleartlabel.cget("text"))
+        # print(self.titleartlabel.cget("text"))
         if  self.titleartlabel.cget("text") != "No Events":
             self.controller.show_frame(EventRegistration)
             self.controller.togglebuttonrelief(self.controller.eventregistrationbutton)
@@ -1319,7 +1389,7 @@ class EventView(Frame):
             self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
             self.update_location(self.eventsname[self.imageindex][1])
             self.update_date(self.eventsname[self.imageindex][1])
-        print(self.imageindex)
+        # print(self.imageindex)
 
 
 
@@ -1336,7 +1406,7 @@ class EventView(Frame):
             self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
             self.update_location(self.eventsname[self.imageindex][1])
             self.update_date(self.eventsname[self.imageindex][1])
-        print(self.imageindex)
+        # print(self.imageindex)
 
         # if self.imageindex == len(self.eventsname):
         #     self.imageindex = 0
@@ -1344,6 +1414,19 @@ class EventView(Frame):
         # self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
         # self.update_location(self.eventsname[self.imageindex][1])
         # self.update_date(self.eventsname[self.imageindex][1])
+
+    #loading event from main page function #will receive either last index or second last index
+    def load_event(self, index):
+        print(index)
+        self.imageindex = index
+        if index <= 0:
+            self.imageindex = 0
+            self.updateevents()
+            return
+        self.read_blob(self.eventsname[self.imageindex][1])
+        self.titleartlabel.config(text=self.eventsname[self.imageindex][1])
+        self.update_location(self.eventsname[self.imageindex][1])
+        self.update_date(self.eventsname[self.imageindex][1])
 
     
 
@@ -1518,7 +1601,7 @@ class EventRegistration(Frame):
         self.eventdropdown.bind('<FocusIn>', defocus)
         self.eventdropdown.bind('<<ComboboxSelected>>', focusout)
         self.eventdropdown.grid_propagate(False)
-        
+        # generate a comboboxselected event when the user clicks on the dropdown
         separator = ttk.Separator(self, orient=HORIZONTAL)
         separator.grid(row=3, column=3, columnspan=16, pady=5, sticky=EW)
         icpasslabel = Label(self, text="IC No.",
@@ -1676,6 +1759,7 @@ class EventRegistration(Frame):
             self.event_list.append(information[0])
             self.current_eventkey = information[1]
         self.eventdropdown['values'] = self.event_list
+    
 
 class EventCreation(Frame):
     def __init__(self, parent, controller):
@@ -1766,7 +1850,7 @@ class EventCreation(Frame):
                                font=(FONTNAME, 18), wrap=WORD)
         self.eventdescription.grid(row=8, column=3, columnspan=13,
                                 rowspan=3, sticky=NSEW)
-        self.eventdescription.insert(1.0, "Event Description")
+        self.eventdescription.insert("1.0", "Event Description", 'center')
 
         self.organizerfield = Entry(self, width=1, bg='#FFFFFF',
                                 font=(FONTNAME, 18), justify='center')
@@ -1938,6 +2022,15 @@ class EventCreation(Frame):
         self.clearimgbtn = Button(self.uploadframe, image=self.clearimgbtnimg, width=1, height=1,
         bg=ORANGE, command=lambda: self.clear_image())
         self.clearimgbtn.grid(row=9, column=18, columnspan=7, rowspan=2, sticky=NSEW)
+        self.prompttextwidget = Text(self.uploadframe, width=1, height=1, bg=ORANGE, font=("Avenir Next", 14), wrap=WORD)
+        self.prompttextwidget.grid(row=12, column=18, columnspan=7, rowspan=2, sticky=NSEW)
+        self.prompttextwidget.insert(1.0,"Let's enter a prompt")
+        self.generateanimagebtnimg = Image.open(r"Assets\EventCreation\generateanimage280x80.png")
+        self.generateanimagebtnimg = ImageTk.PhotoImage(self.generateanimagebtnimg.resize(
+            (math.ceil(280 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.generateanimagebtn = Button(self.uploadframe, image=self.generateanimagebtnimg, width=1, height=1,
+        bg=ORANGE, command=lambda: self.generate_image(self.prompttextwidget.get("1.0", END)))
+        self.generateanimagebtn.grid(row=14, column=18, columnspan=7, rowspan=2, sticky=NSEW)
         self.panelimgnoimg = Image.open(r"Assets\EventCreation\panelnoimage520x520.png")
         self.panelimgnoimg = ImageTk.PhotoImage(self.panelimgnoimg.resize(
             (math.ceil(520 * dpi / 96), math.ceil(520 * dpi / 96)), Image.Resampling.LANCZOS))
@@ -1955,6 +2048,28 @@ class EventCreation(Frame):
         self.confirmandsubmitbtn = Button(self.uploadframe, image=self.confirmandsubmitbtnimg, width=1, height=1,
         bg=ORANGE, command=lambda: self.insert_blob())
         self.confirmandsubmitbtn.grid(row=17, column=33, columnspan=7, rowspan=2, sticky=NSEW)
+    def generate_image(self, inputprompt):
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+        messagebox.showinfo("Generating Image", "Please wait while we generate your image\n The system will become unresponsive for a few seconds")
+        image = (openai.Image.create(
+            prompt = inputprompt,
+            n = 1,
+            size = "512x512"
+            ))
+        url = image["data"][0]["url"]
+        #saves the file in this directory Assets\imagesgenerated by default        
+        #saves as distinct file name
+        # remove all spaces in the inputprompt string
+        inputprompt = inputprompt.strip().replace(" ", "")
+        actualfile = "Assets\imagesgenerated\imageof" + inputprompt + ".png"
+        urllib.request.urlretrieve(url, actualfile)
+        self.generatedimage = Image.open(actualfile)
+        self.generatedimage = ImageTk.PhotoImage(self.generatedimage.resize(
+            (math.ceil(520 * dpi / 96), math.ceil(520 * dpi / 96)), Image.Resampling.LANCZOS))
+        self.panel.configure(image=self.generatedimage)
+        self.filename = actualfile
+        messagebox.showinfo("Image Generated", "Your image has been generated, thanks for waiting!")
+
 
     def cancelupload(self):
         self.uploadframe.grid_remove()
@@ -1963,9 +2078,9 @@ class EventCreation(Frame):
     
     def upload_image(self):
         try:
-            self.filename = filedialog.askopenfilename(initialdir="/",
-                                                    title="Select A File",
-                                                    filetypes=(("png files", "*.png"),("jpeg files", "*.jpg"), ("all files", "*.*")))
+            self.filename = filedialog.askopenfilename(initialdir="Assets", 
+                                                    title="Select A File", 
+                                                    filetypes=(("all files", "*.*"), ("png files", "*.png"),("jpeg files", "*.jpg")))
             #This is the file we need to make as a blob
             self.img = Image.open(self.filename)
             self.img = ImageTk.PhotoImage(self.img.resize
@@ -2014,7 +2129,13 @@ class EventCreation(Frame):
                     (eventkey_number, event_name, event_description, event_startdate, event_enddate, event_starttime, event_endtime, event_organizer, venue_name, host_name, event_image) VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
                     (information))
                     messagebox.showinfo("Success", "Event Created")
-                    eventregistrationreference = self.controller.get_page(EventRegistration)
+                eventregistrationreference = self.controller.get_page(EventRegistration)
+                eventregistrationreference.eventdropdown.event_generate("<<ComboboxSelected>>")
+                eventregistrationreference.eventdropdown.event_generate("<<FocusOut>>")
+                self.controller.show_frame(EventRegistration)
+            except Exception as e:
+                messagebox.showinfo("Error", str(e))
+                print(e)
 
                     
     
@@ -2053,6 +2174,7 @@ class EventCreation(Frame):
             # print(self.c.fetchall())
     def clear_image(self):
         self.panel.configure(image=self.panelimgnoimg)
+        self.filename = self.panelimgnoimg
 
 
             
@@ -2353,6 +2475,13 @@ class ManagementSuite(Frame):
         #Always show the first frame
         self.overallframes[0].grid()
     def edit_event(self, eventname):
+        self.conn = sqlite3.connect("dummy.db")
+        self.c = self.conn.cursor()
+        self.c.execute("SELECT * FROM eventcreation WHERE event_name=?", (eventname,))
+        event_details = self.c.fetchone()
+        if event_details == None:
+            messagebox.showerror("Error", "Event may have already been deleted, please search again.")
+            return
         self.tempframe = Frame(self.interfaceframe, bg=LIGHTPURPLE, relief=FLAT, width=1,height=1)
         self.tempframe.grid(row=1, column=7, rowspan=15, columnspan=18, sticky=NSEW)
         self.tempframe.grid_propagate(False)
@@ -2368,11 +2497,6 @@ class ManagementSuite(Frame):
             row=0, column=0, rowspan=15, columnspan=18, sticky=NSEW)
         #button to remove the frame
         Button(self.tempframe, text="X", width=1, height=1, bg=LIGHTPURPLE, relief=FLAT, command=lambda:self.tempframe.grid_remove()).grid(row=0, column=17, rowspan=1, columnspan=1, sticky=NSEW)
-        self.conn = sqlite3.connect("dummy.db")
-        self.c = self.conn.cursor()
-        self.c.execute("SELECT * FROM eventcreation WHERE event_name=?", (eventname,))
-        # works on a temporary frame to display the event information
-        event_details = self.c.fetchone()
         event_key = event_details[0]
         event_name = event_details[1]
         event_description = event_details[2]
@@ -2460,38 +2584,22 @@ class ManagementSuite(Frame):
             confirmbutton.grid(row=13, column=3, rowspan=2, columnspan=12, sticky=NSEW)
     def confirm_delete(self, event_name, event_key):
         for widget in self.rightframe.winfo_children():
-            # print(widget)
-            #specific widget names to destroy
-            #widget to be deleted is .!frame.!viewparticipants.!frame.!frame2.!label28
-            #delete all widgets where !label is greater than 28
             if widget.winfo_class() == "Button":
                 widget.destroy()
-        self.numbofstudentimg = Image.open(r"Assets\managementsuite\manageeventswidgets\bgforcount80x80.png")
-        self.numbofstudentimg = ImageTk.PhotoImage(self.numbofstudentimg.resize(
-            (math.ceil(80 * dpi/96), math.ceil(80 * dpi/96)), Image.Resampling.LANCZOS))
-        self.numbofstudentlabel = Label(self.rightframe, text="", compound=CENTER, font=("Avenir Next Bold", 8),image=self.numbofstudentimg, width=1, height=1, bg=LIGHTPURPLE)
-        # getting number of event participants from the eventregistration table, under foreign key eventkey_number
-        self.numbofstudentlabel.grid(row=8, column=7, rowspan=2, columnspan=2, sticky=NSEW)
-        #name of event and event key labels
-
         self.conn = sqlite3.connect("dummy.db")
         self.c = self.conn.cursor()
+        self.c.execute("SELECT * FROM eventcreation WHERE event_name=?", (event_name,))
+        event_details = self.c.fetchone()
+        if event_details == None:
+            messagebox.showerror("Error", "Event may have already been deleted, please search again.")
+            return
+        self.numbofstudentlabel = Button(self.rightframe, state=DISABLED, text="", compound=CENTER, font=("Avenir Next Bold", 12),disabledforeground=BLACK,width=1, height=1, bg=LIGHTYELLOW, command=None, relief=FLAT)
+        self.numbofstudentlabel.grid(row=8, column=7, rowspan=2, columnspan=2, sticky=NSEW)
+
         self.c.execute("SELECT full_name FROM eventregistration WHERE eventkey_registered = ?", (event_key,))
         self.numbofstudentlabel.config(text=f"{len(self.c.fetchall())}\nstudents")
         #checking if foreign key is enabled in sqlite3
-        with self.conn:
-            self.c.execute("PRAGMA foreign_keys = ON")
-
-        #deleting the students details from the eventregistration table where eventkey_registered = event_key
-        # self.c.execute("DELETE FROM eventregistration WHERE eventkey_registered = ?", (event_key,))
-        # number_of_participants = self.c.fetchone() # This is a string of the number of participants
-        
-        # self.numbofstudentlabel.config(text=number_of_participants)
-
         self.studentcountlabel.grid(row=8, column=2, rowspan=2, columnspan=5, sticky=NSEW)
-
-
-
         self.cancelimageorg = Image.open(r"Assets\managementsuite\manageeventswidgets\cancelbutton.png")
         self.cancelimage= ImageTk.PhotoImage(self.cancelimageorg.resize(
             (math.ceil(160 * dpi / 96), math.ceil(80 * dpi / 96)), Image.Resampling.LANCZOS))          
@@ -2522,14 +2630,22 @@ class ManagementSuite(Frame):
         with self.conn:
             self.c.execute("PRAGMA foreign_keys = ON")
 
-        #checking if foreign key is enabled in sqlite3
-        self.c.execute("PRAGMA foreign_keys")
-
-        print("The state of foreign keys is ",self.c.fetchall(), f"you deleted {event_key}")
-
         with self.conn:
             self.c.execute("DELETE FROM eventcreation WHERE event_name = ?", (event_name,))
             messagebox.showinfo("Success", f"Event with event name {event_name} and {event_key} deleted successfully")
+        #clear the rightframe
+        self.studentcountlabel.grid_remove()
+        resetdropdown = self.controller.get_page(EventRegistration)
+        resetdropdown.eventdropdown.current(0)
+        resetdropdown.eventdropdown.event_generate("<FocusIn>")
+        resetdropdown.eventdropdown.event_generate("<FocusOut>")
+        resetdropdown.eventdropdown.event_generate("<<ComboboxSelected>>")
+        for widget in self.rightframe.winfo_children():
+            if widget.winfo_class() == "Button":
+                widget.destroy()
+        test = self.controller.get_page(MainPage)
+        test.update_eventnames()
+
 
     def next_page(self):
         if self.page < self.framesneeded:
@@ -3198,7 +3314,7 @@ class ManagementSuite(Frame):
             self.frameforpgbuttonsstudents.rowconfigure(w, weight=1, uniform="x")
             Label(self.frameforpgbuttonsstudents, width=1, height=1, bg=WHITE).grid(row=w, column=0, sticky=NSEW)
         self.frameforpgbuttonsstudents.grid_propagate(False)
-        self.showingthedetailsofstudent_ = Label(self.frameforpgbuttonsstudents, text=f"Showing details of {self.nameofevent}", bg=PINK, fg=BLACK, font=("Avenir Next Medium", 12), width=1, height=1)
+        self.showingthedetailsofstudent_ = Label(self.frameforpgbuttonsstudents, text=f"Showing details of {self.nameofevent}", bg=PINK, fg=BLACK, font=("Avenir Next Medium", 14), width=1, height=1, wraplength= 300, justify=LEFT)
         self.showingthedetailsofstudent_.grid(row=0, column=0, columnspan=8, sticky=NSEW)
         self.pgnumlabelregisteredevents_ = Label(self.frameforpgbuttonsstudents, text=f"Page {self.pagestudentcounter}/{self.studentsregframesneeded}", bg=NICEBLUE, fg=BLACK, font=("Avenir Next Medium", 12), width=1, height=1)
         self.pgnumlabelregisteredevents_.grid(row=0, column=8, columnspan=3, sticky=NSEW)
@@ -3302,7 +3418,7 @@ class ManagementSuite(Frame):
         entrylist = [self.eventfullnameentry, self.eventicpassnoentry, self.eventphonenumberentry, self.eventemailentry, self.eventaddressentry]
         for entry in entrylist:
             entry.grid_remove()
-        self.currentlyeditinglabel_ = Button(self.frametoshowdetailsevent[index], state=DISABLED, text=f"You are currently editing the student, {self.fullname}", font=("Avenir Next", 12), fg=BLACK, bg=WHITE, width=1, height=1)
+        self.currentlyeditinglabel_ = Button(self.frametoshowdetailsevent[index], state=DISABLED, text=f"You are currently editing the student, {self.fullname}", font=("Avenir Next", 14), fg=BLACK, bg=WHITE, width=1, height=1)
         self.confirmbutton_ = Button(self.frametoshowdetailsevent[index], text="Confirm", font=("Avenir Next Bold", 16), fg=BLACK, bg=WHITE, command=lambda:[self.confirm_editing_details(nameofstudent, nameofevent, index)])
         self.currentlyeditinglabel_.grid_remove()
         self.confirmbutton_.grid_remove()
@@ -3319,7 +3435,7 @@ class ManagementSuite(Frame):
         self.frametoshowdetailsevent[index].grid()
         self.frametoshowdetailsevent[index].tkraise()
 
-        self.studentnamelabel = Label(self.frametoshowdetailsevent[index], text=f"The details for student {self.fullname} in event: {nameofevent}", font=("Avenir Next Medium", 16), fg=BLACK, bg=WHITE, width=1, height=1)
+        self.studentnamelabel = Label(self.frametoshowdetailsevent[index], text=f"The details for student {self.fullname} in event: {nameofevent}", font=("Avenir Next Medium", 14), fg=BLACK, bg=WHITE, width=1, height=1)
         self.studentnamelabel.grid(row=0, column=0, rowspan=1, columnspan=14, sticky=NSEW)
         fullnamebutton = Button(self.frametoshowdetailsevent[index], text=f"Full name: {self.fullname}", font=("Avenir Next Medium", 16), fg=BLACK, bg=PINK, command=lambda:self.evententryinitializer(self.eventfullnameentry,self.fullname,fieldchanged="full_name", originaltext=self.fullname, eventregistered=nameofevent, currentindex=index)).grid(row=1, column=1, columnspan=13, sticky=NSEW)
         icpassnobutton = Button(self.frametoshowdetailsevent[index], text=f"IC/Passport number: {self.icpassnumber}", font=("Avenir Next Medium", 16), fg=BLACK, bg=PINK, command=lambda:self.evententryinitializer(self.eventicpassnoentry,self.icpassnumber,fieldchanged="icpass_number", originaltext=self.icpassnumber,eventregistered=nameofevent, currentindex=index)).grid(row=2, column=1, columnspan=13, sticky=NSEW)
