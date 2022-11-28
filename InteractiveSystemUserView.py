@@ -274,14 +274,8 @@ class Window(Tk):
                 Label(self.sidebarframe, width=1, bg=NAVYBLUE).grid(
                 row=y, column=0, sticky=NSEW)
         
-        self.bellimage = Image.open(r"assets\bell.png")
-        self.bellimage = ImageTk.PhotoImage(self.bellimage.resize(
-            (math.ceil(120 * dpi/96), math.ceil(120 * dpi/96)), Image.Resampling.LANCZOS))
-        self.bellbutton = Button(self.sidebarframe, image=self.bellimage, bg=NAVYBLUE,
-                                borderwidth=1, relief="flat", height=1, width=1,
-                                command=lambda: print(dpi))
 
-        self.calendarimage = Image.open(r"assets\calenderr.png")
+        self.calendarimage = Image.open(r"Assets\Main Assets\SideCalendar.png")
         self.calendarimage = ImageTk.PhotoImage(self.calendarimage.resize(
             (math.ceil(120 * dpi/96), math.ceil(120 * dpi/96)), Image.Resampling.LANCZOS))
         self.sidecalendar = Button(self.sidebarframe, image=self.calendarimage, bg=NAVYBLUE,
