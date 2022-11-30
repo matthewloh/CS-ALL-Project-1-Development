@@ -42,6 +42,20 @@ import random
 import sqlite3
 from ctypes import windll
 
+try:
+    import pyglet 
+except:
+    print('Installing pyglet.')
+    subprocess.check_call(['pip', 'install', 'pyglet'])
+    print('Done.')
+    import pyglet
+
+# Pyglet library to add the fonts including Atkinson Hyperlegible and Avenir Next to the system.
+pyglet.font.add_file('fonts\AtkinsonHyperlegible.ttf')
+pyglet.font.add_file('fonts\AvenirNext-Bold.ttf')
+pyglet.font.add_file('fonts\AvenirNext-Regular.ttf')
+pyglet.font.add_file('fonts\AvenirNext-Medium.otf')
+
 # Ctypes method that allows us to interact with windows and get the system resolution
 # https://stackoverflow.com/a/3129524
 
@@ -107,7 +121,7 @@ class Window(Tk):
         self.screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
         if self.screensize == (1920, 1080):
             self.geometry(
-                f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1049 * dpi / 96)}')            
+                f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
         elif self.screensize > (1920, 1080):
             self.geometry(
                 f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
@@ -277,7 +291,7 @@ class Window(Tk):
         self.calendarimage = Image.open(r"Assets\Main Assets\SideCalendar.png")
         self.calendarimage = ImageTk.PhotoImage(self.calendarimage.resize(
             (math.ceil(120 * dpi/96), math.ceil(120 * dpi/96)), Image.Resampling.LANCZOS))
-        self.sidecalendar = Button(self.sidebarframe, image=self.calendarimage, bg=NAVYBLUE,
+        self.sidecalendar = Button(self.sidebarframe, image=self.calendarimage, bg=NAVYBLUE,cursor="hand2",
                                 borderwidth=1, relief="flat", height=1, width=1,
                                 command=lambda:[
                                     self.make_a_container()])
@@ -422,7 +436,7 @@ class Window(Tk):
                             bg="#33c748", fg="WHITE", width=1, height=1, relief=RAISED,
                             command=lambda:[
                                 self.deletethewindowbar(),
-                                print(self.get_display_size())
+                                self.state("zoomed")
                                 ])
         self.maximizebutton.grid(row=1, column=0, sticky=NSEW)
         self.maximizebutton.grid_propagate(False)
