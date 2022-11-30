@@ -880,7 +880,7 @@ class LoginPage(Frame):
                     try:
                         if role == "student":
                             messagebox.showinfo(
-                                "Login Successful", "Welcome Student!")
+                                "Login Successful", f"Welcome {name}!")
                             LOGGEDINAS = "Student"
                             LOGINSTATE = True
                             LOGINID = email
@@ -892,7 +892,7 @@ class LoginPage(Frame):
                             controller.enablethesebuttons()
                         elif role == "admin":
                             messagebox.showinfo(
-                                "Login Successful", "Welcome Admin!")
+                                "Login Successful", f"Welcome {name}!")
                             LOGGEDINAS = "Admin"
                             LOGINSTATE = True
                             LOGINID = email
@@ -1050,6 +1050,12 @@ class LoginPage(Frame):
             if controller.state() == "zoomed":
                 eventID = controller.after(controller.resizeDelay, resize)
         controller.bind('<Configure>', resizeEvent)
+        if controller.screensize == (1920, 1080):
+            self.removewindowbar()
+    def removewindowbar(self):
+        self.controller.deletethewindowbar()
+        self.controller.state("zoomed")
+
 
         
 
