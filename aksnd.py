@@ -112,7 +112,7 @@ class Window(Tk):
         elif self.screensize > (1920, 1080):
             self.geometry(
                 f'{math.ceil(1920 * dpi / 96)}x{math.ceil(1080 * dpi / 96)}')
-        self.title("INTI Interactive System")
+        self.title("INTI Interactive Event System with no Events")
         self.resizable(False, False)
         self.configure(background=LAVENDER)
         for x in range(32):
@@ -274,14 +274,14 @@ class Window(Tk):
                 Label(self.sidebarframe, width=1, bg=NAVYBLUE).grid(
                 row=y, column=0, sticky=NSEW)
         
-        self.bellimage = Image.open(r"assets\bell.png")
-        self.bellimage = ImageTk.PhotoImage(self.bellimage.resize(
-            (math.ceil(120 * dpi/96), math.ceil(120 * dpi/96)), Image.Resampling.LANCZOS))
-        self.bellbutton = Button(self.sidebarframe, image=self.bellimage, bg=NAVYBLUE,
-                                borderwidth=1, relief="flat", height=1, width=1,
-                                command=lambda: print(dpi))
+        # self.bellimage = Image.open(r"assets\bell.png")
+        # self.bellimage = ImageTk.PhotoImage(self.bellimage.resize(
+        #     (math.ceil(120 * dpi/96), math.ceil(120 * dpi/96)), Image.Resampling.LANCZOS))
+        # self.bellbutton = Button(self.sidebarframe, image=self.bellimage, bg=NAVYBLUE,
+        #                         borderwidth=1, relief="flat", height=1, width=1,
+        #                         command=lambda: print(dpi))
 
-        self.calendarimage = Image.open(r"assets\calenderr.png")
+        self.calendarimage = Image.open(r"Assets\Main Assets\SideCalendar.png")
         self.calendarimage = ImageTk.PhotoImage(self.calendarimage.resize(
             (math.ceil(120 * dpi/96), math.ceil(120 * dpi/96)), Image.Resampling.LANCZOS))
         self.sidecalendar = Button(self.sidebarframe, image=self.calendarimage, bg=NAVYBLUE,
@@ -1151,14 +1151,14 @@ class MainPage(Frame):
         calendarbutton.grid(row=16, column=35, columnspan=5,
                             rowspan=3, sticky=N+S+E+W)
 
-        self.logoutimage = Image.open(r"assets\logoutbutton.png")
-        self.logoutimage = ImageTk.PhotoImage(self.logoutimage.resize(
-            (math.ceil(38 * dpi / 96), math.ceil(38 * dpi / 96)), Image.Resampling.LANCZOS)),
-        logoutbutton = Button(self,image=self.logoutimage , width=1, height=1, fg='#000000', bg='#FFF5E4',command=lambda:
-            [controller.show_frame(LoginPage), controller.togglebuttonrelief(controller.loginbutton),
-            controller.signout()])
-        # logoutbutton.grid(row=0, column=41, columnspan=1, rowspan=1, sticky=N+S+E+W)
-        imagelabel = Label(self, image=self.logoutimage, anchor=CENTER, width=1, height=1)
+        # self.logoutimage = Image.open(r"assets\logoutbutton.png")
+        # self.logoutimage = ImageTk.PhotoImage(self.logoutimage.resize(
+        #     (math.ceil(38 * dpi / 96), math.ceil(38 * dpi / 96)), Image.Resampling.LANCZOS)),
+        # logoutbutton = Button(self,image=self.logoutimage , width=1, height=1, fg='#000000', bg='#FFF5E4',command=lambda:
+        #     [controller.show_frame(LoginPage), controller.togglebuttonrelief(controller.loginbutton),
+        #     controller.signout()])
+        # # logoutbutton.grid(row=0, column=41, columnspan=1, rowspan=1, sticky=N+S+E+W)
+        # imagelabel = Label(self, image=self.logoutimage, anchor=CENTER, width=1, height=1)
         self.update_eventnames()
         self.refreshbutton = Button(self, text="Refresh", font=(
             'Lucida Calligraphy', 16), width=1, height=1, relief=RAISED, fg=BLACK, bg='#bcffff', command=
