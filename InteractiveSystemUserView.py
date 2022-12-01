@@ -1944,6 +1944,8 @@ class EventCreation(Frame):
         self.confirmandsubmitbtn = Button(self.uploadframe, image=self.confirmandsubmitbtnimg, width=1, height=1,
         bg=ORANGE, command=lambda: self.insert_blob())
         self.confirmandsubmitbtn.grid(row=17, column=33, columnspan=7, rowspan=2, sticky=NSEW)
+
+        # the function is right here bro
     def generate_image(self, inputprompt):
         try:
             openai.api_key = os.getenv("OPENAI_API_KEY")
