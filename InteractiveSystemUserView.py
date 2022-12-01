@@ -155,7 +155,7 @@ class Window(Tk):
             Label(self.centercontainer, width=1, bg=LAVENDER).grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=NSEW)
                         
-        self.buttoncontainer = Frame(self, bg=DARKBLUE, highlightbackground=ORANGE, highlightthickness=2)
+        self.buttoncontainer = Frame(self, bg=DARKBLUE, highlightbackground=LIGHTYELLOW, highlightthickness=2)
         self.buttoncontainer.grid(row=0, column=0, rowspan=2,
                              columnspan=30, sticky=NSEW)
         self.buttoncontainer.grid_propagate(False)
@@ -343,7 +343,7 @@ class Window(Tk):
         self.feedbackbutton.grid_forget()
         self.sidecalendar.grid_forget()
         self.welcomelabel("Stranger", "Viewer")
-        self.loggedinaslabel.config(text="Logged in as: ")
+        self.welcomebuttonlabel.configure(cursor="arrow")
         global LOGGEDINAS
         global LOGINSTATE
         global LOGINID
@@ -388,7 +388,8 @@ class Window(Tk):
             Label(self.welcomeframe, width=1, bg=NICEBLUE).grid(
                 row=y, column=0, sticky=NSEW)
                 
-        self.welcomebuttonlabel = Button(self.welcomeframe, width=1, height=1,state=DISABLED,text="",font=("Atkinson Hyperlegible", 30), fg="white",disabledforeground=WHITE, bg=DARKBLUE, command=lambda:self.make_a_container())
+        self.welcomebuttonlabel = Button(self.welcomeframe, width=1, height=1,state=DISABLED,text="",font=("Atkinson Hyperlegible", 30), fg="white",  cursor="arrow",
+                                    disabledforeground=WHITE, bg=DARKBLUE, command=lambda:self.make_a_container())
         self.welcomebuttonlabel.grid(row=0, column=0, rowspan=2, columnspan=8, sticky=NSEW)
         self.welcomebuttonlabel.configure(text=f"Welcome {name.capitalize()} as {role.capitalize()}!\nWe are glad to have you here!")
         self.welcomebuttonlabel.grid_propagate(False)
@@ -408,8 +409,8 @@ class Window(Tk):
 
     #Window management button frame
     def createwindowmanagementframe(self):
-        self.windowmanagementframe = Frame(self, bg=NAVYBLUE, width=1, height=1)
-        self.windowmanagementframe.grid(row=0, column=30, rowspan=2, columnspan=2,
+        self.windowmanagementframe = Frame(self, bg=NAVYBLUE, width=1, height=1,highlightthickness=1, highlightbackground=WHITE)
+        self.windowmanagementframe.grid(row=0, column=30, rowspan=2, columnspan=2, 
                                     sticky=NSEW)
         self.windowmanagementframe.grid_propagate(False)
 
@@ -485,7 +486,7 @@ class Window(Tk):
                             bg=LAVENDER, fg="black")
         self.introlabel.grid(row=0, column=2, rowspan=2, columnspan=8, sticky=NSEW)
         self.introlabel.grid_propagate(False)
-        self.viewbutton = Button(self.calendarframepopup,
+        self.viewbutton = Button(self.calendarframepopup,  cursor="hand2",
             text="View Calendar", font=("Atkinson Hyperlegible", 14),
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
             command=lambda:[
@@ -500,13 +501,13 @@ class Window(Tk):
         self.loggedinaslabel.grid_propagate(False)
         self.viewbutton.grid(row=5, column=1, rowspan=2, columnspan=5, sticky=NSEW,padx=2)
         self.viewbutton.grid_propagate(False)
-        self.editbutton = Button(self.calendarframepopup,
+        self.editbutton = Button(self.calendarframepopup, cursor="hand2",
             text="Check My Registered Events", font=("Atkinson Hyperlegible", 14),
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
             command=lambda:[self.getevents()])
         self.editbutton.grid(row=5, column=6, rowspan=2, columnspan=5, sticky=NSEW,padx=2)
         self.editbutton.grid_propagate(False)
-        self.closebutton = Button(self.calendarframepopup, 
+        self.closebutton = Button(self.calendarframepopup,  cursor="hand2",
             text="Close", font=("Atkinson Hyperlegible", 14),
             bg=DARKBLUE, fg="WHITE", width=1, height=1,
             command=lambda:[
@@ -900,6 +901,7 @@ class LoginPage(Frame):
                             LOGINID = email
                             controller.show_loggedin()
                             controller.welcomelabel(name, role)
+                            controller.welcomebuttonlabel.configure(cursor="hand2")
                             controller.loggedinaslabel.configure(text=(f"Logged in as:\n{email}"))
                             controller.show_frame(MainPage)
                             controller.togglebuttonrelief(controller.mainpagebutton)
@@ -912,6 +914,7 @@ class LoginPage(Frame):
                             LOGINID = email
                             controller.show_admin()
                             controller.welcomelabel(name, role)
+                            controller.welcomebuttonlabel.configure(cursor="hand2")
                             controller.loggedinaslabel.configure(text=(f"Logged in as:\n{email}"))
                             controller.show_frame(MainPage)
                             controller.togglebuttonrelief(controller.mainpagebutton)
@@ -3131,6 +3134,14 @@ class ManagementSuite(Frame):
 
         self.studentsregisteredforframe = {}
         self.frametoshowdetailsevent = {}
+        #destroying the previous frames in the studentsregisteredforframe
+        # try:
+        #     for frame in range(len(self.studentsregisteredforframe)):
+        #         self.studentsregisteredforframe[frame].destroy()
+        # except:
+        #     pass
+        # for frame in range(len(self.studentsregisteredforframe)):
+        #         print(frame)
         for z in range(self.studentsregframesneeded):
             self.studentsregisteredforframe[z] = Frame(self.searchbyeventsframe, height=1, width=1, bg=PINK)
             self.studentsregisteredforframe[z].grid(row=4, column=22, rowspan=11, columnspan=15, sticky=NSEW)
@@ -3188,14 +3199,14 @@ class ManagementSuite(Frame):
         if self.pagestudentcounter > 1:
             self.pagestudentcounter -= 1
             self.pgnumlabelregisteredevents_.config(text=f"Page {self.pagestudentcounter} of {self.studentsregframesneeded}")
-            self.studentsregisteredforframe[self.pagestudentcounter].grid()
-            self.studentsregisteredforframe[self.pagestudentcounter+1].grid_remove()
+            self.studentsregisteredforframe[self.pagestudentcounter].grid_remove()
+            self.studentsregisteredforframe[self.pagestudentcounter-1].grid()
     def nextpagestudents(self):
         if self.pagestudentcounter < self.studentsregframesneeded:
             self.pagestudentcounter += 1
             self.pgnumlabelregisteredevents_.config(text=f"Page {self.pagestudentcounter} of {self.studentsregframesneeded}")
             self.studentsregisteredforframe[self.pagestudentcounter-2].grid_remove()
-            self.studentsregisteredforframe[self.pagestudentcounter].grid()
+            self.studentsregisteredforframe[self.pagestudentcounter-1].grid()
 
     def read_student_dtlsevnt(self, nameofevent, nameofstudent, index):
         print(f"Name of event is {nameofevent} and name of student is {nameofstudent}")
