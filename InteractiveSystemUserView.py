@@ -267,8 +267,8 @@ class Window(Tk):
                                 self.show_admin()])
 
         self.signoutbutton.grid(row=0, column=0, rowspan=2, columnspan=3, sticky=NSEW)
-        self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
-        self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
+        # self.studentbutton.grid(row=0, column=3, rowspan=2, columnspan=3, sticky=NSEW)
+        # self.adminbutton.grid(row=0, column=6, rowspan=2, columnspan=3, sticky=NSEW)
 
         self.remindercontainer = Frame(self.bottomleftbuttons, bg=LIGHTYELLOW, width=1, height=1)
         # self.remindercontainer.grid(row=0, column=9, rowspan=2, columnspan=11, sticky=NSEW)
@@ -3340,11 +3340,11 @@ class FeedbackForm(Frame):
         self.grid_rowconfigure(0, weight=1)
         for x in range(42):
             self.columnconfigure(x, weight=1, uniform='x')
-            Label(self, height=2, bg=PINK, relief="flat").grid(
+            Label(self, height=2, bg=PINK, relief="solid").grid(
                 row=0, column=x, rowspan=1, columnspan=1, sticky=N+S+E+W)
         for y in range(21):
             self.rowconfigure(y, weight=1, uniform='x')
-            Label(self, width=5, bg=PINK, relief="flat").grid(
+            Label(self, width=5, bg=PINK, relief="solid").grid(
                 row=y, column=0, rowspan=1, columnspan=1, sticky=N+S+E+W)
             
         # Picture
