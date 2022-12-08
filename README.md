@@ -78,6 +78,9 @@ This project was built using Python 3.10.x. You can download it [here](https://w
 The codebase will have you install third party libraries onto your system, including openai, Pillow, tkcalendar and pyglet. 
 <br>These libraries will be installed in the following commands.
 ```Python
+
+import subprocess
+
 try:
     from PIL import Image, ImageOps, ImageTk
 except:
