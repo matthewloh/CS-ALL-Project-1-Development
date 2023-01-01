@@ -4,7 +4,7 @@
   </font>
   <br>
   <br>
-  <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050454379037208586/image.png" alt="Made in Tkinter">
+  <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058926481138524180/image.png" alt="Made in Tkinter">
   </a>
   <br>
   <font size="+2" color="Orange"> Made completely using Tkinter
@@ -122,47 +122,47 @@ The following shows all of the application's preliminary designs. The creations 
 
 ### Login and Registration Pages
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376383001546832/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927549255794779/image.png" height="400px">
 </p>
 
 ### Main Page
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376507035496498/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927584114647090/image.png" height="400px">
 </p> 
 
 ### Event View and Event Registration Pages
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376532566233098/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927620131139635/image.png" height="400px">
 </p> 
 
 ### Management Suite 
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376554963816448/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927649235423232/image.png" height="400px">
 </p> 
 
 ### Management Suite - Event Creation Page
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376582721712158/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927692805841009/image.png" height="400px">
 </p> 
 
 ### Management Suite - Manage Events Page
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376601700946000/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927718034579476/image.png" height="400px">
 </p> 
 
 ### Management Suite - View Participants by Event or Registrant Pages
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376631660847134/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927740797067294/image.png" height="400px">
 </p> 
 
 ### Additional Features List
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376658663776346/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927777061015572/image.png" height="400px">
 </p> 
 
 ### Additional Features - Feedback Form and Calendar Pages
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050376680935534632/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058927804663730286/image.png" height="400px">
 </p> 
 
 ## Resources
@@ -170,7 +170,7 @@ The following shows all of the application's preliminary designs. The creations 
 ### Development Roadmap🗺️
 <br>
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050459223395422328/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058928160269422673/image.png" height="400px">
 </p> 
   
 
@@ -214,12 +214,12 @@ Some screenshots of actually using the application. These screenshots were taken
 ### Registering for Events
 <br>
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050463029529157632/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058928939055202425/image.png" height="400px">
 </p> 
 
 ### Managing Events 
 <br>
 <p align="center">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050464073663397958/image.png" height="400px">
-   <img src="https://cdn.discordapp.com/attachments/887627854706249769/1050464377343586394/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058928954154692688/image.png" height="400px">
+   <img src="https://cdn.discordapp.com/attachments/1058926221016170526/1058929090637340692/image.png" height="400px">
 </p>
